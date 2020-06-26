@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="mynrg-pu" transaction-type="RESOURCE_LOCAL">
+		<class>com.mynrg.model.Bank</class>
+		<class>com.mynrg.model.Competitor</class>
+		<class>com.mynrg.model.CompetitorsCustomer</class>
+		<class>com.mynrg.model.Connection</class>
+		<class>com.mynrg.model.CustFollowUp</class>
+		<class>com.mynrg.model.CustomerDetail</class>		
+		<class>com.mynrg.model.Document</class>
+		<class>com.mynrg.model.Employee</class>
+		<class>com.mynrg.model.Portal</class>
+		<class>com.mynrg.model.ProductionIssue</class>
+		<class>com.mynrg.model.Role</class>
+		<class>com.mynrg.model.ServerInfo</class>
+		<class>com.mynrg.model.Task</class>
+		<class>com.mynrg.model.Transaction</class>
+		<class>com.mynrg.model.User</class>
+		<class>com.mynrg.model.UserRole</class>
+		<class>com.mynrg.model.IssueComments</class>
+	
+	<exclude-unlisted-classes>true</exclude-unlisted-classes>
+	
+	</persistence-unit>
+</persistence>
