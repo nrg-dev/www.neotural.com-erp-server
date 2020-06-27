@@ -17,20 +17,22 @@
  http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
   -->
 
-<context:component-scan base-package="com.mynrg.*"/>  
+<context:component-scan base-package="com.erp.*"/>  
  
 
- <bean id="MYNRGDS" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+
+  <bean id="ERPDS" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/mynrgdb" />
+		<property name="url" value="jdbc:mysql://localhost:3306/erpdb" />
 		<property name="username" value="root"/>
 		<property name="password" value="root"/>
 		</bean>    
- 
+ 		 		 
+ 	
 		
 		<bean id="entityManagerFactory"  class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-    	<property name="persistenceUnitName" value="mynrg-pu" />  
-	    <property name="dataSource" ref="MYNRGDS" />
+    	<property name="persistenceUnitName" value="erp-pu" />  
+	    <property name="dataSource" ref="ERPDS" />
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 				<property name="showSql" value="true" />

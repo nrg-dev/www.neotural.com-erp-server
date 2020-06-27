@@ -1,32 +1,127 @@
 {"properties": [
   {
-    "name": "memeber.silver",
+    "name": "tran.currency",
     "type": "java.lang.String",
-    "description": "A description for 'memeber.silver'"
+    "description": "A description for 'tran.currency'"
   },
   {
-    "name": "memeber.gold",
+    "name": "stockphase1.status",
     "type": "java.lang.String",
-    "description": "A description for 'memeber.gold'"
+    "description": "A description for 'stockphase1.status'"
   },
   {
-    "name": "memeber.platinum",
+    "name": "stockphase2.status",
     "type": "java.lang.String",
-    "description": "A description for 'memeber.platinum'"
+    "description": "A description for 'stockphase2.status'"
   },
   {
-    "name": "ggl.files",
+    "name": "paymentphase1.status",
     "type": "java.lang.String",
-    "description": "A description for 'ggl.files'"
+    "description": "A description for 'paymentphase1.status'"
   },
   {
-    "name": "memeber.bankName",
+    "name": "paymentphase2.status",
     "type": "java.lang.String",
-    "description": "A description for 'memeber.bankName'"
+    "description": "A description for 'paymentphase2.status'"
   },
   {
-  	"name": "memeber.bankTransfer",
+    "name": "invoicephase1.status",
     "type": "java.lang.String",
-    "description": "A description for 'memeber.bankTransfer'"
+    "description": "A description for 'invoicephase1.status'"
+  },
+  {
+    "name": "invoicephase2.status",
+    "type": "java.lang.String",
+    "description": "A description for 'invoicephase2.status'"
+  },
+  {
+    "name": "poinvcash.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'poinvcash.desc'"
+  },
+  {
+    "name": "soinvcash.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'soinvcash.desc'"
+  },
+  {
+    "name": "poretcash.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'poretcash.desc'"
+  },
+  {
+    "name": "soretcash.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'soretcash.desc'"
+  },
+  {
+    "name": "poinvoutcash.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'poinvoutcash.desc'"
+  },
+  {
+    "name": "soinvoutcash.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'soinvoutcash.desc'"
+  },
+  {
+    "name": "transphase1.status",
+    "type": "java.lang.String",
+    "description": "A description for 'transphase1.status'"
+  },
+  {
+    "name": "transphase2.status",
+    "type": "java.lang.String",
+    "description": "A description for 'transphase2.status'"
+  },
+  {
+    "name": "poretcredit.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'poretcredit.desc'"
+  },
+  {
+    "name": "soretcredit.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'soretcredit.desc'"
+  },
+  {
+    "name": "poretvoucher.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'poretvoucher.desc'"
+  },
+  {
+    "name": "soretvoucher.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'soretvoucher.desc'"
+  },
+  {
+    "name": "purchaseorderphase1.status",
+    "type": "java.lang.String",
+    "description": "A description for 'purchaseorderphase1.status'"
+  },
+  {
+    "name": "purchaseorderphase2.status",
+    "type": "java.lang.String",
+    "description": "A description for 'purchaseorderphase2.status'"
+  },
+  {
+    "name": "salesorderphase1.status",
+    "type": "java.lang.String",
+    "description": "A description for 'salesorderphase1.status'"
+  },
+  {
+    "name": "salesorderphase2.status",
+    "type": "java.lang.String",
+    "description": "A description for 'salesorderphase2.status'"
+  },
+  {
+    "name": "enquiry.userName",
+    "type": "java.lang.String",
+    "description": "A description for 'enquiry.userName'"
+  },
+  {
+    "name": "enquiry.passWord",
+    "type": "java.lang.String",
+    "description": "A description for 'enquiry.passWord'"
   }
 ]}
