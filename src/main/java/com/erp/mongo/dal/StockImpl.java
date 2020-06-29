@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.SOInvoice;
@@ -254,5 +255,17 @@ public class StockImpl implements StockDAL {
 		stock.setStatus("success");
 		return stock;
 	}
+	
+	@Override
+	public Stock getAvailableqty(String productCode) {
+		Stock stock;
+		Query query = new Query();
+		query.addCriteria( new Criteria().andOperator(
+				Criteria.where("status").is("Ready for Sales"),
+				Criteria.where("itemcode").is(productCode)));
+		stock = mongoTemplate.findOne(query, Stock.class);
+		return stock;
+	}
+	
 
 }

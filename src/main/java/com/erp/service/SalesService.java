@@ -44,6 +44,7 @@ import com.erp.dto.SOInvoiceDto;
 import com.erp.dto.Sales;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.SalesDAL;
+import com.erp.mongo.dal.StockDAL;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
@@ -54,6 +55,7 @@ import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.SalesOrder;
+import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
@@ -98,10 +100,12 @@ public class SalesService implements Filter {
 
 	private final SalesDAL salesdal;
 	private final RandomNumberDAL randomnumberdal;
+	private final StockDAL stockdal;
 
-	public SalesService(SalesDAL salesdal, RandomNumberDAL randomnumberdal) {
+	public SalesService(SalesDAL salesdal, RandomNumberDAL randomnumberdal, StockDAL stockdal) {
 		this.salesdal = salesdal;
 		this.randomnumberdal = randomnumberdal;
+		this.stockdal = stockdal;
 	}
 
 	@Override
@@ -402,6 +406,7 @@ public class SalesService implements Filter {
 	@RequestMapping(value = "/getUnitPrice", method = RequestMethod.GET)
 	public ResponseEntity<?> getUnitPrice(String productName, String category) {
 		Item item = null;
+		Stock stock = new Stock();
 		try {
 			item = new Item();
 			logger.info("----------- Before Calling  getUnitPrice Sales ----------");
@@ -416,6 +421,10 @@ public class SalesService implements Filter {
 			logger.info("After Split categoryCode -->" + categoryCode);
 			item = salesdal.getUnitPrice(productCode, categoryCode);
 			logger.info("Unit Price ----------" + item.getPrice());
+			
+			stock = stockdal.getAvailableqty(productCode);
+			item.setRecentStock(stock.getRecentStock()); 
+			logger.debug("Available Qty --->"+stock.getRecentStock());
 			return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());

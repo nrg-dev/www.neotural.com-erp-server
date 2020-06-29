@@ -22,6 +22,7 @@ public class Item {
 	String categorycode;
 	String categoryname;
 	String productImage[];
+	long recentStock;
 
 	public String getId() {
 		return id;
@@ -142,5 +143,14 @@ public class Item {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
+
+	public long getRecentStock() {
+		return recentStock;
+	}
+
+	public void setRecentStock(long recentStock) {
+		this.recentStock = recentStock;
+	}
+
 	
 }

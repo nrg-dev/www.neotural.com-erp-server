@@ -44,4 +44,6 @@ public interface StockDAL {
 
 	public Stock saveStockOut(Stock stock);
 
+	public Stock getAvailableqty(String productCode); 
+
 }
