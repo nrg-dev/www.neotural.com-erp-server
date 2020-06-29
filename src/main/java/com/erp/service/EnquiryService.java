@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
+import com.erp.dto.Career;
 import com.erp.dto.Enquiry;
 import com.erp.dto.User;
 import com.erp.mongo.dal.RandomNumberDAL;
@@ -133,6 +134,27 @@ public class EnquiryService implements Filter {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
+		}
+	}
+	
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/saveCareer", method = RequestMethod.POST)
+	public ResponseEntity<?> saveCareer(@RequestBody Career career) {
+		logger.info("saveCareer");
+		try {
+			career.setStatus("Active");
+			career.setAddeddate(Custom.getCurrentInvoiceDate()); 
+			logger.info("--- Before Calling saveCareer Bo ----");
+			career = bo.saveCareer(career);
+			logger.info("--- After Calling saveCareer Bo ----");
+			return new ResponseEntity<>(HttpStatus.OK); 
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+		finally {
+
 		}
 	}
 		

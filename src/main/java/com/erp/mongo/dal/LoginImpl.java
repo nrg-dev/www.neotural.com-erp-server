@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.erp.bo.ErpBo;
+import com.erp.dto.Career;
 import com.erp.dto.Enquiry;
 import com.erp.dto.User;
 import com.erp.model.UserLogin;
@@ -123,6 +124,12 @@ public class LoginImpl implements LoginDAL {
 		logger.debug("Enquiry list Size-->"+enquirylist.size());
 		return enquirylist;
 
+	}
+	
+	public Career saveCareer(Career career) {
+		mongoTemplate.save(career);
+		career.setStatus("Success"); 
+		return career;
 	}
 
 }

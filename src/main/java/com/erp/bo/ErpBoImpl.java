@@ -31,6 +31,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.erp.dao.ErpDao;
+import com.erp.dto.Career;
 import com.erp.dto.Dropbox;
 import com.erp.dto.Enquiry;
 import com.erp.dto.Member;
@@ -130,5 +131,9 @@ public class ErpBoImpl implements ErpBo{
 		return enquirylist;
 	}
 
+	public Career saveCareer(Career career) {
+		career = logindal.saveCareer(career);
+		return career;
+	} 
 	
 }
