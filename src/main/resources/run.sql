@@ -18,6 +18,7 @@ db.randomNumber.insert({ "randomID" : 16,"number": 10000,"code" : "STIN","descri
 db.randomNumber.insert({ "randomID" : 17,"number": 10000,"code" : "STOT","description" : "Stock Out"})
 db.randomNumber.insert({ "randomID" : 18,"number": 10000,"code" : "MEN","description": "Menu"})
 db.randomNumber.insert({ "randomID" : 19,"number": 10000,"code" : "TR","description" : "Transaction"})
+db.randomNumber.insert({ "randomID" : 20,"number": 10000,"code" : "PC","description" : "Petty Cash"})
 
 db.employee.remove( { } )
 db.absentList.remove( { } )

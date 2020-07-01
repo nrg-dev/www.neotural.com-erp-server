@@ -142,6 +142,7 @@ public class FinanceService implements Filter {
 	public ResponseEntity<?> savePettycash(@RequestBody PettyCash finance) {
 		logger.info("savePettycash");
 		RandomNumber randomnumber = null;
+		int randomId=20;
 		int randomtrId=19;
 		Transaction tran = new Transaction();
 		try {
@@ -150,7 +151,11 @@ public class FinanceService implements Filter {
 			if(finance.getId() != null) {
 				finance = financedal.updatePettyCash(finance);
 			}else {
+				randomnumber = randomnumberdal.getRandamNumber(randomId);
+				String invoice = randomnumber.getCode() + randomnumber.getNumber();
+				finance.setInvoicenumber(invoice); 
 				finance = financedal.save(finance);
+				randomnumberdal.updateRandamNumber(randomnumber,randomId);
 				//---------- Transaction Table Insertion ---------
 				randomnumber = randomnumberdal.getRandamNumber(randomtrId);
 				String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
@@ -158,7 +163,7 @@ public class FinanceService implements Filter {
 				tran.setTransactionnumber(traninvoice);
 				tran.setTransactiondate(Custom.getCurrentInvoiceDate());
 				tran.setDescription(pettycashdesc);
-				tran.setInvoicenumber("");
+				tran.setInvoicenumber(invoice);
 				if(finance.getType().equalsIgnoreCase("Credit")) {
 					tran.setDebit(0);
 					tran.setCredit(finance.getTotalAmount());
@@ -166,7 +171,7 @@ public class FinanceService implements Filter {
 					tran.setCredit(0);
 					tran.setDebit(finance.getTotalAmount());
 				}
-				tran.setStatus(transstatus2);
+				tran.setStatus("");
 				tran.setCurrency(finance.getCurrency());
 				purchasedal.saveTransaction(tran);
 				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);

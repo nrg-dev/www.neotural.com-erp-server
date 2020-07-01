@@ -16,6 +16,7 @@ public class PettyCash {
 	private long totalAmount;
 	private String status;
 	private String currency;
+	private String invoicenumber;
 
 	public String getId() {
 		return id;
@@ -87,6 +88,14 @@ public class PettyCash {
 
 	public void setCurrency(String currency) {
 		this.currency = currency;
+	}
+
+	public String getInvoicenumber() {
+		return invoicenumber;
+	}
+
+	public void setInvoicenumber(String invoicenumber) {
+		this.invoicenumber = invoicenumber;
 	}
 
 	
