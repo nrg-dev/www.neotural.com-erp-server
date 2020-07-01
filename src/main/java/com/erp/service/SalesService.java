@@ -87,8 +87,11 @@ public class SalesService implements Filter {
 	@Value("${salesorderphase1.status}")
 	private String salesorderstatus1;
 	
-	@Value("${transphase1.status}")
-	private String transstatus1;
+	@Value("${transinvphase2.status}")
+	private String transinvstatus2;
+	
+	@Value("${transretphase2.status}")
+	private String transretstatus2;
 	
 	@Value("${soinvcash.desc}")
 	private String soinvcash;
@@ -908,7 +911,7 @@ public class SalesService implements Filter {
 				tran.setInvoicenumber(invoice);
 				tran.setCredit(soinvoicedto.getSubtotal());
 				tran.setDebit(0);
-				tran.setStatus(transstatus1);
+				tran.setStatus(transinvstatus2);
 				tran.setCurrency(currency);
 				salesdal.saveTransaction(tran);
 				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
@@ -989,7 +992,7 @@ public class SalesService implements Filter {
 				long totalAmount = soreturn.getPrice() * Integer.valueOf(soreturn.getQty());
 				trans.setCredit(totalAmount);
 				trans.setDebit(0);
-				trans.setStatus(transstatus1);
+				trans.setStatus(transretstatus2);
 				trans.setCurrency(currency);
 				salesdal.saveTransaction(trans);
 				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);

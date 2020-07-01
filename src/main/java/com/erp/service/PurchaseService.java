@@ -77,8 +77,11 @@ public class PurchaseService implements Filter {
 	@Value("${purchaseorderphase1.status}")
 	private String purchaseorderstatus1;
 	
-	@Value("${transphase1.status}")
-	private String transstatus1;
+	@Value("${transinvphase2.status}")
+	private String transinvstatus2;
+	
+	@Value("${transretphase2.status}")
+	private String transretstatus2;
 	
 	@Value("${poinvcash.desc}")
 	private String poinvcash;
@@ -217,7 +220,7 @@ public class PurchaseService implements Filter {
 				tran.setInvoicenumber(invoice);
 				tran.setCredit(0);
 				tran.setDebit(poinvoicedto.getSubtotal());
-				tran.setStatus(transstatus1);
+				tran.setStatus(transinvstatus2);
 				tran.setCurrency(currency);
 				purchasedal.saveTransaction(tran);
 				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
@@ -872,7 +875,7 @@ public class PurchaseService implements Filter {
 				long totalAmount = poreturn.getPrice() * Integer.valueOf(poreturn.getQty());
 				trans.setCredit(0);
 				trans.setDebit(totalAmount);
-				trans.setStatus(transstatus1);
+				trans.setStatus(transretstatus2);
 				trans.setCurrency(currency);
 				purchasedal.saveTransaction(trans);
 				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);

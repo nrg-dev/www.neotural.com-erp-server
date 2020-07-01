@@ -65,14 +65,24 @@
     "description": "A description for 'soinvoutcash.desc'"
   },
   {
-    "name": "transphase1.status",
+    "name": "transinvphase1.status",
     "type": "java.lang.String",
-    "description": "A description for 'transphase1.status'"
+    "description": "A description for 'transinvphase1.status'"
   },
   {
-    "name": "transphase2.status",
+    "name": "transinvphase2.status",
     "type": "java.lang.String",
-    "description": "A description for 'transphase2.status'"
+    "description": "A description for 'transinvphase2.status'"
+  },
+  {
+    "name": "transretphase1.status",
+    "type": "java.lang.String",
+    "description": "A description for 'transretphase1.status'"
+  },
+  {
+    "name": "transretphase2.status",
+    "type": "java.lang.String",
+    "description": "A description for 'transretphase2.status'"
   },
   {
     "name": "poretcredit.desc",

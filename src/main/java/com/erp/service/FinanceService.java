@@ -82,8 +82,11 @@ public class FinanceService implements Filter {
 	@Value("${paymentphase2.status}")
 	private String paymentstatus2;
 	
-	@Value("${transphase2.status}")
-	private String transstatus2;
+	@Value("${transinvphase2.status}")
+	private String transinvstatus2;
+	
+	@Value("${transretphase2.status}")
+	private String transretstatus2;
 
 	@Value("${pettycash.desc}")
 	private String pettycashdesc;
@@ -293,7 +296,7 @@ public class FinanceService implements Filter {
 			trans.setInvoicenumber(trans.getInvoicenumber());
 			trans.setCredit(0);
 			trans.setDebit(trans.getDebit());
-			trans.setStatus(transstatus2);
+			trans.setStatus(transinvstatus2);
 			trans.setCurrency(currency);
 			purchasedal.saveTransaction(trans);
 			randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
@@ -331,7 +334,7 @@ public class FinanceService implements Filter {
 			trans.setInvoicenumber(trans.getInvoicenumber());
 			trans.setCredit(trans.getCredit());
 			trans.setDebit(0);
-			trans.setStatus(transstatus2);
+			trans.setStatus(transinvstatus2);
 			trans.setCurrency(currency);
 			salesdal.saveTransaction(trans);
 			randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
@@ -423,7 +426,7 @@ public class FinanceService implements Filter {
 			trans.setInvoicenumber(trans.getInvoicenumber());
 			trans.setCredit(0);
 			trans.setDebit(trans.getDebit());
-			trans.setStatus(transstatus2);
+			trans.setStatus(transretstatus2);
 			trans.setCurrency(currency);
 			purchasedal.saveTransaction(trans);
 			randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
@@ -461,7 +464,7 @@ public class FinanceService implements Filter {
 			trans.setInvoicenumber(trans.getInvoicenumber());
 			trans.setCredit(trans.getCredit());
 			trans.setDebit(0);
-			trans.setStatus(transstatus2);
+			trans.setStatus(transretstatus2);
 			trans.setCurrency(currency);
 			salesdal.saveTransaction(trans);
 			randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
