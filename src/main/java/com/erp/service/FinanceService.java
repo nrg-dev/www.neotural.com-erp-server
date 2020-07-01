@@ -85,6 +85,9 @@ public class FinanceService implements Filter {
 	@Value("${transphase2.status}")
 	private String transstatus2;
 
+	@Value("${pettycash.desc}")
+	private String pettycashdesc;
+	
 	public FinanceService(FinanceDAL financedal,PurchaseDAL purchasedal,SalesDAL salesdal,RandomNumberDAL randomnumberdal) {
 		this.financedal = financedal;
 		this.purchasedal = purchasedal;
@@ -138,6 +141,9 @@ public class FinanceService implements Filter {
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> savePettycash(@RequestBody PettyCash finance) {
 		logger.info("savePettycash");
+		RandomNumber randomnumber = null;
+		int randomtrId=19;
+		Transaction tran = new Transaction();
 		try {
 			finance.setStatus("Active"); 
 			logger.debug("PettyCash Id-->"+finance.getId());
@@ -145,6 +151,26 @@ public class FinanceService implements Filter {
 				finance = financedal.updatePettyCash(finance);
 			}else {
 				finance = financedal.save(finance);
+				//---------- Transaction Table Insertion ---------
+				randomnumber = randomnumberdal.getRandamNumber(randomtrId);
+				String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
+				logger.debug("Transaction Invoice number-->" + traninvoice);
+				tran.setTransactionnumber(traninvoice);
+				tran.setTransactiondate(Custom.getCurrentInvoiceDate());
+				tran.setDescription(pettycashdesc);
+				tran.setInvoicenumber("");
+				if(finance.getType().equalsIgnoreCase("Credit")) {
+					tran.setDebit(0);
+					tran.setCredit(finance.getTotalAmount());
+				}else if(finance.getType().equalsIgnoreCase("Debit")) {
+					tran.setCredit(0);
+					tran.setDebit(finance.getTotalAmount());
+				}
+				tran.setStatus(transstatus2);
+				tran.setCurrency(finance.getCurrency());
+				purchasedal.saveTransaction(tran);
+				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
+				logger.info("Transation Insert done!");
 			}
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
