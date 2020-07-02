@@ -153,6 +153,16 @@ public class FinanceService implements Filter {
 			logger.debug("PettyCash Id-->"+finance.getId());
 			if(finance.getId() != null) {
 				finance = financedal.updatePettyCash(finance);
+				if(finance.getType().equalsIgnoreCase("Credit")) {
+					tran.setDebit(0);
+					tran.setCredit(finance.getTotalAmount());
+				}else if(finance.getType().equalsIgnoreCase("Debit")) {
+					tran.setCredit(0);
+					tran.setDebit(finance.getTotalAmount());
+				}
+				tran.setInvoicenumber(finance.getInvoicenumber()); 
+				tran.setCurrency(finance.getCurrency());
+				tran = financedal.updatePettyTransaction(tran);
 			}else {
 				randomnumber = randomnumberdal.getRandamNumber(randomId);
 				String invoice = randomnumber.getCode() + randomnumber.getNumber();

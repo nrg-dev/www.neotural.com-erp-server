@@ -20,5 +20,7 @@ public interface FinanceDAL {
 
 	public List<Transaction> loadProfitLoss();
 
-	public List<Transaction> loadfilterProfitData(List<Transaction> trans, String startdate, String enddate) throws ParseException; 
+	public List<Transaction> loadfilterProfitData(List<Transaction> trans, String startdate, String enddate) throws ParseException;
+
+	public Transaction updatePettyTransaction(Transaction tran);  
 }

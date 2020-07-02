@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.PettyCash;
+import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
@@ -74,6 +76,7 @@ public class FinanceImpl implements FinanceDAL {
 		update.set("toPerson", pettycash.getToPerson());
 		update.set("totalAmount", pettycash.getTotalAmount());
 		update.set("currency", pettycash.getCurrency());
+		update.set("invoicenumber", pettycash.getInvoicenumber());
 		update.set("status", "Active");
 		mongoTemplate.updateFirst(query, update, PettyCash.class);
 		return pettycash;
@@ -111,6 +114,23 @@ public class FinanceImpl implements FinanceDAL {
 			list = mongoTemplate.find(query,Transaction.class);
 		}	
 		return list;
+	}
+	
+	//----------- Update Transaction Table PettyCash Details --------
+	public Transaction updatePettyTransaction(Transaction tran) {
+		Update update = new Update();
+		Query query = new Query();
+		try {
+			query.addCriteria(Criteria.where("invoicenumber").is(tran.getInvoicenumber()));
+			update.set("credit", tran.getCredit());
+			update.set("debit", tran.getDebit());
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), Transaction.class);
+		}catch(Exception e) {
+			logger.info("Transaction Petty Update Exception --->"+e.getMessage()); 
+		}
+		
+		return tran;
 	}
 					
 
