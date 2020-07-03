@@ -90,9 +90,9 @@ public class EnquiryService implements Filter {
 		try {
 			enquiry.setStatus("Active");
 			enquiry.setAddeddate(Custom.getCurrentInvoiceDate()); 
-			logger.info("--- Before Calling Bo ----");
+			logger.info("Before Calling Bo");
 			enquiry = bo.saveEnquiry(enquiry);
-			logger.info("--- After Calling Bo ----");
+			logger.info("After Calling Bo");
 			return new ResponseEntity<>(HttpStatus.OK); 
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
@@ -107,11 +107,11 @@ public class EnquiryService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping(value = "/getUserAndPass", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getUserAndPass() {
-		logger.info("-------- getUserAndPass ----------");
+		logger.info("getUserAndPass");
 		User user = new User();
 		try {
-			logger.info("User Name --->"+username);
-			logger.info("Passowrd --->"+password);
+			logger.debug("User Name --->"+username);
+			logger.debug("Passowrd --->"+password);
 			user.setUsername(username);
 			user.setPassword(password); 
 			return new ResponseEntity<User>(user, HttpStatus.OK);				
@@ -125,7 +125,7 @@ public class EnquiryService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping(value = "/loadEnquiry", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> loadEnquiry() {
-		logger.info("-------- loadEnquiry ----------");
+		logger.info("loadEnquiry");
 		List<Enquiry> enquirylist = new ArrayList<Enquiry>();
 		try {
 			enquirylist = bo.loadEnquiry(enquirylist);
@@ -144,9 +144,9 @@ public class EnquiryService implements Filter {
 		try {
 			career.setStatus("Active");
 			career.setAddeddate(Custom.getCurrentInvoiceDate()); 
-			logger.info("--- Before Calling saveCareer Bo ----");
+			logger.info("Before Calling saveCareer Bo");
 			career = bo.saveCareer(career);
-			logger.info("--- After Calling saveCareer Bo ----");
+			logger.info("After Calling saveCareer Bo");
 			return new ResponseEntity<>(HttpStatus.OK); 
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
