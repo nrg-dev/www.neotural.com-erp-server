@@ -110,8 +110,11 @@ public class FinanceImpl implements FinanceDAL {
 			list = mongoTemplate.find(query,Transaction.class);
 		}else {
 			logger.debug("-------- Both Dates are Not Equal --------");
-			query.addCriteria(Criteria.where("transactiondate").gte(fromdate).lte(todate));
+			String transfromdate = Custom.convertStringToData(fromdate);
+			String transtodate = Custom.convertStringToData(todate);
+			query.addCriteria(Criteria.where("transactiondate").gte(transfromdate).lte(transtodate));
 			list = mongoTemplate.find(query,Transaction.class);
+			logger.info("Filter List Size -->"+list.size()); 
 		}	
 		return list;
 	}

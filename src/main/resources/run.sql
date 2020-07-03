@@ -48,7 +48,12 @@ db.menu.remove( { } )
 db.randomNumber.remove( {"randomID" :19 } )
 
 db.purchaseOrder.update({"_id" :ObjectId("5e84406bb184021e9421f6d3") },{$set : {"status":'Open'}})
+db.transaction.find({"transactiondate" : "20/06/2020"});
+db.transaction.update({"_id" :ObjectId("5efc4550f4d49fd9bc9fb4be") },{$set : {"transactiondate" : "02/07/2020"}})
 
+
+
+db.transaction.find({"transactiondate":{ $gte: '20/06/2020', $lt: '02/07/2020' }}).pretty();
 
 db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dashboard","submenuname":"","langcode":"EN"});
 db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dasbor","submenuname":"","langcode":"INDO"});
