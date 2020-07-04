@@ -54,11 +54,12 @@ public class EnquiryService implements Filter {
 	@Value("${enquiry.passWord}")
 	private String password;
 
-	private final RandomNumberDAL randomnumberdal;
-
-	public EnquiryService(RandomNumberDAL randomnumberdal) {
-		this.randomnumberdal = randomnumberdal;
-	}
+	/*
+	 * private final RandomNumberDAL randomnumberdal;
+	 * 
+	 * public EnquiryService(RandomNumberDAL randomnumberdal) { this.randomnumberdal
+	 * = randomnumberdal; }
+	 */
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
