@@ -168,7 +168,7 @@ public class EmployeeService implements Filter {
 	@RequestMapping(value = "/loadDailyReport", method = RequestMethod.GET)
 	public ResponseEntity<?> loadDailyReport(String employeecode,String date,String type) {
 		logger.info("loadDailyReport");
-		logger.debug("EmployeeService Id-->"+employeecode);
+		logger.debug("Employee Id-->"+employeecode);
 		List<DailyReport> responseList = null;
 		try {
 			responseList = employeedal.loadDailyReport(employeecode,date,type);
@@ -189,7 +189,7 @@ public class EmployeeService implements Filter {
 		@RequestMapping(value = "/loadAbsentList", method = RequestMethod.GET)
 		public ResponseEntity<?> loadAbsentList(String employeecode,String date,String type) {
 			logger.info("loadDailyReport");
-			logger.debug("EmployeeService Code-->"+employeecode);
+			logger.debug("EmployeeCode-->"+employeecode);
 			List<AbsentList> responseList = null;
 			try {
 				responseList = employeedal.loadAbsentList(employeecode,date,type);
@@ -210,7 +210,7 @@ public class EmployeeService implements Filter {
 		@RequestMapping(value = "/loadContractList", method = RequestMethod.GET)
 		public ResponseEntity<?> loadContractList(String employeecode) {
 			logger.info("loadContractList");
-			logger.debug("EmployeeService Id-->"+employeecode);
+			logger.debug("Employee Id-->"+employeecode);
 			List<ContractList> responseList = null;
 			try {
 				responseList = employeedal.loadContractList(employeecode);
@@ -226,25 +226,6 @@ public class EmployeeService implements Filter {
 			}
 		}
 		
-	/*
-	 * // update
-	 * 
-	 * @CrossOrigin(origins = "http://localhost:8080")
-	 * 
-	 * @RequestMapping(value = "/update", method = RequestMethod.PUT) public
-	 * ResponseEntity<?> update(@RequestBody Employee employee) {
-	 * logger.info("update employee"); try {
-	 * logger.info("Employee update inside try--->" + employee.getEmployeecode());
-	 * employee = employeedal.update(employee); return new
-	 * ResponseEntity<>(HttpStatus.OK);
-	 * 
-	 * } catch (Exception e) { logger.info("Exception ------------->" +
-	 * e.getMessage()); return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
-	 * finally {
-	 * 
-	 * } }
-	 */
-
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)

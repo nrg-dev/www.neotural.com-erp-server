@@ -38,8 +38,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
-import com.erp.dto.POInvoiceDto;
-import com.erp.dto.Purchase;
 import com.erp.dto.SOInvoiceDto;
 import com.erp.dto.Sales;
 import com.erp.mongo.dal.RandomNumberDAL;
@@ -47,9 +45,6 @@ import com.erp.mongo.dal.SalesDAL;
 import com.erp.mongo.dal.StockDAL;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
-import com.erp.mongo.model.POInvoice;
-import com.erp.mongo.model.POReturnDetails;
-import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
@@ -57,7 +52,6 @@ import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.SalesOrder;
 import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.Transaction;
-import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
 import com.erp.util.PDFGenerator;
 

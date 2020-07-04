@@ -28,11 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.erp.mongo.dal.FinanceDAL;
 import com.erp.mongo.dal.UserMgtDAL;
-import com.erp.mongo.model.PettyCash;
 import com.erp.mongo.model.UserRole;
-import com.erp.util.Custom;
 
 @SpringBootApplication
 @RestController

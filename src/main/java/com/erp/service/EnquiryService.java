@@ -27,7 +27,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,7 +37,6 @@ import com.erp.dto.Career;
 import com.erp.dto.Enquiry;
 import com.erp.dto.User;
 import com.erp.mongo.dal.RandomNumberDAL;
-import com.erp.mongo.model.POReturnDetails;
 import com.erp.util.Custom;
 
 @SpringBootApplication

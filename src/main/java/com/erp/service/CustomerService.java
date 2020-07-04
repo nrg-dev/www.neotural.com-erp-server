@@ -82,14 +82,15 @@ public class CustomerService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> saveCustomer(@RequestBody Customer customer) {
+		logger.info("Save Customer ang Update Customer Call");
 		RandomNumber randomnumber = null;
 		try {
 			if(customer.getId() != null) {
-				logger.info("UpdateCustomer");
+				logger.info("Update");
 				customer.setLastedit(Custom.getCurrentInvoiceDate());
 				customer = customerdal.updateCustomer(customer);
 			}else {
-				logger.info("saveCustomer");
+				logger.info("save");
 				randomnumber = randomnumberdal.getCustomerRandamNumber();
 				String customercode = randomnumber.getCode() + randomnumber.getNumber();
 				customer.setCustcode(customercode);

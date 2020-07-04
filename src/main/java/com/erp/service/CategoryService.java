@@ -76,37 +76,32 @@ public class CategoryService implements Filter {
 	public ResponseEntity<?> saveCategory(@RequestBody Category category) {
 		logger.info("saveCategory & updateCategory");
 		RandomNumber randomnumber = null;
-		boolean status=false;
-		int temp=5;
-		logger.debug("CategoryCode-->"+category.getCategorycode());
+		boolean status = false;
+		int temp = 5;
+		logger.debug("CategoryCode-->" + category.getCategorycode());
 		try {
-			if(category.getCategorycode()!=null) {
+			if (category.getCategorycode() != null) {
 				logger.info("update category");
 				logger.info("Before Calling update Category");
-				status = categorydal.saveCategory(category,1);
+				status = categorydal.saveCategory(category, 1);
 				logger.info("After Calling update Category");
-
-			}
-			else {
+			} else {
 				randomnumber = randomnumberdal.getRandamNumber(temp);
 				String categorycode = randomnumber.getCode() + randomnumber.getNumber();
 				category.setCategorycode(categorycode);
 				logger.debug("Category name-->" + category.getName());
-				status = categorydal.saveCategory(category,2);
+				status = categorydal.saveCategory(category, 2);
 				if (status) {
 					randomnumberdal.updateRandamNumber(randomnumber, temp);
 				}
 			}
-			
-			return new ResponseEntity<>(HttpStatus.OK); 
-
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-
-		finally {
-
+		} finally {
+			status = false;
+			randomnumber = null;
 		}
 	}
 
@@ -120,22 +115,17 @@ public class CategoryService implements Filter {
 			logger.info("loadCategory");
 			categorylist = categorydal.loadCategory(categorylist);
 			logger.info("loadCategory");
-			if(categorylist.size()>0) {
+			if (categorylist.size() > 0) {
 				logger.info("Category found!");
-				logger.debug("Category-->"+categorylist.size());
+				logger.debug("Category-->" + categorylist.size());
 				return new ResponseEntity<List<Category>>(categorylist, HttpStatus.OK);
-			}
-			else {
+			} else {
 				logger.info("No Category found!");
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT); // No data
-
 			}
-
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		} finally {
-
 		}
 	}
 
@@ -168,17 +158,12 @@ public class CategoryService implements Filter {
 			logger.debug("Remove Category code" + categorycode);
 			categorydal.removeCategory(categorycode);
 			return new ResponseEntity<>(HttpStatus.OK);
-
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-		} finally {
-
-		}
+		} 
 	}
 
-	
 	// Load
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadCategoryName", method = RequestMethod.GET)
@@ -190,11 +175,11 @@ public class CategoryService implements Filter {
 			logger.info("Before Calling loadCategory");
 			categorylist = categorydal.loadCategory(categorylist);
 			logger.info("Successfully Calling loadCategory");
-			for(Category cat: categorylist) {
-				logger.debug("category name-->"+cat.getName());
-				list.add(cat.getName()+"-"+cat.getCategorycode());
+			for (Category cat : categorylist) {
+				logger.debug("category name-->" + cat.getName());
+				list.add(cat.getName() + "-" + cat.getCategorycode());
 			}
-	
+
 			return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 
 		} catch (Exception e) {
@@ -203,6 +188,6 @@ public class CategoryService implements Filter {
 		} finally {
 
 		}
-		//return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
+		// return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 	}
 }

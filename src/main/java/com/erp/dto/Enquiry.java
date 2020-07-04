@@ -1,16 +1,11 @@
 package com.erp.dto;
 
-import java.io.Serializable;
-
 import org.springframework.data.annotation.Id;
 
 public class Enquiry {
-	/**
-	 * 
-	 */
 	@Id
 	private String id;
-	String name; // return status
+	String name; 
 	String phonenumber;	
 	String email_ID;
 	String message;

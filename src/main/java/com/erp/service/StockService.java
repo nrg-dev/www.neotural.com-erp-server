@@ -49,7 +49,6 @@ import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.StockDamage;
 import com.erp.mongo.model.StockInDetails;
 import com.erp.mongo.model.StockReturn;
-import com.erp.mongo.model.Transaction;
 import com.erp.util.Custom;
 
 @SpringBootApplication
