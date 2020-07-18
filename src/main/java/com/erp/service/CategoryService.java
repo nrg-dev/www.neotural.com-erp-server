@@ -30,8 +30,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.mongo.dal.CategoryDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.dal.StockDAL;
 import com.erp.mongo.model.Category;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.Stock;
 
 @SpringBootApplication
 @RestController
@@ -42,11 +44,13 @@ public class CategoryService implements Filter {
 
 	private final CategoryDAL categorydal;
 	private final RandomNumberDAL randomnumberdal;
+	private final StockDAL stockdal;
 	Category category = null;
 
-	public CategoryService(CategoryDAL categorydal, RandomNumberDAL randomnumberdal) {
+	public CategoryService(CategoryDAL categorydal, RandomNumberDAL randomnumberdal, StockDAL stockdal) {
 		this.categorydal = categorydal;
 		this.randomnumberdal = randomnumberdal;
+		this.stockdal = stockdal;
 	}
 
 	@Override
@@ -78,12 +82,26 @@ public class CategoryService implements Filter {
 		RandomNumber randomnumber = null;
 		boolean status = false;
 		int temp = 5;
+		Stock stock = new Stock();
+		List<Stock> stocklist = new ArrayList<Stock>();
 		logger.debug("CategoryCode-->" + category.getCategorycode());
 		try {
 			if (category.getCategorycode() != null) {
 				logger.info("update category");
 				logger.info("Before Calling update Category");
 				status = categorydal.saveCategory(category, 1);
+				
+				//------------ Update Stock Based on Product -----------
+				stocklist = stockdal.loadStock(stocklist,category.getCategorycode());
+				logger.info("Stock CategoryList -->"+stocklist.size());
+				for(int i=0; i< stocklist.size(); i++) {
+					logger.info("Stock Category Calling"); 
+					stock.setId(stocklist.get(i).getId()); 
+					stock.setCategory(category.getName());
+					stock.setCategorycode(category.getCategorycode());
+					stock = stockdal.updateStock(stock,"categoryupdate");
+					logger.info("After Update Stock Category Calling"); 
+				}
 				logger.info("After Calling update Category");
 			} else {
 				randomnumber = randomnumberdal.getRandamNumber(temp);

@@ -349,8 +349,10 @@ public class ItemService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateItem(@RequestBody Item item) {
+		logger.info("Inside item Edit");
+		Stock stock = new Stock();
+		List<Stock> stocklist = new ArrayList<Stock>();
 		try {
-			logger.info("Inside item Edit");
 			logger.debug("Before Category Name -->" + item.getCategoryname());
 			logger.debug("Before Category Code -->" + item.getCategorycode());
 			if (item.getCategorycode() != null) {
@@ -372,6 +374,18 @@ public class ItemService implements Filter {
 			logger.debug("After Set Vendor Name-->" + item.getVendorname());
 			logger.debug("After Set Vendor Code-->" + item.getVendorcode());
 			item = itemdal.updateItem(item);
+			
+			//------------ Update Stock Based on Product -----------
+			stocklist = stockdal.loadStock(stocklist,item.getProdcode());
+			for(int i=0; i< stocklist.size(); i++) {
+				stock.setId(stocklist.get(i).getId()); 
+				stock.setCategory(item.getCategoryname());
+				stock.setCategorycode(item.getCategorycode());
+				stock.setItemname(item.getProductname());
+				stock.setItemcode(item.getProdcode());
+				stock.setUnit(item.getUnit()); 
+				stock = stockdal.updateStock(stock,"productupdate");
+			}
 			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {

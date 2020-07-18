@@ -135,6 +135,10 @@ public class StockImpl implements StockDAL {
 			query.addCriteria( new Criteria().andOperator(
 					Criteria.where("status").is("Ready for Sales"),
 					Criteria.where("recentStock").ne(0) ) );
+		}else {
+			query.addCriteria( new Criteria().orOperator(
+					Criteria.where("itemcode").is(status),
+					Criteria.where("categorycode").is(status) ));
 		}
 		stocklist = mongoTemplate.find(query, Stock.class);
 		return stocklist;
@@ -233,6 +237,21 @@ public class StockImpl implements StockDAL {
 		}else if(id == "update") {
 			query.addCriteria(Criteria.where("id").is(stock.getId()));
 			update.set("recentStock", stock.getRecentStock());
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), Stock.class);
+		}else if(id == "productupdate") {
+			query.addCriteria(Criteria.where("id").is(stock.getId()));
+			update.set("itemname", stock.getItemname());
+			update.set("itemcode", stock.getItemcode());
+			update.set("category", stock.getCategory());
+			update.set("categorycode", stock.getCategorycode());
+			update.set("unit", stock.getUnit());
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), Stock.class);
+		}else if(id == "categoryupdate") {
+			query.addCriteria(Criteria.where("id").is(stock.getId()));
+			update.set("category", stock.getCategory());
+			update.set("categorycode", stock.getCategorycode());
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), Stock.class);
 		}else {
