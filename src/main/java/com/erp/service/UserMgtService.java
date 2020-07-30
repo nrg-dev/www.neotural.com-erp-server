@@ -12,6 +12,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +30,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.UserMgtDAL;
+import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.UserRole;
 
 @SpringBootApplication
@@ -39,9 +43,11 @@ public class UserMgtService implements Filter {
 	public static final Logger logger = LoggerFactory.getLogger(UserMgtService.class);
 	UserRole userrole = null;
 	private final UserMgtDAL usermgtdal;
+	private final RandomNumberDAL randomnumberdal;
 
-	public UserMgtService(UserMgtDAL usermgtdal) {
+	public UserMgtService(UserMgtDAL usermgtdal,RandomNumberDAL randomnumberdal) {
 		this.usermgtdal = usermgtdal;
+		this.randomnumberdal = randomnumberdal;
 	}
 
 	@Override
@@ -88,15 +94,35 @@ public class UserMgtService implements Filter {
 	// save petty cash
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public ResponseEntity<?> savePettycash(@RequestBody UserRole user) {
-		logger.info("savePettycash");
+	public ResponseEntity<?> saveuserMgmt(@RequestBody String menuarray) {
+		logger.info("saveuserMgmt");
+		RandomNumber randomnumber = null;
+		int randomId=21;
+		UserRole user = new UserRole();
 		try {
-			logger.debug("PettyCash Id-->"+user.getId());
-			if(user.getId() != null) {
-				user = usermgtdal.updateUser(user);
-			}else {
-				user = usermgtdal.save(user);
-			}
+			 String temp = menuarray; 
+			 logger.info("Mapped value -->" + temp);
+			 randomnumber = randomnumberdal.getRandamNumber(randomId);
+			 String invoice = randomnumber.getCode() + randomnumber.getNumber();
+			 logger.debug("Invoice number -->" + invoice);
+			 
+			 //JSONArray jsonArr = new JSONArray(menuarray); 
+			 JSONObject jObject = new JSONObject(menuarray);
+
+			 user.setInvnumber(invoice);
+			 user.setUsername(jObject.getString("username"));
+		 	 user.setPassword(jObject.getString("password"));
+		 	 user.setDepartmentname(jObject.getString("departmentname"));
+		 	 user.setMenuItem(jObject.getString("menuArray"));
+		 	 
+		 	 logger.info("UserName-->"+user.getUsername());
+		 	 logger.info("Password-->"+user.getPassword());
+		 	 logger.info("Department-->"+user.getDepartmentname());
+		 	 logger.info("Menus and Submenus-->"+user.getMenuItem());
+		 	 
+		 	 usermgtdal.save(user);
+			 randomnumberdal.updateRandamNumber(randomnumber,randomId);
+			 
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());

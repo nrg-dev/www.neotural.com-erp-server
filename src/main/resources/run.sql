@@ -19,6 +19,7 @@ db.randomNumber.insert({ "randomID" : 17,"number": 10000,"code" : "STOT","descri
 db.randomNumber.insert({ "randomID" : 18,"number": 10000,"code" : "MEN","description": "Menu"})
 db.randomNumber.insert({ "randomID" : 19,"number": 10000,"code" : "TR","description" : "Transaction"})
 db.randomNumber.insert({ "randomID" : 20,"number": 10000,"code" : "PC","description" : "Petty Cash"})
+db.randomNumber.insert({ "randomID" : 21,"number": 10000,"code" : "U","description" : "User"})
 
 db.employee.remove( { } )
 db.absentList.remove( { } )
@@ -46,6 +47,8 @@ db.stock.remove( { } )
 db.menu.remove( { } )
 
 db.randomNumber.remove( {"randomID" :19 } )
+
+db.item.remove( {"prodcode" :"P10008" } )
 
 db.purchaseOrder.update({"_id" :ObjectId("5e84406bb184021e9421f6d3") },{$set : {"status":'Open'}})
 db.transaction.find({"transactiondate" : "20/06/2020"});
