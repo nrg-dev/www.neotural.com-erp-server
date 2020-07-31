@@ -88,6 +88,9 @@ public class PurchaseService implements Filter {
 	
 	@Value("${poretcash.desc}")
 	private String poretcash;
+	
+	@Value("${invoicephase1.status}")
+	private String invoicestatus1;
 
 	private final PurchaseDAL purchasedal;
 	private final RandomNumberDAL randomnumberdal;
@@ -158,6 +161,7 @@ public class PurchaseService implements Filter {
 		Purchase purchase = new Purchase();
 		int randomtrId=19;
 		Transaction tran = new Transaction();
+		POInvoice poinv = new POInvoice();
 		try {
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
@@ -200,9 +204,9 @@ public class PurchaseService implements Filter {
 			logger.info("--------- Before Calling PDF Generator -----------");
 			poinvoice.setVendorname(vendor.getVendorName());
 			poinvoice.setVendorcode(vendor.getVendorcode());
-			String base64=PDFGenerator.getBase64(poinvoice,purchase);
-			logger.info("--------- After Calling PDF Generator -----------");
-			poinvoice.setBase64(base64);
+			//String base64=PDFGenerator.getBase64(poinvoice,purchase);
+			//logger.info("--------- After Calling PDF Generator -----------");
+			//poinvoice.setBase64(base64);
 			purchasedal.savePOInvoice(poinvoice);
 			// Update Random number table
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
@@ -228,6 +232,13 @@ public class PurchaseService implements Filter {
 			}else {
 				logger.info("Payment Type is not cash!");
 			}
+			
+			poinv = purchasedal.loadPOInvoice(invoice);
+			logger.info("--------- Before Calling PDF Generator -----------");
+			poinv.setStatus(invoicestatus1);
+			String base64=PDFGenerator.getBase64(poinv,purchase);
+			poinv.setBase64(base64); 
+			purchasedal.updatePOInvoice(poinv,3);
 			
 			return new ResponseEntity<>(HttpStatus.OK); // 200
 

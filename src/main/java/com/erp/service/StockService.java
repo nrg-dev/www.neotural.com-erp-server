@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 //import org.springframework.beans.factory.annotation.Autowire;
 
@@ -49,7 +50,9 @@ import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.StockDamage;
 import com.erp.mongo.model.StockInDetails;
 import com.erp.mongo.model.StockReturn;
+import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
+import com.erp.util.PDFGenerator;
 
 @SpringBootApplication
 @RestController
@@ -57,6 +60,9 @@ import com.erp.util.Custom;
 public class StockService implements Filter {
 
 	public static final Logger logger = LoggerFactory.getLogger(StockService.class);
+	
+	@Value("${invoicephase2.status}")
+	private String invoicestatus2;
 
 	private final StockDAL stockdal;
 	private final PurchaseDAL purchasedal;
@@ -560,6 +566,7 @@ public class StockService implements Filter {
 		Stock stock = null;
 		List<PurchaseOrder> polist = new ArrayList<PurchaseOrder>();
 		POInvoice poinv = new POInvoice();
+		Purchase purchase = new Purchase();
 		try {
 			polist = purchasedal.loadPO(2,invoiceNumber);
 			for(PurchaseOrder po :polist) {
@@ -580,11 +587,23 @@ public class StockService implements Filter {
 				long currentStock = po.getQty()+st.getRecentStock();
 				stock.setAddedqty(currentStock); 
 				stockdal.updateStock(stock,"all");
-				
 			}
 
 			poinv = purchasedal.loadPOInvoice(invoiceNumber);
-			purchasedal.updatePOInvoice(poinv,1);
+			
+			Vendor vendor = purchasedal.getVendorDetails(poinv.getVendorcode());
+			purchase.setVendorName(vendor.getVendorName());
+			purchase.setVendorCity(vendor.getCity());
+			purchase.setVendorCountry(vendor.getCountry());
+			purchase.setVendorPhone(vendor.getPhoneNumber());
+			purchase.setVendorEmail(vendor.getEmail()); 
+			logger.info("--------- Before Calling PDF Generator -----------");
+			poinv.setStatus(invoicestatus2);
+			String base64=PDFGenerator.getBase64(poinv,purchase);
+			
+			poinv.setBase64(base64); 
+			purchasedal.updatePOInvoice(poinv,3);
+
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
