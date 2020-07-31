@@ -7,7 +7,7 @@ public interface UserMgtDAL {
 
 	public UserRole save(UserRole user);
 
-	public List<UserRole> load();
+	public List<UserRole> load(List<UserRole> userlist); 
 
 	public UserRole updateUser(UserRole userrole);
 

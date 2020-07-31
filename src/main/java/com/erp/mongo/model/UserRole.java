@@ -15,6 +15,7 @@ public class UserRole {
 	private String menuItem;
 	private String subMenuItem;
 	private String departmentname;
+	private String status;
 	
 	public String getId() {
 		return id;
@@ -64,6 +65,12 @@ public class UserRole {
 	}
 	public void setDepartmentname(String departmentname) {
 		this.departmentname = departmentname;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 		
 	 

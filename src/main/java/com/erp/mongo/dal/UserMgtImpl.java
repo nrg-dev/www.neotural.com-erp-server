@@ -5,12 +5,16 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.UserRole;
 
 @Repository
@@ -28,8 +32,11 @@ public class UserMgtImpl implements UserMgtDAL {
 	}
 
 	// load User list
-	public List<UserRole> load() {
-		List<UserRole> userlist = mongoTemplate.findAll(UserRole.class);
+	public List<UserRole> load(List<UserRole> userlist) {
+		Query query = new Query();
+		query.with(new Sort(new Order(Direction.DESC, "invnumber")));
+		query.addCriteria(Criteria.where("status").is("Active"));
+		userlist = mongoTemplate.find(query,UserRole.class);
 		return userlist;
 	}
 

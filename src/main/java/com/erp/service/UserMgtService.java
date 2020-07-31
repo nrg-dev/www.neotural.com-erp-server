@@ -12,8 +12,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONObject;
-import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,28 +100,30 @@ public class UserMgtService implements Filter {
 		int randomId=21;
 		UserRole user = new UserRole();
 		try {
-			 String temp = menuarray; 
-			 logger.info("Mapped value -->" + temp);
-			 randomnumber = randomnumberdal.getRandamNumber(randomId);
-			 String invoice = randomnumber.getCode() + randomnumber.getNumber();
-			 logger.debug("Invoice number -->" + invoice);
+			logger.debug("Mapped value -->" + menuarray);
+			randomnumber = randomnumberdal.getRandamNumber(randomId);
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
+			logger.debug("Invoice number -->" + invoice);
 			 
-			 //JSONArray jsonArr = new JSONArray(menuarray); 
-			 JSONObject jObject = new JSONObject(menuarray);
+			String string = menuarray;
+			String userarray = StringUtils.removeStart(StringUtils.removeEnd(string, "]"), "[");
+			 
+			JSONObject jObject = new JSONObject(userarray);
 
-			 user.setInvnumber(invoice);
-			 user.setUsername(jObject.getString("username"));
-		 	 user.setPassword(jObject.getString("password"));
-		 	 user.setDepartmentname(jObject.getString("departmentname"));
-		 	 user.setMenuItem(jObject.getString("menuArray"));
+			user.setInvnumber(invoice);
+			user.setUsername(jObject.getString("username"));
+		 	user.setPassword(jObject.getString("password"));
+		 	user.setDepartmentname(jObject.getString("departmentname"));
+		 	user.setMenuItem(jObject.getString("menuArray"));
+		 	user.setStatus("Active");
 		 	 
-		 	 logger.info("UserName-->"+user.getUsername());
-		 	 logger.info("Password-->"+user.getPassword());
-		 	 logger.info("Department-->"+user.getDepartmentname());
-		 	 logger.info("Menus and Submenus-->"+user.getMenuItem());
+		 	logger.debug("UserName-->"+user.getUsername());
+		 	logger.debug("Password-->"+user.getPassword());
+		 	logger.debug("Department-->"+user.getDepartmentname());
+		 	logger.debug("Menus and Submenus-->"+user.getMenuItem());
 		 	 
-		 	 usermgtdal.save(user);
-			 randomnumberdal.updateRandamNumber(randomnumber,randomId);
+		 	usermgtdal.save(user);
+			randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			 
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
@@ -140,7 +142,7 @@ public class UserMgtService implements Filter {
 		List<UserRole> userlist = null;
 		try {
 			logger.info("Before Calling load pettycash list");
-			userlist = usermgtdal.load();
+			userlist = usermgtdal.load(userlist);
 			logger.info("Successfully Called load pettycash list");
 			return new ResponseEntity<List<UserRole>>(userlist, HttpStatus.CREATED);
 
