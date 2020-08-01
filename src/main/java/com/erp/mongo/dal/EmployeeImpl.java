@@ -289,9 +289,6 @@ public class EmployeeImpl implements EmployeeDAL {
 	    //List<MyClass> allObjects = mongoTemplate.find(query, MyClass.class);
 		list = mongoTemplate.find(query,Employee.class);
 		logger.debug("Size-->"+list.size());
-		for (Employee e : list) {
-		    logger.debug(e.getName());    
-		   }
 		return list;
 	}
 

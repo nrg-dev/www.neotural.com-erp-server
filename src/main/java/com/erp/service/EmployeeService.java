@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 //import org.springframework.beans.factory.annotation.Autowire;
 
@@ -48,6 +49,9 @@ public class EmployeeService implements Filter {
 
 	@Autowired
 	ErpBo investmentBo;
+	
+	@Value("${noimage.base64}")
+	private String noimagebase64;
 
 	// private final RandamNumberRepository randamNumberRepository;
 
@@ -105,6 +109,15 @@ public class EmployeeService implements Filter {
 				employee.setStatus("Active");
 				logger.debug("Current Date-->" + Custom.getCurrentDate());
 				temp=2;
+				
+				logger.debug("Employee Image Base64 -->"+employee.getProfilepic());
+				if(employee.getProfilepic()!=null) {
+					logger.info("Employee Image not null"); 
+				}else {
+					logger.info("Employee Image Null");
+					employee.setProfilepic(noimagebase64);
+				}
+				
 				status = employeedal.save(employee,temp);
 				randomnumberdal.updateEmployeeRandamNumber(randomnumber);
 			}
