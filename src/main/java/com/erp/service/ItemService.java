@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 //import org.springframework.beans.factory.annotation.Autowire;
 
@@ -49,6 +50,9 @@ public class ItemService implements Filter {
 
 	@Autowired
 	ErpBo erpBo;
+	
+	@Value("${noimage.base64}")
+	private String[] noimagebase64;
 
 	private final ItemDAL itemdal;
 	private final RandomNumberDAL randomnumberdal;
@@ -116,7 +120,13 @@ public class ItemService implements Filter {
 			}
 
 			item.setProdcode(invoice);
-			logger.info("Product Image Base64 -->"+item.getProductImage());
+			logger.debug("Product Image Base64 -->"+item.getProductImage());
+			if(item.getProductImage().equals(null) || item.getProductImage().toString().isEmpty() || item.getProductImage().length == 0) {
+				logger.info("Product Image Null");
+				item.setProductImage(noimagebase64);
+			}else {
+				logger.info("Image not null"); 
+			}
 			item = itemdal.saveItem(item);
 			if (item.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateCategoryRandamNumber(randomnumber, 2);
