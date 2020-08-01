@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 //import org.springframework.beans.factory.annotation.Autowire;
 
@@ -41,6 +42,9 @@ public class VendorService implements Filter {
 
 	public static final Logger logger = LoggerFactory.getLogger(VendorService.class);
 
+	@Value("${noimage.base64}")
+	private String noimagebase64;
+	
 	/*
 	 * @Autowired ErpBo erpBo;
 	 * 
@@ -92,6 +96,12 @@ public class VendorService implements Filter {
 			vendor.setStatus("Active"); 
 			logger.debug("Current Date-->" + Custom.getCurrentDate());
 			logger.debug("Vendor Image Base 64 -->" + vendor.getVendorbase64());
+			if(vendor.getVendorbase64()!=null) {
+				logger.info("Vendor Image not null"); 
+			}else {
+				logger.info("Vendor Image Null");
+				vendor.setVendorbase64(noimagebase64);
+			}	
 			vendor = vendordal.saveVendor(vendor);
 			if (vendor.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateVendorRandamNumber(randomnumber, 1);

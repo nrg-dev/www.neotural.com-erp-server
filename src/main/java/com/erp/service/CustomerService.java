@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 //import org.springframework.beans.factory.annotation.Autowire;
 
@@ -45,6 +46,9 @@ public class CustomerService implements Filter {
 	@Autowired
 	ErpBo erpBo;
 
+	@Value("${noimage.base64}")
+	private String noimagebase64;
+	
 	// private final RandamNumberRepository randamNumberRepository;
 
 	private final CustomerDAL customerdal;
@@ -95,6 +99,13 @@ public class CustomerService implements Filter {
 				String customercode = randomnumber.getCode() + randomnumber.getNumber();
 				customer.setCustcode(customercode);
 				customer.setAddeddate(Custom.getCurrentInvoiceDate());
+				logger.debug("Customer Image Base64 -->"+customer.getCustomerbase64());
+				if(customer.getCustomerbase64()!=null) {
+					logger.info("Customer Image not null"); 
+				}else {
+					logger.info("Customer Image Null");
+					customer.setCustomerbase64(noimagebase64);
+				}
 				customer = customerdal.saveCustomer(customer);
 				if (customer.getStatus().equalsIgnoreCase("success")) {
 					randomnumberdal.updateVendorRandamNumber(randomnumber, 2);
