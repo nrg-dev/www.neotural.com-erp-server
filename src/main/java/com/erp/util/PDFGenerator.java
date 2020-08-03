@@ -85,7 +85,7 @@ public class PDFGenerator {
             PdfPCell pcell5;
             pcell5 = new PdfPCell(new Phrase("Delivery Price",headFont));
             table2.addCell(pcell5);
-            pcell5 = new PdfPCell(new Phrase(poinvoice.getDeliveryprice()));
+            pcell5 = new PdfPCell(new Phrase(String.valueOf(poinvoice.getDeliveryprice())));
             table2.addCell(pcell5);
             /* --------- Invoice Table End ---------- */
             
@@ -109,9 +109,8 @@ public class PDFGenerator {
             ptable.setHorizontalAlignment(Element.ALIGN_RIGHT); 
             ptable.setWidths(new int[]{ 5});
             
-            PdfPCell rcell = new PdfPCell();
+            /* PdfPCell rcell = new PdfPCell();
        
-			/*
 			 * String imagePath =
 			 * "E://WS//ERP-Frontend2//src//assets//images//nrg_logo.png"; Image img =
 			 * Image.getInstance(imagePath); img.scaleAbsoluteHeight(120f);
@@ -227,7 +226,7 @@ public class PDFGenerator {
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 
-                cell = new PdfPCell(new Phrase(poinvoice.getQty()));
+                cell = new PdfPCell(new Phrase(String.valueOf(poinvoice.getQty())));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 cell.setPaddingRight(5);
@@ -397,7 +396,7 @@ public class PDFGenerator {
             PdfPCell pcell5;
             pcell5 = new PdfPCell(new Phrase("Delivery Price",headFont));
             table2.addCell(pcell5);
-            pcell5 = new PdfPCell(new Phrase(soinvoice.getDeliveryprice()));
+            pcell5 = new PdfPCell(new Phrase(String.valueOf(soinvoice.getDeliveryprice())));
             table2.addCell(pcell5);
             /* --------- Invoice Table End ---------- */
             
@@ -421,9 +420,8 @@ public class PDFGenerator {
             ptable.setHorizontalAlignment(Element.ALIGN_RIGHT); 
             ptable.setWidths(new int[]{ 5});
             
-            PdfPCell rcell = new PdfPCell();
+        	/* PdfPCell rcell = new PdfPCell();
        
-			/*
 			 * String imagePath =
 			 * "E://WS//ERP-Frontend2//src//assets//images//nrg_logo.png"; Image img =
 			 * Image.getInstance(imagePath); img.scaleAbsoluteHeight(120f);
@@ -524,7 +522,7 @@ public class PDFGenerator {
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 
-                cell = new PdfPCell(new Phrase(soinvoice.getQty()));
+                cell = new PdfPCell(new Phrase(String.valueOf(soinvoice.getQty())));
                 cell.setPaddingLeft(5);
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_RIGHT);

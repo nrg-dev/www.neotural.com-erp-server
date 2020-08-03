@@ -246,6 +246,7 @@ public class PurchaseImpl implements PurchaseDAL {
 			logger.debug("After POInvoice Payment Status Update -->");
 		}else if(i == 3) {
 			update.set("base64", purchase.getBase64());
+			update.set("status", purchase.getStatus());
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), POInvoice.class);
 		}
