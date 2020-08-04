@@ -3,26 +3,23 @@ package com.erp.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.itextpdf.text.Chunk;
+//import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.List;
-import com.itextpdf.text.ListItem;
+//import com.itextpdf.text.Image;
+//import com.itextpdf.text.List;
+//import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import java.io.ByteArrayInputStream;
+//import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.erp.dto.Purchase;
 import com.erp.dto.Sales;
@@ -36,7 +33,6 @@ public class PDFGenerator {
 	public static String  getBase64(POInvoice poinvoice,Purchase purchase) { 
 		logger.info("PDFGenerator");
 		logger.info("PDF QTY -->"+poinvoice.getQty()); 
-		String base64=null;
 		byte[] encodedBytes=null;
 		String encodedString=null;
 		Document document = new Document();
@@ -61,9 +57,11 @@ public class PDFGenerator {
             mainTable.setSpacingAfter(12.5f);
             
             PdfPTable table2 = new PdfPTable(2);
-            table2.setWidthPercentage(40);
-            table2.setHorizontalAlignment(Element.ALIGN_LEFT); 
+            table2.setWidthPercentage(50);
+            table2.setHorizontalAlignment(Element.ALIGN_CENTER); 
             table2.setWidths(new int[]{ 5, 5});
+            table2.setSpacingBefore(10f);
+            table2.setSpacingAfter(12.5f);
             
             Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);  
             
@@ -112,55 +110,13 @@ public class PDFGenerator {
             table2.addCell(pcell5);
             pcell5 = new PdfPCell(new Phrase(String.valueOf(poinvoice.getDeliveryprice())));
             table2.addCell(pcell5);
-            mainTable.addCell(table2);
             /* --------- Invoice Table End ---------- */
-            
-            /* --------- Business Table Start ---------- */  
-            PdfPTable ptable = new PdfPTable(1);
-            ptable.setWidthPercentage(40);
-            ptable.setHorizontalAlignment(Element.ALIGN_RIGHT); 
-            ptable.setWidths(new int[]{ 5});
-            
-            /* PdfPCell rcell = new PdfPCell();
-       
-			 * String imagePath =
-			 * "E://WS//ERP-Frontend2//src//assets//images//nrg_logo.png"; Image img =
-			 * Image.getInstance(imagePath); img.scaleAbsoluteHeight(120f);
-			 * img.scaleAbsoluteWidth(120f); img.setAlignment(Element.ALIGN_RIGHT);
-			 * rcell.addElement(img); rcell.setBorder(Rectangle.NO_BORDER);
-			 * ptable.addCell(rcell);
-			 */
-            
-            PdfPCell rcell1;
-            rcell1 = new PdfPCell(new Phrase("NICKY OKITA TANAKA,"));
-            rcell1.setBorder(Rectangle.NO_BORDER);
-            rcell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            ptable.addCell(rcell1);
-            PdfPCell rcell2;
-            rcell2 = new PdfPCell(new Phrase("10110 , Jakarta,"));
-            rcell2.setBorder(Rectangle.NO_BORDER);
-            rcell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            ptable.addCell(rcell2);
-            PdfPCell rcell3;
-            rcell3 = new PdfPCell(new Phrase("Jakarta,"));
-            rcell3.setBorder(Rectangle.NO_BORDER);
-            rcell3.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            ptable.addCell(rcell3);
-            PdfPCell rcell4;
-            rcell4 = new PdfPCell(new Phrase("Indonesia."));
-            rcell4.setBorder(Rectangle.NO_BORDER);
-            rcell4.setHorizontalAlignment(Element.ALIGN_RIGHT); 
-            ptable.addCell(rcell4);
-            mainTable.addCell(ptable);
-            /* --------- Bussiness Table Start ---------- */  
             
             /* --------- Vendor Table Start ---------- */  
             PdfPTable ventable = new PdfPTable(1);
             ventable.setWidthPercentage(50);
             ventable.setHorizontalAlignment(Element.ALIGN_LEFT); 
             ventable.setWidths(new int[]{ 5});
-            ventable.setSpacingBefore(10f);
-            ventable.setSpacingAfter(12.5f);
             
             PdfPCell vcell;
             vcell = new PdfPCell(new Phrase("Billing To :",headFont));
@@ -192,7 +148,46 @@ public class PDFGenerator {
             vcell5.setBorder(Rectangle.NO_BORDER);
             vcell5.setHorizontalAlignment(Element.ALIGN_LEFT); 
             ventable.addCell(vcell5);
-            /* --------- Header Label Table End ---------- */  
+            mainTable.addCell(ventable);
+            /* --------- Vendor Table End ---------- */  
+            
+            /* --------- Business Table Start ---------- */  
+            PdfPTable ptable = new PdfPTable(1);
+            ptable.setWidthPercentage(50);
+            ptable.setHorizontalAlignment(Element.ALIGN_RIGHT); 
+            ptable.setWidths(new int[]{ 5});
+            
+            /* PdfPCell rcell = new PdfPCell();
+			 * String imagePath =
+			 * "E://WS//ERP-Frontend2//src//assets//images//nrg_logo.png"; Image img =
+			 * Image.getInstance(imagePath); img.scaleAbsoluteHeight(120f);
+			 * img.scaleAbsoluteWidth(120f); img.setAlignment(Element.ALIGN_RIGHT);
+			 * rcell.addElement(img); rcell.setBorder(Rectangle.NO_BORDER);
+			 * ptable.addCell(rcell);
+			 */
+            
+            PdfPCell rcell1;
+            rcell1 = new PdfPCell(new Phrase("NICKY OKITA TANAKA,"));
+            rcell1.setBorder(Rectangle.NO_BORDER);
+            rcell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            ptable.addCell(rcell1);
+            PdfPCell rcell2;
+            rcell2 = new PdfPCell(new Phrase("10110 , Jakarta,"));
+            rcell2.setBorder(Rectangle.NO_BORDER);
+            rcell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            ptable.addCell(rcell2);
+            PdfPCell rcell3;
+            rcell3 = new PdfPCell(new Phrase("Jakarta,"));
+            rcell3.setBorder(Rectangle.NO_BORDER);
+            rcell3.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            ptable.addCell(rcell3);
+            PdfPCell rcell4;
+            rcell4 = new PdfPCell(new Phrase("Indonesia."));
+            rcell4.setBorder(Rectangle.NO_BORDER);
+            rcell4.setHorizontalAlignment(Element.ALIGN_RIGHT); 
+            ptable.addCell(rcell4);
+            mainTable.addCell(ptable);
+            /* --------- Bussiness Table Start ---------- */  
             
             /*document.add("Purchase Invoice: ", headFont);
             List list1 = new List(List.UNORDERED,Element.ALIGN_RIGHT);           
@@ -326,11 +321,11 @@ public class PDFGenerator {
             PdfWriter.getInstance(document, out);
             document.open();
             document.add(headerTable);
+            document.add(table2);            
             paragraph.add(mainTable);
             document.add(paragraph);
-            /* document.add(table2);            
-            document.add(ptable); */
-            document.add(ventable);
+            /* document.add(ptable);
+            document.add(ventable); */
             document.add(table);
             document.add(table1);
             
@@ -359,7 +354,6 @@ public class PDFGenerator {
 	//------------  Sales PDF Generator -------------
 	public static String  getSalesBase64(SOInvoice soinvoice,Sales sales) { 
 		logger.info("Sales PDFGenerator");
-		String base64=null;
 		byte[] encodedBytes=null;
 		String encodedString=null;
 		Document document = new Document();
@@ -386,8 +380,10 @@ public class PDFGenerator {
             
             PdfPTable table2 = new PdfPTable(2);
             table2.setWidthPercentage(50);
-            table2.setHorizontalAlignment(Element.ALIGN_LEFT); 
+            table2.setHorizontalAlignment(Element.ALIGN_CENTER); 
             table2.setWidths(new int[]{ 5, 5});
+            table2.setSpacingBefore(10f);
+            table2.setSpacingAfter(12.5f);
             
             Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);           
             
@@ -436,47 +432,7 @@ public class PDFGenerator {
             table2.addCell(pcell5);
             pcell5 = new PdfPCell(new Phrase(String.valueOf(soinvoice.getDeliveryprice())));
             table2.addCell(pcell5);
-            mainTable.addCell(table2);
             /* --------- Invoice Table End ---------- */
-            
-            /* --------- Business Table Start ---------- */  
-            PdfPTable ptable = new PdfPTable(1);
-            ptable.setWidthPercentage(50);
-            ptable.setHorizontalAlignment(Element.ALIGN_RIGHT); 
-            ptable.setWidths(new int[]{ 5});
-            
-        	/* PdfPCell rcell = new PdfPCell();
-       
-			 * String imagePath =
-			 * "E://WS//ERP-Frontend2//src//assets//images//nrg_logo.png"; Image img =
-			 * Image.getInstance(imagePath); img.scaleAbsoluteHeight(120f);
-			 * img.scaleAbsoluteWidth(120f); img.setAlignment(Element.ALIGN_RIGHT);
-			 * rcell.addElement(img); rcell.setBorder(Rectangle.NO_BORDER);
-			 * ptable.addCell(rcell);
-			 */
-            
-            PdfPCell rcell1;
-            rcell1 = new PdfPCell(new Phrase("NICKY OKITA TANAKA,"));
-            rcell1.setBorder(Rectangle.NO_BORDER);
-            rcell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            ptable.addCell(rcell1);
-            PdfPCell rcell2;
-            rcell2 = new PdfPCell(new Phrase("10110 , Jakarta,"));
-            rcell2.setBorder(Rectangle.NO_BORDER);
-            rcell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            ptable.addCell(rcell2);
-            PdfPCell rcell3;
-            rcell3 = new PdfPCell(new Phrase("Jakarta,"));
-            rcell3.setBorder(Rectangle.NO_BORDER);
-            rcell3.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            ptable.addCell(rcell3);
-            PdfPCell rcell4;
-            rcell4 = new PdfPCell(new Phrase("Indonesia."));
-            rcell4.setBorder(Rectangle.NO_BORDER);
-            rcell4.setHorizontalAlignment(Element.ALIGN_RIGHT); 
-            ptable.addCell(rcell4);
-            mainTable.addCell(ptable);
-            /* --------- Bussiness Table Start ---------- */  
             
             /* --------- Vendor Table Start ---------- */  
             PdfPTable ventable = new PdfPTable(1);
@@ -516,7 +472,46 @@ public class PDFGenerator {
             vcell5.setBorder(Rectangle.NO_BORDER);
             vcell5.setHorizontalAlignment(Element.ALIGN_LEFT); 
             ventable.addCell(vcell5);
-            /* --------- Header Label Table End ---------- */  
+            mainTable.addCell(ventable);
+            /* --------- Vendor Table End ---------- */  
+            
+            /* --------- Business Table Start ---------- */  
+            PdfPTable ptable = new PdfPTable(1);
+            ptable.setWidthPercentage(50);
+            ptable.setHorizontalAlignment(Element.ALIGN_RIGHT); 
+            ptable.setWidths(new int[]{ 5});
+            
+        	/* PdfPCell rcell = new PdfPCell();
+			 * String imagePath =
+			 * "E://WS//ERP-Frontend2//src//assets//images//nrg_logo.png"; Image img =
+			 * Image.getInstance(imagePath); img.scaleAbsoluteHeight(120f);
+			 * img.scaleAbsoluteWidth(120f); img.setAlignment(Element.ALIGN_RIGHT);
+			 * rcell.addElement(img); rcell.setBorder(Rectangle.NO_BORDER);
+			 * ptable.addCell(rcell);
+			 */
+            
+            PdfPCell rcell1;
+            rcell1 = new PdfPCell(new Phrase("NICKY OKITA TANAKA,"));
+            rcell1.setBorder(Rectangle.NO_BORDER);
+            rcell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            ptable.addCell(rcell1);
+            PdfPCell rcell2;
+            rcell2 = new PdfPCell(new Phrase("10110 , Jakarta,"));
+            rcell2.setBorder(Rectangle.NO_BORDER);
+            rcell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            ptable.addCell(rcell2);
+            PdfPCell rcell3;
+            rcell3 = new PdfPCell(new Phrase("Jakarta,"));
+            rcell3.setBorder(Rectangle.NO_BORDER);
+            rcell3.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            ptable.addCell(rcell3);
+            PdfPCell rcell4;
+            rcell4 = new PdfPCell(new Phrase("Indonesia."));
+            rcell4.setBorder(Rectangle.NO_BORDER);
+            rcell4.setHorizontalAlignment(Element.ALIGN_RIGHT); 
+            ptable.addCell(rcell4);
+            mainTable.addCell(ptable);
+            /* --------- Bussiness Table Start ---------- */  
             
             PdfPCell hcell;
             hcell = new PdfPCell(new Phrase("NO", headFont));
@@ -631,11 +626,11 @@ public class PDFGenerator {
             PdfWriter.getInstance(document, out);
             document.open();
             document.add(headerTable);
+            document.add(table2); 
             paragraph.add(mainTable);
             document.add(paragraph);
-            /* document.add(table2);            
+            /* document.add(ventable);            
             document.add(ptable); */
-            document.add(ventable);
             document.add(table);
             document.add(table1);
             document.close();
