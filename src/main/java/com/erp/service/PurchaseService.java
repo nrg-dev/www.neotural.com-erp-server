@@ -161,6 +161,7 @@ public class PurchaseService implements Filter {
 		Purchase purchase = new Purchase();
 		int randomtrId=19;
 		Transaction tran = new Transaction();
+		List<PurchaseOrder> polist = new ArrayList<PurchaseOrder>();
 		try {
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
@@ -200,12 +201,8 @@ public class PurchaseService implements Filter {
 			purchase.setVendorCountry(vendor.getCountry());
 			purchase.setVendorPhone(vendor.getPhoneNumber());
 			purchase.setVendorEmail(vendor.getEmail()); 
-			logger.info("--------- Before Calling PDF Generator -----------");
 			poinvoice.setVendorname(vendor.getVendorName());
 			poinvoice.setVendorcode(vendor.getVendorcode());
-			String base64=PDFGenerator.getBase64(poinvoice,purchase);
-			logger.info("--------- After Calling PDF Generator -----------");
-			poinvoice.setBase64(base64);
 			purchasedal.savePOInvoice(poinvoice);
 			// Update Random number table
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
@@ -231,6 +228,13 @@ public class PurchaseService implements Filter {
 			}else {
 				logger.info("Payment Type is not cash!");
 			}
+			
+			logger.info("--------- Before Calling PDF Generator -----------");
+			polist = purchasedal.loadPO(2,invoice);
+			String base64=PDFGenerator.getBase64(poinvoice,purchase,polist);
+			logger.info("--------- After Calling PDF Generator -----------");
+			poinvoice.setBase64(base64);
+			purchasedal.updatePOInvoice(poinvoice,3);
 			
 			return new ResponseEntity<>(HttpStatus.OK); // 200
 

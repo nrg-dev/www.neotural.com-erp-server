@@ -20,17 +20,20 @@ import com.itextpdf.text.pdf.PdfWriter;
 //import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
+import java.util.List;
 
 import com.erp.dto.Purchase;
 import com.erp.dto.Sales;
 import com.erp.mongo.model.POInvoice;
+import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.SOInvoice;
+import com.erp.mongo.model.SalesOrder;
 
 public class PDFGenerator {
 	
 	public static final Logger logger = LoggerFactory.getLogger(PDFGenerator.class);
 
-	public static String  getBase64(POInvoice poinvoice,Purchase purchase) { 
+	public static String  getBase64(POInvoice poinvoice,Purchase purchase, List<PurchaseOrder> polist) {  
 		logger.info("PDFGenerator");
 		logger.info("PDF QTY -->"+poinvoice.getQty()); 
 		byte[] encodedBytes=null;
@@ -224,36 +227,38 @@ public class PDFGenerator {
             hcell = new PdfPCell(new Phrase("TOTAL", headFont));
             hcell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table.addCell(hcell);
-
-                PdfPCell cell;
-                cell = new PdfPCell(new Phrase("1"));
+            
+            for(int i= 0; i<polist.size(); i++) {
+            	
+            	PdfPCell cell;
+                cell = new PdfPCell(new Phrase(String.valueOf(i+1)));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
 
-                cell = new PdfPCell(new Phrase(poinvoice.getProductname()));
+                cell = new PdfPCell(new Phrase(polist.get(i).getProductname()));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 
-                cell = new PdfPCell(new Phrase(String.valueOf(poinvoice.getQty())));
+                cell = new PdfPCell(new Phrase(String.valueOf(polist.get(i).getQty())));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 cell.setPaddingRight(5);
                 table.addCell(cell);
                 
-                cell = new PdfPCell(new Phrase(String.valueOf(poinvoice.getSubtotal())));
+                cell = new PdfPCell(new Phrase(String.valueOf(polist.get(i).getUnitprice())));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 cell.setPaddingRight(5);
                 table.addCell(cell);
            
-                cell = new PdfPCell(new Phrase(String.valueOf(poinvoice.getTotalprice())));
+                cell = new PdfPCell(new Phrase(String.valueOf(polist.get(i).getSubtotal())));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 cell.setPaddingRight(5);
                 table.addCell(cell);   
-      
+            }
            
             /*------- Second Table Start -------- */
             PdfPCell hcell1; 
@@ -275,7 +280,7 @@ public class PDFGenerator {
             table1.addCell(hcell1);
 
             PdfPCell cell1;
-            cell1 = new PdfPCell(new Phrase(String.valueOf(poinvoice.getTotalprice())));
+            cell1 = new PdfPCell(new Phrase(String.valueOf(poinvoice.getSubtotal())));
             cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table1.addCell(cell1);
@@ -285,7 +290,7 @@ public class PDFGenerator {
             cell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table1.addCell(cell1);
             
-            cell1 = new PdfPCell(new Phrase("0"));
+            cell1 = new PdfPCell(new Phrase(String.valueOf(poinvoice.getDeliveryprice())));
             cell1.setPaddingLeft(5);
             cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -352,7 +357,7 @@ public class PDFGenerator {
 	}
 	
 	//------------  Sales PDF Generator -------------
-	public static String  getSalesBase64(SOInvoice soinvoice,Sales sales) { 
+	public static String  getSalesBase64(SOInvoice soinvoice,Sales sales, List<SalesOrder> solist) { 
 		logger.info("Sales PDFGenerator");
 		byte[] encodedBytes=null;
 		String encodedString=null;

@@ -588,8 +588,10 @@ public class StockService implements Filter {
 				stock.setAddedqty(currentStock); 
 				stockdal.updateStock(stock,"all");
 			}
-
+			
+			logger.info("--------- Before Calling PDF Generator -----------");
 			poinv = purchasedal.loadPOInvoice(invoiceNumber);
+			polist = purchasedal.loadPO(2,invoiceNumber);
 			
 			Vendor vendor = purchasedal.getVendorDetails(poinv.getVendorcode());
 			purchase.setVendorName(vendor.getVendorName());
@@ -597,12 +599,12 @@ public class StockService implements Filter {
 			purchase.setVendorCountry(vendor.getCountry());
 			purchase.setVendorPhone(vendor.getPhoneNumber());
 			purchase.setVendorEmail(vendor.getEmail()); 
-			logger.info("--------- Before Calling PDF Generator -----------");
 			poinv.setStatus(invoicestatus2);
-			String base64=PDFGenerator.getBase64(poinv,purchase);
-			
+
+			String base64=PDFGenerator.getBase64(poinv,purchase,polist);
+			logger.info("--------- After Calling PDF Generator -----------");
 			poinv.setBase64(base64); 
-			purchasedal.updatePOInvoice(poinv,3);
+			purchasedal.updatePOInvoice(poinv,1);
 
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {

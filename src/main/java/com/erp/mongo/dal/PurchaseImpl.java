@@ -246,8 +246,8 @@ public class PurchaseImpl implements PurchaseDAL {
 			logger.debug("After POInvoice Payment Status Update -->");
 		}else if(i == 3) {
 			update.set("base64", purchase.getBase64());
-			update.set("status", invoicestatus2);
-			update.set("stockstatus", stockstatus2);
+			//update.set("status", invoicestatus2);
+			//update.set("stockstatus", stockstatus2);
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), POInvoice.class);
 		}
@@ -307,7 +307,6 @@ public class PurchaseImpl implements PurchaseDAL {
 		List<PurchaseOrder> list=null;
 		Query query = new Query();
 		if(temp == 1) {
-			logger.info("DAO Vendor item load all");
 			query.with(new Sort(new Order(Direction.DESC, "pocode")));
 			list = mongoTemplate.find(query,PurchaseOrder.class);
 		}else if(temp == 2) {
