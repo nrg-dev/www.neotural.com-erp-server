@@ -364,13 +364,12 @@ public class PDFGenerator {
 		Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-
         	PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100);
             table.setWidths(new int[]{1, 5, 3, 5, 5});
             table.setSpacingBefore(10f);
             table.setSpacingAfter(12.5f);
-            
+
             PdfPTable table1 = new PdfPTable(4);
             table1.setWidthPercentage(100);
             table1.setWidths(new int[]{ 5, 3, 5, 5});
@@ -390,7 +389,7 @@ public class PDFGenerator {
             table2.setSpacingBefore(10f);
             table2.setSpacingAfter(12.5f);
             
-            Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);           
+            Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);  
             
             /* --------- Header Label Table Start ---------- */            
             PdfPTable headerTable = new PdfPTable(1);
@@ -439,13 +438,11 @@ public class PDFGenerator {
             table2.addCell(pcell5);
             /* --------- Invoice Table End ---------- */
             
-            /* --------- Vendor Table Start ---------- */  
+            /* --------- Customer Table Start ---------- */  
             PdfPTable ventable = new PdfPTable(1);
             ventable.setWidthPercentage(50);
             ventable.setHorizontalAlignment(Element.ALIGN_LEFT); 
             ventable.setWidths(new int[]{ 5});
-            ventable.setSpacingBefore(10f);
-            ventable.setSpacingAfter(12.5f);
             
             PdfPCell vcell;
             vcell = new PdfPCell(new Phrase("Billing To :",headFont));
@@ -478,22 +475,13 @@ public class PDFGenerator {
             vcell5.setHorizontalAlignment(Element.ALIGN_LEFT); 
             ventable.addCell(vcell5);
             mainTable.addCell(ventable);
-            /* --------- Vendor Table End ---------- */  
+            /* --------- Customer Table End ---------- */  
             
             /* --------- Business Table Start ---------- */  
             PdfPTable ptable = new PdfPTable(1);
             ptable.setWidthPercentage(50);
             ptable.setHorizontalAlignment(Element.ALIGN_RIGHT); 
             ptable.setWidths(new int[]{ 5});
-            
-        	/* PdfPCell rcell = new PdfPCell();
-			 * String imagePath =
-			 * "E://WS//ERP-Frontend2//src//assets//images//nrg_logo.png"; Image img =
-			 * Image.getInstance(imagePath); img.scaleAbsoluteHeight(120f);
-			 * img.scaleAbsoluteWidth(120f); img.setAlignment(Element.ALIGN_RIGHT);
-			 * rcell.addElement(img); rcell.setBorder(Rectangle.NO_BORDER);
-			 * ptable.addCell(rcell);
-			 */
             
             PdfPCell rcell1;
             rcell1 = new PdfPCell(new Phrase("NICKY OKITA TANAKA,"));
@@ -538,35 +526,38 @@ public class PDFGenerator {
             hcell = new PdfPCell(new Phrase("TOTAL", headFont));
             hcell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table.addCell(hcell);
-
-                PdfPCell cell;
-                cell = new PdfPCell(new Phrase("1"));
+            
+            for(int i= 0; i<solist.size(); i++) {
+            	
+            	PdfPCell cell;
+                cell = new PdfPCell(new Phrase(String.valueOf(i+1)));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
 
-                cell = new PdfPCell(new Phrase(soinvoice.getProductname()));
+                cell = new PdfPCell(new Phrase(solist.get(i).getProductname()));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 
-                cell = new PdfPCell(new Phrase(String.valueOf(soinvoice.getQty())));
-                cell.setPaddingLeft(5);
+                cell = new PdfPCell(new Phrase(String.valueOf(solist.get(i).getQty())));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                cell.setPaddingRight(5);
                 table.addCell(cell);
                 
-                cell = new PdfPCell(new Phrase(String.valueOf(soinvoice.getSubtotal())));
+                cell = new PdfPCell(new Phrase(String.valueOf(solist.get(i).getUnitprice())));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 cell.setPaddingRight(5);
                 table.addCell(cell);
            
-                cell = new PdfPCell(new Phrase(String.valueOf(soinvoice.getTotalprice())));
+                cell = new PdfPCell(new Phrase(String.valueOf(solist.get(i).getSubtotal())));
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 cell.setPaddingRight(5);
                 table.addCell(cell);   
+            }
            
             /*------- Second Table Start -------- */
             PdfPCell hcell1; 
@@ -588,7 +579,7 @@ public class PDFGenerator {
             table1.addCell(hcell1);
 
             PdfPCell cell1;
-            cell1 = new PdfPCell(new Phrase(String.valueOf(soinvoice.getTotalprice())));
+            cell1 = new PdfPCell(new Phrase(String.valueOf(soinvoice.getSubtotal())));
             cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table1.addCell(cell1);
@@ -598,7 +589,7 @@ public class PDFGenerator {
             cell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table1.addCell(cell1);
             
-            cell1 = new PdfPCell(new Phrase("0"));
+            cell1 = new PdfPCell(new Phrase(String.valueOf(soinvoice.getDeliveryprice())));
             cell1.setPaddingLeft(5);
             cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -626,26 +617,28 @@ public class PDFGenerator {
             cell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
             cell2.setPaddingRight(5);
             table1.addCell(cell2);
+     
             /* ------- Second Table End -------- */
+            
             Paragraph paragraph = new Paragraph();
+
             PdfWriter.getInstance(document, out);
             document.open();
             document.add(headerTable);
-            document.add(table2); 
+            document.add(table2);            
             paragraph.add(mainTable);
             document.add(paragraph);
-            /* document.add(ventable);            
-            document.add(ptable); */
+            /* document.add(ptable);
+            document.add(ventable); */
             document.add(table);
             document.add(table1);
+            
             document.close();
-    		logger.info("PDFGenerator done!");
+    		logger.info("Sales PDFGenerator done!");
     		encodedBytes = Base64.getEncoder().encode(out.toByteArray());
             encodedString =  new String(encodedBytes);
-            //return new ByteArrayInputStream(out.toByteArray());
             return encodedString;
 
-        
         }catch(Exception e) {
         	logger.error("Exception-->"+e.getMessage());
         }

@@ -50,7 +50,7 @@ public interface SalesDAL {
 	public SalesOrder saveSO(SalesOrder salesorder);   
 	public boolean updateSalesOrder(SalesOrder salesorder);
 	public boolean removeSO(String id);
-	public List<SalesOrder> loadSO();
+	public List<SalesOrder> loadSO(int i, String string); 
 
 	public boolean updateSO(String invoice,String[] value);
 

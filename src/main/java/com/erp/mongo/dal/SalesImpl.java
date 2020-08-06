@@ -180,19 +180,19 @@ public class SalesImpl implements SalesDAL {
 	
 	// update SOInvoice
 	@Override
-	public SOInvoice updateSOInvoice(SOInvoice purchase,int i) {		
+	public SOInvoice updateSOInvoice(SOInvoice soinv,int i) {		
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("invoicenumber").is(purchase.getInvoicenumber()));
+		query.addCriteria(Criteria.where("invoicenumber").is(soinv.getInvoicenumber()));
 		if(i == 1) {
-			update.set("invoicedate", purchase.getInvoicedate());
-			update.set("invoicenumber", purchase.getInvoicenumber());
-			update.set("customername", purchase.getCustomername());
-			update.set("deliveryprice", purchase.getDeliveryprice());
-			update.set("qty", purchase.getQty());
-			update.set("totalprice", purchase.getTotalprice());
+			update.set("invoicedate", soinv.getInvoicedate());
+			update.set("invoicenumber", soinv.getInvoicenumber());
+			update.set("customername", soinv.getCustomername());
+			update.set("deliveryprice", soinv.getDeliveryprice());
+			update.set("qty", soinv.getQty());
+			update.set("totalprice", soinv.getTotalprice());
 			//update.set("totalitem", purchase.getTotalitem());
-			update.set("status", purchase.getStatus());
+			update.set("status", soinv.getStatus());
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), SOInvoice.class);
 			//mongoTemplate.updateFirst(query, update, SOInvoice.class);
@@ -202,8 +202,13 @@ public class SalesImpl implements SalesDAL {
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), SOInvoice.class);
 			logger.debug("After SOInvoice Payment Status Update -->");
+		}else if(i == 3) {
+			logger.info("--- PDF Update ---"); 
+			update.set("base64", soinv.getBase64());
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), SOInvoice.class);
 		}
-		return purchase;
+		return soinv;
 	}
 
 	// Save SO Invoice details
@@ -277,12 +282,28 @@ public class SalesImpl implements SalesDAL {
 		return true;
 	}
 	
-	public List<SalesOrder> loadSO(){
+	/* public List<SalesOrder> loadSO(){
 		List<SalesOrder> list=null;
 		Query query = new Query();
 		query.with(new Sort(new Order(Direction.DESC, "socode")));
 		list = mongoTemplate.find(query,SalesOrder.class);
 		logger.info("Size-->"+list.size());
+		return list;
+	} */
+	
+	public List<SalesOrder> loadSO(int temp,String invoice){
+		logger.info("Invoice -->"+invoice); 
+		List<SalesOrder> list=null;
+		Query query = new Query();
+		if(temp == 1) {
+			query.with(new Sort(new Order(Direction.DESC, "socode")));
+			list = mongoTemplate.find(query,SalesOrder.class);
+		}else if(temp == 2) {
+			query.addCriteria(Criteria.where("invoicenumber").is(invoice));
+			list = mongoTemplate.find(query,SalesOrder.class);
+		}
+		
+		logger.debug("Size-->"+list.size());
 		return list;
 	}
 	

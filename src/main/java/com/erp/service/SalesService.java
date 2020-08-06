@@ -823,7 +823,7 @@ public class SalesService implements Filter {
 		logger.info("loadSO");
 		List<SalesOrder> solist = null;
 		try {
-			solist = salesdal.loadSO();
+			solist = salesdal.loadSO(1,"all");
 			return new ResponseEntity<List<SalesOrder>>(solist, HttpStatus.CREATED);
 
 		} catch (Exception e) {
@@ -849,6 +849,7 @@ public class SalesService implements Filter {
 		int randomId = 11;
 		int randomtrId=19;
 		Transaction tran = new Transaction();
+		List<SalesOrder> solist = new ArrayList<SalesOrder>();
 		try {
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
@@ -859,12 +860,13 @@ public class SalesService implements Filter {
 			soinvoice.setInvoicedate(soinvoicedto.getCreateddate());
 			logger.debug("Invoice Date-->" + soinvoice.getInvoicedate());
 			soinvoice.setInvoicenumber(invoice);
-			soinvoice.setStatus(salesorderstatus1);
 			soinvoice.setPaymenttype(soinvoicedto.getPaymenttype());
 			if(soinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
 				soinvoice.setPaymentstatus(paymentstatus2); 
+				soinvoice.setStatus("Success");
 			}else {
 				soinvoice.setPaymentstatus(paymentstatus1); 
+				soinvoice.setStatus("Pending");
 			}			
 			soinvoice.setSubtotal(soinvoicedto.getSubtotal());
 			soinvoice.setDeliveryprice(soinvoicedto.getDeliverycharge());
@@ -886,12 +888,11 @@ public class SalesService implements Filter {
 			sales.setCustomerEmail(cust.getEmail());
 			soinvoice.setCustomercode(cust.getCustcode());
 			soinvoice.setCustomername(cust.getCustomerName()); 
-			String base64=PDFGenerator.getSalesBase64(soinvoice,sales);
-			soinvoice.setBase64(base64);
+			
 			salesdal.saveSOInvoice(soinvoice);
 			// Update Random number table
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
-			logger.info("createInvoice done!");
+			logger.info("createInvoice done!");			
 			
 			//-- Transaction Table Insert
 			if(soinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
@@ -913,6 +914,13 @@ public class SalesService implements Filter {
 			}else {
 				logger.info("Payment Type is not cash!");
 			}
+			
+			solist = salesdal.loadSO(2,invoice);
+			String base64=PDFGenerator.getSalesBase64(soinvoice,sales,solist);
+			logger.info("--------- After Calling Sales PDF Generator -----------");
+			soinvoice.setBase64(base64);
+			salesdal.updateSOInvoice(soinvoice,3);
+			
 			return new ResponseEntity<>(HttpStatus.OK);
 			
 		}catch(Exception e) {
