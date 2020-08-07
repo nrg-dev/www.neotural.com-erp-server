@@ -1,6 +1,8 @@
 package com.erp.service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -10,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -182,9 +185,17 @@ public class EmployeeService implements Filter {
 	public ResponseEntity<?> loadDailyReport(String employeecode,String date,String type) {
 		logger.info("loadDailyReport");
 		logger.debug("Employee Id-->"+employeecode);
+		logger.debug("Date -->"+date);
 		List<DailyReport> responseList = null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat your_format = new SimpleDateFormat("dd/MMM/yyyy");
 		try {
-			responseList = employeedal.loadDailyReport(employeecode,date,type);
+			logger.debug("Report Date-->" + date);
+			Date dt1 = format.parse(date);
+			String reportdate = your_format.format(dt1);
+			logger.debug("Change FormatedDate-->" + reportdate);
+			
+			responseList = employeedal.loadDailyReport(employeecode,reportdate,type);
 			logger.debug("List Size-->"+responseList.size());
 			return new ResponseEntity<List<DailyReport>>(responseList, HttpStatus.OK);
 
@@ -260,27 +271,27 @@ public class EmployeeService implements Filter {
 
 	}
 	
-	    // Save Daily Report
-		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value = "/saveDailyReport", method = RequestMethod.POST)
-		public ResponseEntity<?> saveDailyReport(@RequestBody EmployeeDto employeeDto) {
-			logger.info("saveDailyReport");
-			try {
-				boolean status = employeedal.saveUpdateDailyReport(employeeDto);
-				if(status) {
-					return new ResponseEntity<>(HttpStatus.OK); 
-				} else {
-					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
-				}
-
-			} catch (Exception e) {
-				logger.error("Exception-->" + e.getMessage());
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
-			} finally {
-
+    // Save Daily Report
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/saveDailyReport", method = RequestMethod.POST)
+	public ResponseEntity<?> saveDailyReport(@RequestBody EmployeeDto employeeDto) {
+		logger.info("saveDailyReport");
+		try {
+			boolean status = employeedal.saveUpdateDailyReport(employeeDto);
+			if(status) {
+				return new ResponseEntity<>(HttpStatus.OK); 
+			} else {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
 			}
+
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
+		} finally {
+
 		}
-		
+	}
+	
 	/*
 	 * // Save Daily Report
 	 * 

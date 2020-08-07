@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -18,6 +19,8 @@ import com.erp.mongo.model.AbsentList;
 import com.erp.mongo.model.ContractList;
 import com.erp.mongo.model.DailyReport;
 import com.erp.mongo.model.Employee;
+import com.erp.mongo.model.POReturnDetails;
+
 import org.springframework.data.domain.Sort; 
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
@@ -91,12 +94,37 @@ public class EmployeeImpl implements EmployeeDAL {
 	}
 	
 	public boolean saveUpdateDailyReport(EmployeeDto employeeDto) {
-		boolean status;
+		boolean status = false; 
 		Update update = null;//new Update();
 		Query query = null;//new Query();
 		DailyReport dailyReport=null;
 		try {
-			query = new Query();		
+			logger.info("EmployeeID -->"+employeeDto.getId()); 
+			if(employeeDto.getId() != null) {
+				logger.info("Update");
+				update = new Update();
+				query = new Query();
+				query.addCriteria(Criteria.where("id").is(employeeDto.getId()));
+				update.set("report", employeeDto.getReport());
+				mongoTemplate.findAndModify(query, update,
+						new FindAndModifyOptions().returnNew(true), DailyReport.class);
+				status=true;
+			}else {
+				 // save
+				query = new Query();		
+				query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
+				query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
+				List<DailyReport> list = mongoTemplate.find(query,DailyReport.class);
+				if(list.size()>0) {
+					
+				} else {
+					dailyReport=new DailyReport(employeeDto.getEmployeecode(),employeeDto.getDate(),employeeDto.getReport());
+					mongoTemplate.save(dailyReport);
+					status=true;
+				} 
+			}
+			
+			/* query = new Query();		
 			query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
 			query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
 			List<DailyReport> list = mongoTemplate.find(query,DailyReport.class);
@@ -115,7 +143,7 @@ public class EmployeeImpl implements EmployeeDAL {
 			dailyReport=new DailyReport(employeeDto.getEmployeecode(),employeeDto.getDate(),employeeDto.getReport());
 			mongoTemplate.save(dailyReport);
 			status=true;
-		}
+		} */
 		return status;
 	}
 		/*try {
