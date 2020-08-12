@@ -99,7 +99,7 @@ public class EmployeeImpl implements EmployeeDAL {
 		Query query = null;//new Query();
 		DailyReport dailyReport=null;
 		try {
-			logger.info("EmployeeID -->"+employeeDto.getId()); 
+			/* logger.info("EmployeeID -->"+employeeDto.getId()); 
 			if(employeeDto.getId() != null) {
 				logger.info("Update");
 				update = new Update();
@@ -122,9 +122,9 @@ public class EmployeeImpl implements EmployeeDAL {
 					mongoTemplate.save(dailyReport);
 					status=true;
 				} 
-			}
+			} */
 			
-			/* query = new Query();		
+			query = new Query();		
 			query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
 			query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
 			List<DailyReport> list = mongoTemplate.find(query,DailyReport.class);
@@ -137,15 +137,14 @@ public class EmployeeImpl implements EmployeeDAL {
 				update.set("report", employeeDto.getReport());
 				mongoTemplate.updateFirst(query, update, DailyReport.class);
 				status=true;
-			}
-		else {
-            // save
-			dailyReport=new DailyReport(employeeDto.getEmployeecode(),employeeDto.getDate(),employeeDto.getReport());
-			mongoTemplate.save(dailyReport);
-			status=true;
-		} */
-		return status;
-	}
+			} else {
+	            // save
+				dailyReport=new DailyReport(employeeDto.getEmployeecode(),employeeDto.getDate(),employeeDto.getReport());
+				mongoTemplate.save(dailyReport);
+				status=true;
+			} 
+			return status;
+		}
 		/*try {
 			
 			 * if(employeeDto.getType().equalsIgnoreCase("save")) { dailyReport=new
@@ -156,7 +155,8 @@ public class EmployeeImpl implements EmployeeDAL {
 			 * update.set("report", employeeDto.getReport());
 			 * mongoTemplate.updateFirst(query, update, DailyReport.class); } status=true;
 			 * return status;
-			 }*/ catch(Exception e) {
+			 }*/ 
+		catch(Exception e) {
 			logger.error("EmployeeImpl saveDailyReport error"+e.getMessage());
 			status=false;
 			return status;

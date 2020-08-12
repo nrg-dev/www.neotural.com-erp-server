@@ -208,11 +208,32 @@ public class EmployeeService implements Filter {
 		}
 	}
 	
+	// get & load daily report
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadTodayReport", method = RequestMethod.GET)
+	public ResponseEntity<?> loadTodayReport(String employeecode,String date,String type) {
+		logger.info("loadTodayReport");
+		logger.debug("Employee Id-->"+employeecode);
+		logger.debug("Date -->"+date); 
+		List<DailyReport> responseList = null;
+		try {
+			responseList = employeedal.loadDailyReport(employeecode,date,type);
+			logger.debug("List Size-->"+responseList.size());
+			return new ResponseEntity<List<DailyReport>>(responseList, HttpStatus.OK);
+
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+		} finally {
+
+		}
+	}
 		// get & load AbsentList
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value = "/loadAbsentList", method = RequestMethod.GET)
 		public ResponseEntity<?> loadAbsentList(String employeecode,String date,String type) {
-			logger.info("loadDailyReport");
+			logger.info("loadAbsentList");
 			logger.debug("EmployeeCode-->"+employeecode);
 			List<AbsentList> responseList = null;
 			try {
