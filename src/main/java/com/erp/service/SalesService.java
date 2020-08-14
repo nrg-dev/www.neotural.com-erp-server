@@ -51,6 +51,7 @@ import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.SalesOrder;
 import com.erp.mongo.model.Stock;
+import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Transaction;
 import com.erp.util.Custom;
 import com.erp.util.PDFGenerator;
@@ -92,6 +93,9 @@ public class SalesService implements Filter {
 	
 	@Value("${soretcash.desc}")
 	private String soretcash;
+	
+	@Value("${noimage.base64}")
+	private String nologo;
 
 	// private final RandamNumberRepository randamNumberRepository;
 
@@ -167,14 +171,14 @@ public class SalesService implements Filter {
 		int totalitem = 0;
 		try {
 			sales = new Sales();
-			logger.info("Post Json -->" + salesorderarray);
+			logger.debug("Post Json -->" + salesorderarray);
 			// logger.info("Vendor name --->"+vendorName);
 			// Store into parent table to show in first data table view
 			randomnumber = randomnumberdal.getRandamNumber(2);
 			//logger.info("SO Invoice random number-->" + randomnumber.getSalesinvoicenumber());
 			//logger.info("SO Invoice random code-->" + randomnumber.getSalesinvoicecode());
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
-			logger.info("Invoice number -->" + invoice);
+			logger.debug("Invoice number -->" + invoice);
 			ArrayList<String> list = new ArrayList<String>();
 			JSONArray jsonArr = new JSONArray(salesorderarray);
 			int remove = 0;
@@ -185,17 +189,17 @@ public class SalesService implements Filter {
 				}
 			}
 			int postion = remove - 1;
-			logger.info("Position-->" + postion);
+			logger.debug("Position-->" + postion);
 			list.remove(postion);
-			logger.info("Size -------->" + jsonArr.length());
+			logger.debug("Size -------->" + jsonArr.length());
 			int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
-				logger.info("Loop 1...." + i);
+				logger.debug("Loop 1...." + i);
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (l == jsonArr.length()) {
 					logger.info("Last Value");
 					JSONObject jObject = arr2.getJSONObject(0);
-					logger.info("SO Date -->" + jObject.getString("sodate"));
+					logger.debug("SO Date -->" + jObject.getString("sodate"));
 					// logger.info("Customer Name -->" + jObject.getString("customername"));
 					logger.info("Delivery Cost -->" + jObject.getString("deliveryCost"));
 					// sales.setCustomerName(jObject.getString("customername"));
@@ -850,78 +854,87 @@ public class SalesService implements Filter {
 		int randomtrId=19;
 		Transaction tran = new Transaction();
 		List<SalesOrder> solist = new ArrayList<SalesOrder>();
+		List<Template> templist = new ArrayList<Template>();
 		try {
-			randomnumber = randomnumberdal.getRandamNumber(randomId);
-			String invoice = randomnumber.getCode() + randomnumber.getNumber();
-			logger.debug("Invoice number-->" + invoice);
-			// Update Invoice Number and get Vendor name and code
-			salesdal.updateSO(invoice,soinvoicedto.getOrdernumbers());
-			SOInvoice soinvoice = new SOInvoice();
-			soinvoice.setInvoicedate(soinvoicedto.getCreateddate());
-			logger.debug("Invoice Date-->" + soinvoice.getInvoicedate());
-			soinvoice.setInvoicenumber(invoice);
-			soinvoice.setPaymenttype(soinvoicedto.getPaymenttype());
-			if(soinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
-				soinvoice.setPaymentstatus(paymentstatus2); 
-				soinvoice.setStatus("Success");
+			templist = salesdal.getTemplateListDetails(templist,"Sales Invoice");
+			logger.debug("List Size -->"+templist.size()); 
+			if(templist.size() > 0) {
+				randomnumber = randomnumberdal.getRandamNumber(randomId);
+				String invoice = randomnumber.getCode() + randomnumber.getNumber();
+				logger.debug("Invoice number-->" + invoice);
+				// Update Invoice Number and get Vendor name and code
+				salesdal.updateSO(invoice,soinvoicedto.getOrdernumbers());
+				SOInvoice soinvoice = new SOInvoice();
+				soinvoice.setInvoicedate(soinvoicedto.getCreateddate());
+				logger.debug("Invoice Date-->" + soinvoice.getInvoicedate());
+				soinvoice.setInvoicenumber(invoice);
+				soinvoice.setPaymenttype(soinvoicedto.getPaymenttype());
+				if(soinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
+					soinvoice.setPaymentstatus(paymentstatus2); 
+					soinvoice.setStatus("Success");
+				}else {
+					soinvoice.setPaymentstatus(paymentstatus1); 
+					soinvoice.setStatus("Pending");
+				}			
+				soinvoice.setSubtotal(soinvoicedto.getSubtotal());
+				soinvoice.setDeliveryprice(soinvoicedto.getDeliverycharge());
+				soinvoice.setTotalprice(soinvoicedto.getSubtotal()+soinvoicedto.getDeliverycharge());
+				for(long v:soinvoicedto.getQty()) {
+					soinvoice.setQty(v);
+				}
+				for(String custcode:soinvoicedto.getCustomercode()) {
+					sales.setSoDate(custcode);
+				}
+				for(String prod:soinvoicedto.getProductname()) {
+					soinvoice.setProductname(prod);
+				}
+				Customer cust = salesdal.getCustomerDetails(sales.getSoDate());
+				sales.setCustomerName(cust.getCustomerName());
+				sales.setCustomerCity(cust.getCity());
+				sales.setCustomerCountry(cust.getCountry());
+				sales.setCustomerPhone(cust.getPhoneNumber());
+				sales.setCustomerEmail(cust.getEmail());
+				soinvoice.setCustomercode(cust.getCustcode());
+				soinvoice.setCustomername(cust.getCustomerName()); 
+				
+				salesdal.saveSOInvoice(soinvoice);
+				// Update Random number table
+				randomnumberdal.updateRandamNumber(randomnumber,randomId);
+				logger.info("createInvoice done!");			
+				
+				//-- Transaction Table Insert
+				if(soinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
+					logger.info("Payment Type is cash!");
+					randomnumber = randomnumberdal.getRandamNumber(randomtrId);
+					String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
+					logger.debug("Transaction Invoice number-->" + traninvoice);
+					tran.setTransactionnumber(traninvoice);
+					tran.setTransactiondate(Custom.getCurrentInvoiceDate());
+					tran.setDescription(soinvcash);
+					tran.setInvoicenumber(invoice);
+					tran.setCredit(soinvoicedto.getSubtotal());
+					tran.setDebit(0);
+					tran.setStatus(transinvstatus2);
+					tran.setCurrency(currency);
+					salesdal.saveTransaction(tran);
+					randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
+					logger.info("Transation Insert done!");
+				}else {
+					logger.info("Payment Type is not cash!");
+				}
+				
+				solist = salesdal.loadSO(2,invoice);
+				Template template = salesdal.getTemplateDetails("Sales Invoice");
+				String base64=PDFGenerator.getSalesBase64(soinvoice,sales,solist,template);
+				logger.info("--------- After Calling Sales PDF Generator -----------");
+				soinvoice.setBase64(base64);
+				salesdal.updateSOInvoice(soinvoice,3);
+				
+				return new ResponseEntity<>(HttpStatus.OK);
 			}else {
-				soinvoice.setPaymentstatus(paymentstatus1); 
-				soinvoice.setStatus("Pending");
-			}			
-			soinvoice.setSubtotal(soinvoicedto.getSubtotal());
-			soinvoice.setDeliveryprice(soinvoicedto.getDeliverycharge());
-			soinvoice.setTotalprice(soinvoicedto.getSubtotal()+soinvoicedto.getDeliverycharge());
-			for(long v:soinvoicedto.getQty()) {
-				soinvoice.setQty(v);
+				logger.info("--------- Template Details Null -----------");
+				return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED); // 417
 			}
-			for(String custcode:soinvoicedto.getCustomercode()) {
-				sales.setSoDate(custcode);
-			}
-			for(String prod:soinvoicedto.getProductname()) {
-				soinvoice.setProductname(prod);
-			}
-			Customer cust = salesdal.getCustomerDetails(sales.getSoDate());
-			sales.setCustomerName(cust.getCustomerName());
-			sales.setCustomerCity(cust.getCity());
-			sales.setCustomerCountry(cust.getCountry());
-			sales.setCustomerPhone(cust.getPhoneNumber());
-			sales.setCustomerEmail(cust.getEmail());
-			soinvoice.setCustomercode(cust.getCustcode());
-			soinvoice.setCustomername(cust.getCustomerName()); 
-			
-			salesdal.saveSOInvoice(soinvoice);
-			// Update Random number table
-			randomnumberdal.updateRandamNumber(randomnumber,randomId);
-			logger.info("createInvoice done!");			
-			
-			//-- Transaction Table Insert
-			if(soinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
-				logger.info("Payment Type is cash!");
-				randomnumber = randomnumberdal.getRandamNumber(randomtrId);
-				String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
-				logger.debug("Transaction Invoice number-->" + traninvoice);
-				tran.setTransactionnumber(traninvoice);
-				tran.setTransactiondate(Custom.getCurrentInvoiceDate());
-				tran.setDescription(soinvcash);
-				tran.setInvoicenumber(invoice);
-				tran.setCredit(soinvoicedto.getSubtotal());
-				tran.setDebit(0);
-				tran.setStatus(transinvstatus2);
-				tran.setCurrency(currency);
-				salesdal.saveTransaction(tran);
-				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
-				logger.info("Transation Insert done!");
-			}else {
-				logger.info("Payment Type is not cash!");
-			}
-			
-			solist = salesdal.loadSO(2,invoice);
-			String base64=PDFGenerator.getSalesBase64(soinvoice,sales,solist);
-			logger.info("--------- After Calling Sales PDF Generator -----------");
-			soinvoice.setBase64(base64);
-			salesdal.updateSOInvoice(soinvoice,3);
-			
-			return new ResponseEntity<>(HttpStatus.OK);
 			
 		}catch(Exception e) {
 			logger.error("Exception-->"+e.getMessage());
@@ -952,14 +965,14 @@ public class SalesService implements Filter {
 	@RequestMapping(value = "/createReturn", method = RequestMethod.POST)
 	public ResponseEntity<?> createReturn(@RequestBody SOReturnDetails soreturn) {
 		logger.info("--------- createReturn -------");
-		logger.info("SO CUstomer Name -->" + soreturn.getCustomername());
-		logger.info("SO Item Name -->" + soreturn.getItemname());
-		logger.info("SO Invoiced Qty-->" + soreturn.getInvoicedqty());
-		logger.info("SO Date -->" + soreturn.getInvoiceddate());
-		logger.info("SO Item Status -->" + soreturn.getItemStatus());
-		logger.info("SO Payment Status -->" + soreturn.getReturnStatus());
-		logger.info("SO Qty -->" + soreturn.getQty());
-		logger.info("SO Price -->" + soreturn.getPrice());
+		logger.debug("SO CUstomer Name -->" + soreturn.getCustomername());
+		logger.debug("SO Item Name -->" + soreturn.getItemname());
+		logger.debug("SO Invoiced Qty-->" + soreturn.getInvoicedqty());
+		logger.debug("SO Date -->" + soreturn.getInvoiceddate());
+		logger.debug("SO Item Status -->" + soreturn.getItemStatus());
+		logger.debug("SO Payment Status -->" + soreturn.getReturnStatus());
+		logger.debug("SO Qty -->" + soreturn.getQty());
+		logger.debug("SO Price -->" + soreturn.getPrice());
 		logger.debug("SoCode-->" + soreturn.getSocode());
 		RandomNumber randomnumber = null;
 		int randomId=9;
@@ -1025,5 +1038,47 @@ public class SalesService implements Filter {
 		}
 	}
 	
+	// get Company Details
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/getTemplateDetails", method = RequestMethod.GET)
+	public ResponseEntity<?> getTemplateDetails(String templateType) {
+		logger.info("getTemplateDetails");
+		Template template = null;
+		try {
+			template = salesdal.getTemplateDetails(templateType);
+			return new ResponseEntity<Template>(template, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.info("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+		} finally {
+
+		}
+	}
+	
+	//Save/Update Details
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/addTemplateDetails", method = RequestMethod.POST)
+	public ResponseEntity<?> addTemplateDetails(@RequestBody Template template) {
+		logger.info("Sales AddTemplateDetails");
+		logger.debug("Company Name-->" + template.getCompanyname());
+		logger.debug("Address-->" + template.getAddress());
+		logger.debug("City Name-->" + template.getCity());
+		logger.debug("Country Name-->" + template.getCountry());
+		logger.debug("Type-->" + template.getTemplateType());
+		try {
+			if(template.getCompanylogo()!= null) {
+				logger.info("Sales Company Image not null"); 
+			}else {
+				logger.info("Sales Company Image Null");
+				template.setCompanylogo(nologo);
+			}
+			salesdal.addTemplateDetails(template);
+			return new ResponseEntity<>(HttpStatus.OK); // 200
+		}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
+		}
+	}
 	
 }

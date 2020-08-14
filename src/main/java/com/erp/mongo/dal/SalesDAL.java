@@ -11,6 +11,7 @@ import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.SalesOrder;
+import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Transaction;
 
 public interface SalesDAL {
@@ -62,5 +63,7 @@ public interface SalesDAL {
 
 	public SOReturnDetails updateSOReturn(SOReturnDetails soret);  
 	
-
+	public Template getTemplateDetails(String templatetype);
+	public Template addTemplateDetails(Template template);
+	public List<Template> getTemplateListDetails(List<Template> templist, String templatetype);  
 }

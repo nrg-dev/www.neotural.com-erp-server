@@ -370,12 +370,15 @@ public class PDFGenerator {
 	}
 	
 	//------------  Sales PDF Generator -------------
-	public static String  getSalesBase64(SOInvoice soinvoice,Sales sales, List<SalesOrder> solist) { 
+	public static String  getSalesBase64(SOInvoice soinvoice,Sales sales, List<SalesOrder> solist, Template template) { 
 		logger.info("Sales PDFGenerator");
 		byte[] encodedBytes=null;
 		String encodedString=null;
 		Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+        
+        int pos = template.getCompanylogo().indexOf("base64,");
+        Image img = null;
         try {
         	PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100);
@@ -496,23 +499,39 @@ public class PDFGenerator {
             ptable.setHorizontalAlignment(Element.ALIGN_RIGHT); 
             ptable.setWidths(new int[]{ 5});
             
+            PdfPCell rcell = new PdfPCell();
+            if (template.getCompanylogo().startsWith("data") && pos > 0) {
+                byte[] image = com.itextpdf.text.pdf.codec.Base64.decode(template.getCompanylogo().substring(pos + 7));
+    			img = Image.getInstance(image); 
+            }
+            else {
+    			img = Image.getInstance(template.getCompanylogo()); 
+            }
+			img.scaleAbsoluteHeight(120f);
+			img.scaleAbsoluteWidth(120f); 
+			img.setAlignment(Element.ALIGN_RIGHT);
+			rcell.addElement(img); 
+            rcell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			rcell.setBorder(Rectangle.NO_BORDER);
+			ptable.addCell(rcell);
+            
             PdfPCell rcell1;
-            rcell1 = new PdfPCell(new Phrase("NICKY OKITA TANAKA,"));
+            rcell1 = new PdfPCell(new Phrase(template.getCompanyname()));
             rcell1.setBorder(Rectangle.NO_BORDER);
             rcell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
             ptable.addCell(rcell1);
             PdfPCell rcell2;
-            rcell2 = new PdfPCell(new Phrase("10110 , Jakarta,"));
+            rcell2 = new PdfPCell(new Phrase(template.getAddress()));
             rcell2.setBorder(Rectangle.NO_BORDER);
             rcell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
             ptable.addCell(rcell2);
             PdfPCell rcell3;
-            rcell3 = new PdfPCell(new Phrase("Jakarta,"));
+            rcell3 = new PdfPCell(new Phrase(template.getCity()));
             rcell3.setBorder(Rectangle.NO_BORDER);
             rcell3.setHorizontalAlignment(Element.ALIGN_RIGHT);
             ptable.addCell(rcell3);
             PdfPCell rcell4;
-            rcell4 = new PdfPCell(new Phrase("Indonesia."));
+            rcell4 = new PdfPCell(new Phrase(template.getCountry()));
             rcell4.setBorder(Rectangle.NO_BORDER);
             rcell4.setHorizontalAlignment(Element.ALIGN_RIGHT); 
             ptable.addCell(rcell4);

@@ -26,6 +26,7 @@ import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.SalesOrder;
+import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Transaction;
 
 @Repository
@@ -391,4 +392,50 @@ public class SalesImpl implements SalesDAL {
 		return soreturn; 
 	}
 
+	@Override
+	public Template getTemplateDetails(String templatetype) {
+		Template template;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("templateType").is(templatetype));
+		template = mongoTemplate.findOne(query, Template.class);
+		return template;
+	}
+	
+	//--- Insert Transaction Table ---
+	public Template addTemplateDetails(Template template) {
+		logger.info("DAO Sales addTemplateDetails");
+		Update update = null;
+		Query query = null;
+		try {
+			query = new Query();		
+			query.addCriteria(Criteria.where("templateType").is("Sales Invoice"));
+			List<Template> list = mongoTemplate.find(query,Template.class);
+			if(list.size()>0) {
+				// update
+				update = new Update();
+				query = new Query();
+				query.addCriteria(Criteria.where("templateType").is("Sales Invoice"));
+				update.set("companyname", template.getCompanyname());
+				update.set("address", template.getAddress());
+				update.set("city", template.getCity());
+				update.set("country", template.getCountry());
+				update.set("templateType", "Sales Invoice");
+				update.set("companylogo", template.getCompanylogo());
+				mongoTemplate.updateFirst(query, update, Template.class);
+			} else {
+	            // save
+				mongoTemplate.save(template);
+			} 
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return template;
+	}
+	
+	public List<Template> getTemplateListDetails(List<Template> templist, String templatetype){
+		Query query = new Query();
+		query.addCriteria(Criteria.where("templateType").is(templatetype));
+		templist = mongoTemplate.find(query, Template.class);
+		return templist;
+	}
 }
