@@ -50,6 +50,7 @@ import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.StockDamage;
 import com.erp.mongo.model.StockInDetails;
 import com.erp.mongo.model.StockReturn;
+import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
 import com.erp.util.PDFGenerator;
@@ -601,7 +602,9 @@ public class StockService implements Filter {
 			purchase.setVendorEmail(vendor.getEmail()); 
 			poinv.setStatus(invoicestatus2);
 
-			String base64=PDFGenerator.getBase64(poinv,purchase,polist);
+			Template template = purchasedal.getTemplateDetails("Purchase Invoice");
+
+			String base64=PDFGenerator.getBase64(poinv,purchase,polist,template);
 			logger.info("--------- After Calling PDF Generator -----------");
 			poinv.setBase64(base64); 
 			purchasedal.updatePOInvoice(poinv,1);

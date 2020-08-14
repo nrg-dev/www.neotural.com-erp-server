@@ -8,6 +8,7 @@ import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
+import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Vendor;
 import com.erp.mongo.model.Transaction;
 
@@ -56,7 +57,13 @@ public interface PurchaseDAL {
 
 	public Transaction saveTransaction(Transaction tran);
 
-	public POReturnDetails updatePOReturn(POReturnDetails poret); 
+	public POReturnDetails updatePOReturn(POReturnDetails poret);
+
+	public Template getTemplateDetails(String templatetype);
+
+	public Template addTemplateDetails(Template template);
+
+	public List<Template> getTemplateListDetails(List<Template> templist, String templatetype);    
 	
 
 

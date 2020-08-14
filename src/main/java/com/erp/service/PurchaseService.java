@@ -40,12 +40,14 @@ import com.erp.dto.POInvoiceDto;
 import com.erp.dto.Purchase;
 import com.erp.mongo.dal.PurchaseDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
@@ -91,6 +93,9 @@ public class PurchaseService implements Filter {
 	
 	@Value("${invoicephase1.status}")
 	private String invoicestatus1;
+	
+	@Value("${noimage.base64}")
+	private String nologo;
 
 	private final PurchaseDAL purchasedal;
 	private final RandomNumberDAL randomnumberdal;
@@ -162,86 +167,95 @@ public class PurchaseService implements Filter {
 		int randomtrId=19;
 		Transaction tran = new Transaction();
 		List<PurchaseOrder> polist = new ArrayList<PurchaseOrder>();
+		List<Template> templist = new ArrayList<Template>();
 		try {
-			randomnumber = randomnumberdal.getRandamNumber(randomId);
-			String invoice = randomnumber.getCode() + randomnumber.getNumber();
-			logger.debug("Invoice number-->" + invoice);
-			// Update Invoice Number and get Vendor name and code
-			purchasedal.updatePO(invoice,poinvoicedto.getOrdernumbers());
-			POInvoice poinvoice = new POInvoice();
-			poinvoice.setInvoicedate(poinvoicedto.getCreateddate());
-			logger.debug("Invoice Date-->" + poinvoice.getInvoicedate());
-			poinvoice.setInvoicenumber(invoice);
-			poinvoice.setStatus(purchaseorderstatus1);
-			poinvoice.setStockstatus(stockstatus1);
-			poinvoice.setPaymenttype(poinvoicedto.getPaymenttype());
-			if(poinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
-				poinvoice.setPaymentstatus(paymentstatus2); 
-			}else {
-				poinvoice.setPaymentstatus(paymentstatus1); 
-			}
-			poinvoice.setSubtotal(poinvoicedto.getSubtotal());
-			poinvoice.setDeliveryprice(poinvoicedto.getDeliverycharge());
-			poinvoice.setTotalprice(poinvoicedto.getSubtotal()+poinvoicedto.getDeliverycharge());
-			for(long qty:poinvoicedto.getQty()) {
-				poinvoice.setQty(qty);
-			}
-			logger.debug("Qty-->"+poinvoice.getQty());
-			for(String vencode:poinvoicedto.getVendorcode()) {
-				purchase.setPaymentStatus(vencode);
-			}
-			logger.info("Vendor Code ----->"+purchase.getPaymentStatus());
-			for(String prod:poinvoicedto.getProductname()) {
-				poinvoice.setProductname(prod);
-			}
-			logger.debug("Product Name-->"+poinvoice.getProductname());
-			Vendor vendor = purchasedal.getVendorDetails(purchase.getPaymentStatus());
-			purchase.setVendorName(vendor.getVendorName());
-			purchase.setVendorCity(vendor.getCity());
-			purchase.setVendorCountry(vendor.getCountry());
-			purchase.setVendorPhone(vendor.getPhoneNumber());
-			purchase.setVendorEmail(vendor.getEmail()); 
-			poinvoice.setVendorname(vendor.getVendorName());
-			poinvoice.setVendorcode(vendor.getVendorcode());
-			purchasedal.savePOInvoice(poinvoice);
-			// Update Random number table
-			randomnumberdal.updateRandamNumber(randomnumber,randomId);
-			logger.info("createInvoice done!");
+			templist = purchasedal.getTemplateListDetails(templist,"Purchase Invoice");
+			logger.info("List Size -->"+templist.size()); 
+			if(templist.size() > 0) {
+				logger.info(" Template Data Not Null ");
+				randomnumber = randomnumberdal.getRandamNumber(randomId);
+				String invoice = randomnumber.getCode() + randomnumber.getNumber();
+				logger.debug("Invoice number-->" + invoice);
+				// Update Invoice Number and get Vendor name and code
+				purchasedal.updatePO(invoice,poinvoicedto.getOrdernumbers());
+				POInvoice poinvoice = new POInvoice();
+				poinvoice.setInvoicedate(poinvoicedto.getCreateddate());
+				logger.debug("Invoice Date-->" + poinvoice.getInvoicedate());
+				poinvoice.setInvoicenumber(invoice);
+				poinvoice.setStatus(purchaseorderstatus1);
+				poinvoice.setStockstatus(stockstatus1);
+				poinvoice.setPaymenttype(poinvoicedto.getPaymenttype());
+				if(poinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
+					poinvoice.setPaymentstatus(paymentstatus2); 
+				}else {
+					poinvoice.setPaymentstatus(paymentstatus1); 
+				}
+				poinvoice.setSubtotal(poinvoicedto.getSubtotal());
+				poinvoice.setDeliveryprice(poinvoicedto.getDeliverycharge());
+				poinvoice.setTotalprice(poinvoicedto.getSubtotal()+poinvoicedto.getDeliverycharge());
+				for(long qty:poinvoicedto.getQty()) {
+					poinvoice.setQty(qty);
+				}
+				logger.debug("Qty-->"+poinvoice.getQty());
+				for(String vencode:poinvoicedto.getVendorcode()) {
+					purchase.setPaymentStatus(vencode);
+				}
+				logger.info("Vendor Code ----->"+purchase.getPaymentStatus());
+				for(String prod:poinvoicedto.getProductname()) {
+					poinvoice.setProductname(prod);
+				}
+				logger.debug("Product Name-->"+poinvoice.getProductname());
+				Vendor vendor = purchasedal.getVendorDetails(purchase.getPaymentStatus());
+				purchase.setVendorName(vendor.getVendorName());
+				purchase.setVendorCity(vendor.getCity());
+				purchase.setVendorCountry(vendor.getCountry());
+				purchase.setVendorPhone(vendor.getPhoneNumber());
+				purchase.setVendorEmail(vendor.getEmail()); 
+				poinvoice.setVendorname(vendor.getVendorName());
+				poinvoice.setVendorcode(vendor.getVendorcode());
+				purchasedal.savePOInvoice(poinvoice);
+				// Update Random number table
+				randomnumberdal.updateRandamNumber(randomnumber,randomId);
+				logger.info("createInvoice done!");
 
-			//-- Transaction Table Insert
-			if(poinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
-				logger.info("Payment Type is cash!");
-				randomnumber = randomnumberdal.getRandamNumber(randomtrId);
-				String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
-				logger.debug("Transaction Invoice number-->" + traninvoice);
-				tran.setTransactionnumber(traninvoice);
-				tran.setTransactiondate(Custom.getCurrentInvoiceDate());
-				tran.setDescription(poinvcash);
-				tran.setInvoicenumber(invoice);
-				tran.setCredit(0);
-				tran.setDebit(poinvoicedto.getSubtotal());
-				tran.setStatus(transinvstatus2);
-				tran.setCurrency(currency);
-				purchasedal.saveTransaction(tran);
-				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
-				logger.info("Transation Insert done!");
+				//-- Transaction Table Insert
+				if(poinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
+					logger.info("Payment Type is cash!");
+					randomnumber = randomnumberdal.getRandamNumber(randomtrId);
+					String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
+					logger.debug("Transaction Invoice number-->" + traninvoice);
+					tran.setTransactionnumber(traninvoice);
+					tran.setTransactiondate(Custom.getCurrentInvoiceDate());
+					tran.setDescription(poinvcash);
+					tran.setInvoicenumber(invoice);
+					tran.setCredit(0);
+					tran.setDebit(poinvoicedto.getSubtotal());
+					tran.setStatus(transinvstatus2);
+					tran.setCurrency(currency);
+					purchasedal.saveTransaction(tran);
+					randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
+					logger.info("Transation Insert done!");
+				}else {
+					logger.info("Payment Type is not cash!");
+				}
+				
+				logger.info("--------- Before Calling PDF Generator -----------");
+				polist = purchasedal.loadPO(2,invoice);
+				Template template = purchasedal.getTemplateDetails("Purchase Invoice");
+				String base64=PDFGenerator.getBase64(poinvoice,purchase,polist,template);
+				logger.info("--------- After Calling PDF Generator -----------");
+				poinvoice.setBase64(base64);
+				purchasedal.updatePOInvoice(poinvoice,3);
+				
+				return new ResponseEntity<>(HttpStatus.OK); // 200
 			}else {
-				logger.info("Payment Type is not cash!");
+				logger.info("--------- Template Data Equal To Null -----------");
+				return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED); // 417
 			}
-			
-			logger.info("--------- Before Calling PDF Generator -----------");
-			polist = purchasedal.loadPO(2,invoice);
-			String base64=PDFGenerator.getBase64(poinvoice,purchase,polist);
-			logger.info("--------- After Calling PDF Generator -----------");
-			poinvoice.setBase64(base64);
-			purchasedal.updatePOInvoice(poinvoice,3);
-			
-			return new ResponseEntity<>(HttpStatus.OK); // 200
 
 		}catch(Exception e) {
 			logger.error("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
-
 		}
 	
 	}
@@ -910,6 +924,48 @@ public class PurchaseService implements Filter {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
+		}
+	}
+	// get Company Details
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/getTemplateDetails", method = RequestMethod.GET)
+	public ResponseEntity<?> getTemplateDetails(String templateType) {
+		logger.info("getTemplateDetails");
+		Template template = null;
+		try {
+			template = purchasedal.getTemplateDetails(templateType);
+			return new ResponseEntity<Template>(template, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.info("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+		} finally {
+
+		}
+	}
+	
+	//Save/Update Details
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/addTemplateDetails", method = RequestMethod.POST)
+	public ResponseEntity<?> addTemplateDetails(@RequestBody Template template) {
+		logger.info("addTemplateDetails");
+		logger.debug("Company Name-->" + template.getCompanyname());
+		logger.debug("Address-->" + template.getAddress());
+		logger.debug("City Name-->" + template.getCity());
+		logger.debug("Country Name-->" + template.getCountry());
+		logger.debug("Type-->" + template.getTemplateType());
+		try {
+			if(template.getCompanylogo()!= null) {
+				logger.info("Company Image not null"); 
+			}else {
+				logger.info("Company Image Null");
+				template.setCompanylogo(nologo);
+			}
+			purchasedal.addTemplateDetails(template);
+			return new ResponseEntity<>(HttpStatus.OK); // 200
+		}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
 		}
 	}
 	

@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import com.erp.mongo.model.DailyReport;
 import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
@@ -22,6 +23,7 @@ import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.SOInvoice;
+import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
 
@@ -372,58 +374,106 @@ public class PurchaseImpl implements PurchaseDAL {
 		update.set("description", purchaseorder.getDescription());
 		mongoTemplate.updateFirst(query, update, PurchaseOrder.class);
 		return true;
-		}
-			
+	}
+		
 
-		// Remove
-		public boolean removePO(String id) {
-			logger.info("PO delete Id-->"+id);
-			logger.info("PO delete start");
+	// Remove
+	public boolean removePO(String id) {
+		logger.info("PO delete Id-->"+id);
+		logger.info("PO delete start");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(id));
+		mongoTemplate.remove(query, PurchaseOrder.class);
+		logger.debug("PO deleted"+id);
+		return true;
+	}
+	
+	@Override
+	public List<POReturnDetails> loadReturn(String paystatus) {
+		List<POReturnDetails> list = new ArrayList<POReturnDetails>();
+		if(paystatus.equalsIgnoreCase("All")) {
 			Query query = new Query();
-			query.addCriteria(Criteria.where("_id").is(id));
-			mongoTemplate.remove(query, PurchaseOrder.class);
-			logger.debug("PO deleted"+id);
-			return true;
-		}
-		
-		@Override
-		public List<POReturnDetails> loadReturn(String paystatus) {
-			List<POReturnDetails> list = new ArrayList<POReturnDetails>();
-			if(paystatus.equalsIgnoreCase("All")) {
-				Query query = new Query();
-			    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
-				list = mongoTemplate.find(query,POReturnDetails.class);
-			}else if(paystatus.equalsIgnoreCase("Pending")) {
-				Query query = new Query();
-			    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
-			    query.addCriteria(Criteria.where("paymentstatus").is(paystatus));
-				list = mongoTemplate.find(query,POReturnDetails.class);
-			}		
-			logger.debug("Return List Size-->"+list.size());
-			return list;
+		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+			list = mongoTemplate.find(query,POReturnDetails.class);
+		}else if(paystatus.equalsIgnoreCase("Pending")) {
+			Query query = new Query();
+		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+		    query.addCriteria(Criteria.where("paymentstatus").is(paystatus));
+			list = mongoTemplate.find(query,POReturnDetails.class);
+		}		
+		logger.debug("Return List Size-->"+list.size());
+		return list;
 
+	}
+	
+	//--- Insert Transaction Table ---
+	public Transaction saveTransaction(Transaction trans) {
+		logger.info("DAO saveTransaction");
+		mongoTemplate.save(trans);
+		trans.setStatus("success"); 
+		return trans;
+	}
+	
+	//-------- Update PoReturn Table ----
+	@Override 
+	public POReturnDetails updatePOReturn(POReturnDetails poret) {
+		logger.info("Update POReturn Number --->"+poret.getInvoicenumber());
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("invoicenumber").is(poret.getInvoicenumber()));
+		update.set("paymentstatus", paymentstatus2);
+		mongoTemplate.findAndModify(query, update,
+				new FindAndModifyOptions().returnNew(true), POReturnDetails.class);
+		logger.debug("After POReturn Payment Status Update -->");
+		return poret; 
+	}
+	
+	@Override
+	public Template getTemplateDetails(String templatetype) {
+		Template template;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("templateType").is(templatetype));
+		template = mongoTemplate.findOne(query, Template.class);
+		return template;
+	}
+	
+	//--- Insert Transaction Table ---
+	public Template addTemplateDetails(Template template) {
+		logger.info("DAO addTemplateDetails");
+		Update update = null;
+		Query query = null;
+		try {
+			query = new Query();		
+			query.addCriteria(Criteria.where("templateType").is("Purchase Invoice"));
+			List<Template> list = mongoTemplate.find(query,Template.class);
+			if(list.size()>0) {
+				// update
+				update = new Update();
+				query = new Query();
+				query.addCriteria(Criteria.where("templateType").is("Purchase Invoice"));
+				update.set("companyname", template.getCompanyname());
+				update.set("address", template.getAddress());
+				update.set("city", template.getCity());
+				update.set("country", template.getCountry());
+				update.set("templateType", "Purchase Invoice");
+				update.set("companylogo", template.getCompanylogo());
+				mongoTemplate.updateFirst(query, update, Template.class);
+			} else {
+	            // save
+				mongoTemplate.save(template);
+			} 
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
-		
-		//--- Insert Transaction Table ---
-		public Transaction saveTransaction(Transaction trans) {
-			logger.info("DAO saveTransaction");
-			mongoTemplate.save(trans);
-			trans.setStatus("success"); 
-			return trans;
-		}
-		
-		//-------- Update PoReturn Table ----
-		@Override 
-		public POReturnDetails updatePOReturn(POReturnDetails poret) {
-			logger.info("Update POReturn Number --->"+poret.getInvoicenumber());
-			Update update = new Update();
-			Query query = new Query();
-			query.addCriteria(Criteria.where("invoicenumber").is(poret.getInvoicenumber()));
-			update.set("paymentstatus", paymentstatus2);
-			mongoTemplate.findAndModify(query, update,
-					new FindAndModifyOptions().returnNew(true), POReturnDetails.class);
-			logger.debug("After POReturn Payment Status Update -->");
-			return poret; 
-		}
+		return template;
+	}
+	
+	public List<Template> getTemplateListDetails(List<Template> templist, String templatetype){
+		Query query = new Query();
+		query.addCriteria(Criteria.where("templateType").is(templatetype));
+		templist = mongoTemplate.find(query, Template.class);
+		return templist;
+	}
+
 		
 }
