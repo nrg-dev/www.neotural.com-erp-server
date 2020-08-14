@@ -79,7 +79,7 @@ public class ItemImpl implements ItemDAL {
 			query.fields().include("tax");
 			query.fields().include("unit");
 			query.fields().include("sellingprice");
-			query.fields().include("productImage");
+			query.fields().include("productImage1");
 			logger.info("DAO item load all");
 			itemlist = mongoTemplate.find(query,Item.class);
 			logger.debug("DAO item size -->" + itemlist.size());
@@ -140,6 +140,7 @@ public class ItemImpl implements ItemDAL {
 		update.set("unit", item.getUnit());
 		update.set("sellingprice", item.getSellingprice());
 		update.set("productImage", item.getProductImage());
+		update.set("productImage1", item.getProductImage1());
 		mongoTemplate.updateFirst(query, update, Item.class);
 		return item;
 

@@ -53,6 +53,9 @@ public class ItemService implements Filter {
 	
 	@Value("${noimage.base64}")
 	private String[] noimagebase64;
+	
+	@Value("${noimage.base64}")
+	private String noimage;
 
 	private final ItemDAL itemdal;
 	private final RandomNumberDAL randomnumberdal;
@@ -124,6 +127,7 @@ public class ItemService implements Filter {
 			if(item.getProductImage().equals(null) || item.getProductImage().toString().isEmpty() || item.getProductImage().length == 0) {
 				logger.info("Product Image Null");
 				item.setProductImage(noimagebase64);
+				item.setProductImage1(noimage);
 			}else {
 				logger.info("Image not null"); 
 			}
@@ -203,6 +207,7 @@ public class ItemService implements Filter {
 				logger.info("After Calling ItemLoad");
 				for (Item item : itemlist) {
 					logger.debug("product code-->" + item.getProdcode());
+					logger.debug("First product Image-->" + item.getProductImage1());
 				}
 				return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
 
