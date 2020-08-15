@@ -17,6 +17,7 @@ import com.erp.dto.Career;
 import com.erp.dto.Enquiry;
 import com.erp.dto.User;
 import com.erp.model.UserLogin;
+import com.erp.mongo.model.Index;
 import com.erp.mongo.model.Login;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
@@ -117,14 +118,18 @@ public class LoginImpl implements LoginDAL {
 	
 	@Override
 	public List<Enquiry> loadEnquiry(List<Enquiry> enquirylist) {
-		//Query query = new Query();
-	    //query.with(new Sort(new Order(Direction.DESC, "addeddate")));
-		//list = mongoTemplate.find(query,Enquiry.class);	
 		enquirylist = mongoTemplate.findAll(Enquiry.class);	
 		logger.debug("Enquiry list Size-->"+enquirylist.size());
 		return enquirylist;
-
 	}
+
+	@Override
+	public List<Index> loadIndex(List<Index> indexlist) {
+		indexlist = mongoTemplate.findAll(Index.class);	
+		logger.debug("Enquiry list Size-->"+indexlist.size());
+		return indexlist;
+	}
+
 	
 	public Career saveCareer(Career career) {
 		mongoTemplate.save(career);

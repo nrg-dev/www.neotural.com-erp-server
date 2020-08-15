@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.erp.bo.ErpBo;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Employee;
+import com.erp.mongo.model.Index;
 import com.erp.mongo.model.PettyCash;
 
 @Repository
@@ -35,6 +36,10 @@ public class CustomerImpl implements CustomerDAL {
 	@Override
 	public Customer saveCustomer(Customer customer) {
 		logger.info("saveCustomer");
+		Index index = new Index();
+		index.setKey(customer.getCustcode());
+		index.setValue(customer.getCustomerName()+"-"+customer.getPhoneNumber()+"-"+customer.getEmail()+" -customer");
+		mongoTemplate.save(index);
 		mongoTemplate.save(customer);
 		customer.setStatus("success");
 		return customer;

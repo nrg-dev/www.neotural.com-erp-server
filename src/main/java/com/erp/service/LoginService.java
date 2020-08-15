@@ -1,6 +1,8 @@
 package com.erp.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -29,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
 import com.erp.dto.User;
+import com.erp.mongo.model.Index;
+import com.erp.mongo.model.Item;
 
 @SpringBootApplication
 @RestController
@@ -84,6 +88,29 @@ public class LoginService implements Filter {
 		}
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
+	
+			// load index data
+			@CrossOrigin(origins = "http://localhost:8080")
+			@RequestMapping(value = "/loadIndex", method = RequestMethod.GET)
+			public ResponseEntity<?> loadIndex() {
+				logger.info("loadIndex");
+				List<Index> indexlist = null;
+				try {
+					logger.info("Before Calling ItemLoad");
+					indexlist = new ArrayList<Index>();
+					indexlist = bo.loadIndex(indexlist);
+					logger.info("After Calling ItemLoad");
+					logger.info("Index Size-->"+indexlist.size());
+					return new ResponseEntity<List<Index>>(indexlist, HttpStatus.CREATED);
+
+				} catch (Exception e) {
+					logger.error("Exception-->" + e.getMessage());
+					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				} finally {
+
+				}
+			}
+			
 
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/Checkuser", method = RequestMethod.GET)

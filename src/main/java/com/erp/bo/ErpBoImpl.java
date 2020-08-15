@@ -12,6 +12,7 @@ import com.erp.dto.User;
 
 import com.erp.mongo.dal.LoginDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.model.Index;
 import com.erp.mongo.model.Login;
 
 
@@ -89,6 +90,12 @@ public class ErpBoImpl implements ErpBo{
 	public List<Enquiry> loadEnquiry(List<Enquiry> enquirylist) {
 		enquirylist = logindal.loadEnquiry(enquirylist);
 		return enquirylist;
+	}
+	
+	@Override
+	public List<Index> loadIndex(List<Index> indexlist) {
+		indexlist = logindal.loadIndex(indexlist);
+		return indexlist;
 	}
 
 	public Career saveCareer(Career career) {
