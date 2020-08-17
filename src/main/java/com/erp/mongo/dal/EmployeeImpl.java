@@ -98,32 +98,7 @@ public class EmployeeImpl implements EmployeeDAL {
 		Update update = null;//new Update();
 		Query query = null;//new Query();
 		DailyReport dailyReport=null;
-		try {
-			/* logger.info("EmployeeID -->"+employeeDto.getId()); 
-			if(employeeDto.getId() != null) {
-				logger.info("Update");
-				update = new Update();
-				query = new Query();
-				query.addCriteria(Criteria.where("id").is(employeeDto.getId()));
-				update.set("report", employeeDto.getReport());
-				mongoTemplate.findAndModify(query, update,
-						new FindAndModifyOptions().returnNew(true), DailyReport.class);
-				status=true;
-			}else {
-				 // save
-				query = new Query();		
-				query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
-				query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
-				List<DailyReport> list = mongoTemplate.find(query,DailyReport.class);
-				if(list.size()>0) {
-					
-				} else {
-					dailyReport=new DailyReport(employeeDto.getEmployeecode(),employeeDto.getDate(),employeeDto.getReport());
-					mongoTemplate.save(dailyReport);
-					status=true;
-				} 
-			} */
-			
+		try {	
 			query = new Query();		
 			query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
 			query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
