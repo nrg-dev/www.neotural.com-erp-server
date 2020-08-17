@@ -153,7 +153,7 @@ public class PDFGenerator {
             vcell4.setHorizontalAlignment(Element.ALIGN_LEFT); 
             ventable.addCell(vcell4);
             PdfPCell vcell5;
-            vcell5 = new PdfPCell(new Phrase(purchase.getVendorEmail()+"."));
+            vcell5 = new PdfPCell(new Phrase("Email  : " + purchase.getVendorEmail()+"."));
             vcell5.setBorder(Rectangle.NO_BORDER);
             vcell5.setHorizontalAlignment(Element.ALIGN_LEFT); 
             ventable.addCell(vcell5);
@@ -225,7 +225,7 @@ public class PDFGenerator {
             hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(hcell);
             
-            hcell = new PdfPCell(new Phrase("ID", headFont));
+            hcell = new PdfPCell(new Phrase("PRODUCT NAME", headFont));
             hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(hcell);
             
@@ -486,7 +486,7 @@ public class PDFGenerator {
             vcell4.setHorizontalAlignment(Element.ALIGN_LEFT); 
             ventable.addCell(vcell4);
             PdfPCell vcell5;
-            vcell5 = new PdfPCell(new Phrase(sales.getCustomerEmail()+"."));
+            vcell5 = new PdfPCell(new Phrase("Email  : " + sales.getCustomerEmail()+"."));
             vcell5.setBorder(Rectangle.NO_BORDER);
             vcell5.setHorizontalAlignment(Element.ALIGN_LEFT); 
             ventable.addCell(vcell5);
@@ -543,7 +543,7 @@ public class PDFGenerator {
             hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(hcell);
             
-            hcell = new PdfPCell(new Phrase("ID", headFont));
+            hcell = new PdfPCell(new Phrase("PRODUCT NAME", headFont));
             hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(hcell);
             
