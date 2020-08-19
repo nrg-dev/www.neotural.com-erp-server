@@ -207,7 +207,6 @@ public class ItemService implements Filter {
 				logger.info("After Calling ItemLoad");
 				for (Item item : itemlist) {
 					logger.debug("product code-->" + item.getProdcode());
-					logger.debug("First product Image-->" + item.getProductImage1());
 				}
 				return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
 
