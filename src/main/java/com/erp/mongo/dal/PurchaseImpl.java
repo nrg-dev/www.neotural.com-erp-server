@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import com.erp.mongo.model.DailyReport;
 import com.erp.mongo.model.Employee;
+import com.erp.mongo.model.Index;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
@@ -65,19 +66,27 @@ public class PurchaseImpl implements PurchaseDAL {
 	public POInvoice savePOInvoice(POInvoice poinvoice) {
 		logger.info("savePOInvoice");
 		logger.info("Before save Invoice");
+		Index index = new Index();
+		index.setKey(poinvoice.getInvoicenumber());
+		index.setValue(poinvoice.getInvoicenumber()+"-"+poinvoice.getStatus()+" -purcahseinvoice");
+		mongoTemplate.save(index);
 		mongoTemplate.save(poinvoice);
 		logger.info("After save Invoice");
 		return poinvoice;
 	}
 
-	// Save PO Invoice details
-	@Override
-	public POInvoiceDetails savePurchase(POInvoiceDetails purchaseorder) {
-		logger.info("Before save PO Invoice details");
-		mongoTemplate.save(purchaseorder);
-		logger.info("After save Invoice details");
-		return purchaseorder;
-	}
+//	// Save PO Invoice details
+//	@Override
+//	public POInvoiceDetails savePurchase(POInvoiceDetails purchaseorder) {
+//		logger.info("Before save PO Invoice details");
+//		Index index = new Index();
+//		index.setKey(purchaseorder.getInvoicenumber());
+//		index.setValue(purchaseorder.getInvoicenumber()+"-"+purchaseorder.getStatus()+" -purcahseorder");
+//		mongoTemplate.save(index);
+//		mongoTemplate.save(purchaseorder);
+//		logger.info("After save Invoice details");
+//		return purchaseorder;
+//	}
 
 	public List<Vendor> loadVendorList(List<Vendor> list) {
 		list = mongoTemplate.findAll(Vendor.class);// .find(query, OwnTree.class); return
@@ -323,6 +332,10 @@ public class PurchaseImpl implements PurchaseDAL {
 	public PurchaseOrder savePO(PurchaseOrder purchaseorder) {
 		logger.info("DAO PurchaseOrder");
 		logger.debug("PO Number-->"+purchaseorder.getPocode());
+		Index index = new Index();
+		index.setKey(purchaseorder.getInvoicenumber());
+		index.setValue(purchaseorder.getInvoicenumber()+"-"+purchaseorder.getStatus()+" -purchaseorder");
+		mongoTemplate.save(index);
 		mongoTemplate.save(purchaseorder);
 		purchaseorder.setStatus("success"); 
 		return purchaseorder;

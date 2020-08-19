@@ -156,125 +156,125 @@ public class SalesService implements Filter {
 
 	}
 
-	// Save
-	@CrossOrigin(origins = "http://localhost:4200")
-	@PostMapping(value = "/save")
-	public ResponseEntity<?> saveSales(@RequestBody String salesorderarray) {
-		logger.info("saveSales");
-		String temp = salesorderarray;
-		Sales sales = null;
-		SOInvoice soinvoice = null;
-		SOInvoiceDetails sodetails = null;
-		RandomNumber randomnumber = null;
-		int totalQty = 0;
-		int totalPrice = 0;
-		int totalitem = 0;
-		try {
-			sales = new Sales();
-			logger.debug("Post Json -->" + salesorderarray);
-			// logger.info("Vendor name --->"+vendorName);
-			// Store into parent table to show in first data table view
-			randomnumber = randomnumberdal.getRandamNumber(2);
-			//logger.info("SO Invoice random number-->" + randomnumber.getSalesinvoicenumber());
-			//logger.info("SO Invoice random code-->" + randomnumber.getSalesinvoicecode());
-			String invoice = randomnumber.getCode() + randomnumber.getNumber();
-			logger.debug("Invoice number -->" + invoice);
-			ArrayList<String> list = new ArrayList<String>();
-			JSONArray jsonArr = new JSONArray(salesorderarray);
-			int remove = 0;
-			if (jsonArr != null) {
-				for (int i = 0; i < jsonArr.length(); i++) {
-					list.add(jsonArr.get(i).toString());
-					remove++;
-				}
-			}
-			int postion = remove - 1;
-			logger.debug("Position-->" + postion);
-			list.remove(postion);
-			logger.debug("Size -------->" + jsonArr.length());
-			int l = 1;
-			for (int i = 0; i < jsonArr.length(); i++) {
-				logger.debug("Loop 1...." + i);
-				JSONArray arr2 = jsonArr.optJSONArray(i);
-				if (l == jsonArr.length()) {
-					logger.info("Last Value");
-					JSONObject jObject = arr2.getJSONObject(0);
-					logger.debug("SO Date -->" + jObject.getString("sodate"));
-					// logger.info("Customer Name -->" + jObject.getString("customername"));
-					logger.info("Delivery Cost -->" + jObject.getString("deliveryCost"));
-					// sales.setCustomerName(jObject.getString("customername"));
-					sales.setDeliveryCost(jObject.getString("deliveryCost"));
-
-				} else {
-					if (jsonArr.optJSONArray(i) != null) {
-						// JSONArray arr2 = jsonArr.optJSONArray(i);
-						for (int j = 0; j < arr2.length(); j++) {
-							logger.info("Loop 2...." + j);
-							if (arr2.getJSONObject(j) != null) {
-								JSONObject jObject = arr2.getJSONObject(j);
-								logger.info(jObject.getString("productName"));
-								logger.info(jObject.getString("category"));
-								sodetails = new SOInvoiceDetails();
-								sodetails.setInvoicenumber(invoice);// random table..
-								sales.setCustomerName(jObject.getString("customerName"));
-								sodetails.setCategory(jObject.getString("category"));
-								sodetails.setItemname(jObject.getString("productName"));
-								sodetails.setDescription(jObject.getString("description"));
-								sodetails.setUnitprice(jObject.getString("unitPrice"));
-								sodetails.setQty(jObject.getString("quantity"));
-								sodetails.setSubtotal(jObject.getDouble("netAmount"));
-								sodetails.setSoDate(Custom.getCurrentInvoiceDate());
-								logger.info("SOInvoice Date --->" + sodetails.getSoDate());
-								salesdal.saveSales(sodetails);
-								String str = jObject.getString("quantity");
-								str = str.replaceAll("\\D", "");
-								totalQty += Integer.valueOf(str);
-								totalPrice += jObject.getDouble("netAmount");
-								totalitem = j + 1;
-							} else {
-								logger.info("Null....");
-							}
-						}
-					} else {
-						logger.info("Outer Null....");
-					}
-				}
-				l++;
-			}
-			soinvoice = new SOInvoice();
-			soinvoice.setInvoicedate(Custom.getCurrentInvoiceDate());
-			logger.info("Invoice Date --->" + soinvoice.getInvoicedate());
-			soinvoice.setCustomername(sales.getCustomerName());
-			soinvoice.setInvoicenumber(invoice);
-			soinvoice.setStatus("Pending");
-			soinvoice.setQty(totalQty);
-			soinvoice.setTotalprice(totalPrice);
-			//soinvoice.setTotalitem(totalitem);
-			soinvoice.setDeliveryprice(Integer.valueOf(sales.getDeliveryCost()));
-			salesdal.saveSOInvoice(soinvoice);
-			logger.info("Service call start.....");
-			sales.setStatus("success");
-			randomnumberdal.updateSalesRandamNumber(randomnumber);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-
-		/*
-		 * catch (NullPointerException ne) { sales = new Sales();
-		 * logger.info("Inside null pointer exception ....");
-		 * sales.setStatus("success"); boolean status =
-		 * randomnumberdal.updateRandamNumber(randomnumber); return new
-		 * ResponseEntity<Sales>(sales, HttpStatus.CREATED);
-		 * 
-		 * }
-		 */ catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-
-		finally {
-
-		}
-	}
+//	// Save
+//	@CrossOrigin(origins = "http://localhost:4200")
+//	@PostMapping(value = "/save")
+//	public ResponseEntity<?> saveSales(@RequestBody String salesorderarray) {
+//		logger.info("saveSales");
+//		String temp = salesorderarray;
+//		Sales sales = null;
+//		SOInvoice soinvoice = null;
+//		SOInvoiceDetails sodetails = null;
+//		RandomNumber randomnumber = null;
+//		int totalQty = 0;
+//		int totalPrice = 0;
+//		int totalitem = 0;
+//		try {
+//			sales = new Sales();
+//			logger.debug("Post Json -->" + salesorderarray);
+//			// logger.info("Vendor name --->"+vendorName);
+//			// Store into parent table to show in first data table view
+//			randomnumber = randomnumberdal.getRandamNumber(2);
+//			//logger.info("SO Invoice random number-->" + randomnumber.getSalesinvoicenumber());
+//			//logger.info("SO Invoice random code-->" + randomnumber.getSalesinvoicecode());
+//			String invoice = randomnumber.getCode() + randomnumber.getNumber();
+//			logger.debug("Invoice number -->" + invoice);
+//			ArrayList<String> list = new ArrayList<String>();
+//			JSONArray jsonArr = new JSONArray(salesorderarray);
+//			int remove = 0;
+//			if (jsonArr != null) {
+//				for (int i = 0; i < jsonArr.length(); i++) {
+//					list.add(jsonArr.get(i).toString());
+//					remove++;
+//				}
+//			}
+//			int postion = remove - 1;
+//			logger.debug("Position-->" + postion);
+//			list.remove(postion);
+//			logger.debug("Size -------->" + jsonArr.length());
+//			int l = 1;
+//			for (int i = 0; i < jsonArr.length(); i++) {
+//				logger.debug("Loop 1...." + i);
+//				JSONArray arr2 = jsonArr.optJSONArray(i);
+//				if (l == jsonArr.length()) {
+//					logger.info("Last Value");
+//					JSONObject jObject = arr2.getJSONObject(0);
+//					logger.debug("SO Date -->" + jObject.getString("sodate"));
+//					// logger.info("Customer Name -->" + jObject.getString("customername"));
+//					logger.info("Delivery Cost -->" + jObject.getString("deliveryCost"));
+//					// sales.setCustomerName(jObject.getString("customername"));
+//					sales.setDeliveryCost(jObject.getString("deliveryCost"));
+//
+//				} else {
+//					if (jsonArr.optJSONArray(i) != null) {
+//						// JSONArray arr2 = jsonArr.optJSONArray(i);
+//						for (int j = 0; j < arr2.length(); j++) {
+//							logger.info("Loop 2...." + j);
+//							if (arr2.getJSONObject(j) != null) {
+//								JSONObject jObject = arr2.getJSONObject(j);
+//								logger.info(jObject.getString("productName"));
+//								logger.info(jObject.getString("category"));
+//								sodetails = new SOInvoiceDetails();
+//								sodetails.setInvoicenumber(invoice);// random table..
+//								sales.setCustomerName(jObject.getString("customerName"));
+//								sodetails.setCategory(jObject.getString("category"));
+//								sodetails.setItemname(jObject.getString("productName"));
+//								sodetails.setDescription(jObject.getString("description"));
+//								sodetails.setUnitprice(jObject.getString("unitPrice"));
+//								sodetails.setQty(jObject.getString("quantity"));
+//								sodetails.setSubtotal(jObject.getDouble("netAmount"));
+//								sodetails.setSoDate(Custom.getCurrentInvoiceDate());
+//								logger.info("SOInvoice Date --->" + sodetails.getSoDate());
+//								salesdal.saveSales(sodetails);
+//								String str = jObject.getString("quantity");
+//								str = str.replaceAll("\\D", "");
+//								totalQty += Integer.valueOf(str);
+//								totalPrice += jObject.getDouble("netAmount");
+//								totalitem = j + 1;
+//							} else {
+//								logger.info("Null....");
+//							}
+//						}
+//					} else {
+//						logger.info("Outer Null....");
+//					}
+//				}
+//				l++;
+//			}
+//			soinvoice = new SOInvoice();
+//			soinvoice.setInvoicedate(Custom.getCurrentInvoiceDate());
+//			logger.info("Invoice Date --->" + soinvoice.getInvoicedate());
+//			soinvoice.setCustomername(sales.getCustomerName());
+//			soinvoice.setInvoicenumber(invoice);
+//			soinvoice.setStatus("Pending");
+//			soinvoice.setQty(totalQty);
+//			soinvoice.setTotalprice(totalPrice);
+//			//soinvoice.setTotalitem(totalitem);
+//			soinvoice.setDeliveryprice(Integer.valueOf(sales.getDeliveryCost()));
+//			salesdal.saveSOInvoice(soinvoice);
+//			logger.info("Service call start.....");
+//			sales.setStatus("success");
+//			randomnumberdal.updateSalesRandamNumber(randomnumber);
+//			return new ResponseEntity<>(HttpStatus.OK);
+//		}
+//
+//		/*
+//		 * catch (NullPointerException ne) { sales = new Sales();
+//		 * logger.info("Inside null pointer exception ....");
+//		 * sales.setStatus("success"); boolean status =
+//		 * randomnumberdal.updateRandamNumber(randomnumber); return new
+//		 * ResponseEntity<Sales>(sales, HttpStatus.CREATED);
+//		 * 
+//		 * }
+//		 */ catch (Exception e) {
+//			logger.info("Exception ------------->" + e.getMessage());
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		}
+//
+//		finally {
+//
+//		}
+//	}
 
 	// load
 	ArrayList<JSONArray> res = new ArrayList<JSONArray>();

@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Sort;
 import com.erp.mongo.model.Discount;
+import com.erp.mongo.model.Index;
 
 //import java.util.ArrayList;
 //import java.util.Collections;
@@ -31,6 +32,10 @@ public class ItemImpl implements ItemDAL {
 
 	// item save
 	public Item saveItem(Item product) {
+		Index index = new Index();
+		index.setKey(product.getProdcode());
+		index.setValue(product.getProductname()+"-"+product.getVendorname()+" -product");
+		mongoTemplate.save(index);
 		mongoTemplate.save(product);
 		product.setStatus("success");
 		return product;

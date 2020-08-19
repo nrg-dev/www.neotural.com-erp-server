@@ -18,6 +18,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.Index;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POReturnDetails;
@@ -50,20 +51,24 @@ public class SalesImpl implements SalesDAL {
 	// Save SO Invoice
 	public SOInvoice saveSOInvoice(SOInvoice soinvoice) {
 		logger.info("Before save Invoice");
+		Index index = new Index();
+		index.setKey(soinvoice.getInvoicenumber());
+		index.setValue(soinvoice.getInvoicenumber()+"-"+soinvoice.getStatus()+" -salesinvoice");
+		mongoTemplate.save(index);
 		mongoTemplate.save(soinvoice);
 		logger.info("After save Invoice");
 		return soinvoice;
 
 	}
 
-	// Save SO Invoice details
-	@Override
-	public SOInvoiceDetails saveSales(SOInvoiceDetails salesorder) {
-		logger.info("Before save SO Invoice details");
-		mongoTemplate.save(salesorder);
-		logger.info("After save SO Invoice details");
-		return salesorder;
-	}
+//	// Save SO Invoice details
+//	@Override
+//	public SOInvoiceDetails saveSales(SOInvoiceDetails salesorder) {
+//		logger.info("Before save SO Invoice details");
+//		mongoTemplate.save(salesorder);
+//		logger.info("After save SO Invoice details");
+//		return salesorder;
+//	}
 
 	public List<Customer> loadCustomerList(List<Customer> list) {
 		list = mongoTemplate.findAll(Customer.class);// .find(query, OwnTree.class); return
@@ -246,6 +251,10 @@ public class SalesImpl implements SalesDAL {
 	public SalesOrder saveSO(SalesOrder salesorder) {
 		logger.info("------ DAO SalesOrder ------");
 		logger.debug("SO Number-->"+salesorder.getSocode());
+		Index index = new Index();
+		index.setKey(salesorder.getSocode());
+		index.setValue(salesorder.getSocode()+"-"+salesorder.getCustomername()+" -salesorder");
+		mongoTemplate.save(index);
 		mongoTemplate.save(salesorder);
 		salesorder.setStatus("success"); 
 		return salesorder;

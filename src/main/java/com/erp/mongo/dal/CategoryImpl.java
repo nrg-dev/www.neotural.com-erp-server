@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.erp.mongo.model.Category;
+import com.erp.mongo.model.Index;
 
 @Repository
 public class CategoryImpl implements CategoryDAL {
@@ -44,6 +45,10 @@ public class CategoryImpl implements CategoryDAL {
 			// Save
 			else {
 				logger.info("Inside Save");
+				Index index = new Index();
+				index.setKey(category.getId());
+				index.setValue(category.getName()+" -category");
+				mongoTemplate.save(index);
 				mongoTemplate.save(category);
 				status=true;		
 			}

@@ -19,6 +19,7 @@ import com.erp.mongo.model.AbsentList;
 import com.erp.mongo.model.ContractList;
 import com.erp.mongo.model.DailyReport;
 import com.erp.mongo.model.Employee;
+import com.erp.mongo.model.Index;
 import com.erp.mongo.model.POReturnDetails;
 
 import org.springframework.data.domain.Sort; 
@@ -81,6 +82,10 @@ public class EmployeeImpl implements EmployeeDAL {
 			// Save
 			else {
 				logger.info("Inside Save");
+				Index index = new Index();
+				index.setKey(employee.getEmployeecode());
+				index.setValue(employee.getName()+"-"+employee.getPhonenumber()+"-"+employee.getEmail()+" -employee");
+				mongoTemplate.save(index);
 				mongoTemplate.save(employee);
 				status=true;		
 			}

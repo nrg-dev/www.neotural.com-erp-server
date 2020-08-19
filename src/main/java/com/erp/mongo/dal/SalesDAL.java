@@ -18,7 +18,7 @@ public interface SalesDAL {
 	
 	public SOInvoice saveSOInvoice(SOInvoice soinvoice);
 
-	public SOInvoiceDetails saveSales(SOInvoiceDetails purchaseorder);
+//	public SOInvoiceDetails saveSales(SOInvoiceDetails purchaseorder);
 
 	public List<SOInvoice> loadSales(List<SOInvoice> list);
 

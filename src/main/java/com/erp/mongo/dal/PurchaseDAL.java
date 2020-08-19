@@ -15,7 +15,7 @@ import com.erp.mongo.model.Transaction;
 public interface PurchaseDAL {
 	public POInvoice savePOInvoice(POInvoice poinvoice);
 
-	public POInvoiceDetails savePurchase(POInvoiceDetails purchaseorder);
+//	public POInvoiceDetails savePurchase(POInvoiceDetails purchaseorder);
 
 	//public List<POInvoice> loadPurchase(List<POInvoice> list);
 	public List<POInvoice> loadInvoice(String paystatus); 
