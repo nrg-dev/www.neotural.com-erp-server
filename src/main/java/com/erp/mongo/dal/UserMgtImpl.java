@@ -14,7 +14,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.erp.mongo.model.Employee;
+import com.erp.mongo.model.Menu;
+import com.erp.mongo.model.Submenu;
 import com.erp.mongo.model.UserRole;
 
 @Repository
@@ -34,7 +35,7 @@ public class UserMgtImpl implements UserMgtDAL {
 	// load User list
 	public List<UserRole> load(List<UserRole> userlist) {
 		Query query = new Query();
-		query.with(new Sort(new Order(Direction.DESC, "invnumber")));
+		query.with(new Sort(new Order(Direction.DESC, "invnumber"))).limit(5);
 		query.addCriteria(Criteria.where("status").is("Active"));
 		userlist = mongoTemplate.find(query,UserRole.class);
 		return userlist;
@@ -61,6 +62,22 @@ public class UserMgtImpl implements UserMgtDAL {
 		query.addCriteria(Criteria.where("id").is(id));
 		mongoTemplate.remove(query, UserRole.class);
 		return response;
+	}
+	
+	public List<Menu> getMenuName(String menuCode) {
+		List<Menu> list=null;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("menucode").is(menuCode));
+		list = mongoTemplate.find(query,Menu.class);
+		return list;
+	}
+	
+	public List<Submenu> getSubMenuName(String subMenuCode1){
+		List<Submenu> list=null;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("submenucode").is(subMenuCode1));
+		list = mongoTemplate.find(query,Submenu.class);
+		return list;
 	}
 
 }

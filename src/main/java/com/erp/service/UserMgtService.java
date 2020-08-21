@@ -1,7 +1,6 @@
 package com.erp.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -32,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.UserMgtDAL;
+import com.erp.mongo.model.Menu;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.UserRole;
 
@@ -72,7 +72,7 @@ public class UserMgtService implements Filter {
 	}
 
 	// Load customer / vendor name for populate for auto text box
-	@CrossOrigin(origins = "http://localhost:8080")
+	/* @CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loaddepartmentname", method = RequestMethod.GET)
 	public ResponseEntity<?> loaddepartmentname() {
 		logger.info("loaddepartmentname");
@@ -89,7 +89,7 @@ public class UserMgtService implements Filter {
 		} finally {
 
 		}
-	}
+	} */
 
 	// save petty cash
 	@CrossOrigin(origins = "http://localhost:8080")
@@ -115,12 +115,30 @@ public class UserMgtService implements Filter {
 		 	user.setPassword(jObject.getString("password"));
 		 	user.setDepartmentname(jObject.getString("departmentname"));
 		 	user.setMenuItem(jObject.getString("menuArray"));
-		 	user.setStatus("Active");
-		 	 
+		 	
 		 	logger.debug("UserName-->"+user.getUsername());
 		 	logger.debug("Password-->"+user.getPassword());
 		 	logger.debug("Department-->"+user.getDepartmentname());
-		 	logger.debug("Menus and Submenus-->"+user.getMenuItem());
+		 	
+		 	user.setMenuItem1(jObject.getString("menuItem1"));
+		 	user.setMenuItem2(jObject.getString("menuItem2"));
+		 	user.setMenuItem3(jObject.getString("menuItem3"));
+		 	
+		 	user.setMenuItem4(jObject.getString("menuItem4"));
+		 	user.setPurchasesubmenu(jObject.getString("purchasesubmenu"));
+
+		 	user.setMenuItem5(jObject.getString("menuItem5"));
+		 	user.setProductsubmenu(jObject.getString("productsubmenu"));
+
+		 	user.setMenuItem6(jObject.getString("menuItem6"));
+		 	user.setSalessubmenu(jObject.getString("salessubmenu"));
+
+		 	user.setMenuItem7(jObject.getString("menuItem7"));
+		 	user.setMenuItem8(jObject.getString("menuItem8"));
+		 	user.setStatus("Active");
+		 	
+		 	logger.debug("Menu1 -->"+user.getMenuItem1()); 
+		 	logger.debug("Menu2-->"+user.getMenuItem2());
 		 	 
 		 	usermgtdal.save(user);
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
@@ -141,9 +159,9 @@ public class UserMgtService implements Filter {
 		logger.info("load");
 		List<UserRole> userlist = null;
 		try {
-			logger.info("Before Calling load pettycash list");
+			logger.info("Before Calling load user list");
 			userlist = usermgtdal.load(userlist);
-			logger.info("Successfully Called load pettycash list");
+			logger.info("Successfully Called load user list");
 			return new ResponseEntity<List<UserRole>>(userlist, HttpStatus.CREATED);
 
 		} catch (Exception e) {
@@ -154,32 +172,16 @@ public class UserMgtService implements Filter {
 		}
 	}
 
-	/*// update
-	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public ResponseEntity<?> updatePetty(@RequestBody PettyCash pettycash) {
-		try {
-			pettycash = usermgtdal.updatePettyCash(pettycash);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (Exception e) {
-			logger.error("Exception-->" + e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-		} finally {
-
-		}
-	}*/
-
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
-	public ResponseEntity<?> removePettyCash(String id) {
+	public ResponseEntity<?> remove(String id) {
 		try {
 			logger.debug("Remove -->" + id);
 			userrole = new UserRole();
-			logger.info("Before Calling  removePettyCash");
+			logger.info("Before Calling remove user");
 			usermgtdal.removeUser(id);
-			logger.info("Successfully Called  removePettyCash");
+			logger.info("Successfully Called remove user");
 			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
@@ -189,6 +191,43 @@ public class UserMgtService implements Filter {
 		} finally {
 
 		}
-
 	}
+	
+	// get Menu
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/getMenuName", method = RequestMethod.GET)
+	public ResponseEntity<?> getMenuName(String menuCode) {
+		logger.info("getMenuName");
+		List<Menu> menulist = null;
+		try {
+			menulist = usermgtdal.getMenuName(menuCode);
+			return new ResponseEntity<List<Menu>>(menulist, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+		} finally {
+
+		}
+	}
+	
+	// get SubMenu
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/removeUser", method = RequestMethod.DELETE)
+	public ResponseEntity<?> removeUser(String id) {
+		logger.info("removeUser");
+		try {
+			logger.debug("Remove UserID-->" + id);
+			usermgtdal.removeUser(id);
+			
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
+
+
 }

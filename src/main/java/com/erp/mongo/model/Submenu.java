@@ -4,12 +4,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class Menu {
+public class Submenu {
 
 	@Id
 	private String id;
 	String menucode;
-	String menuname;
+	String submenucode;
+	String submenuname;
 	String displayOrder;
 	String langcode;
 
@@ -29,12 +30,20 @@ public class Menu {
 		this.menucode = menucode;
 	}
 
-	public String getMenuname() {
-		return menuname;
+	public String getSubmenucode() {
+		return submenucode;
 	}
 
-	public void setMenuname(String menuname) {
-		this.menuname = menuname;
+	public void setSubmenucode(String submenucode) {
+		this.submenucode = submenucode;
+	}
+
+	public String getSubmenuname() {
+		return submenuname;
+	}
+
+	public void setSubmenuname(String submenuname) {
+		this.submenuname = submenuname;
 	}
 
 	public String getDisplayOrder() {
@@ -51,6 +60,8 @@ public class Menu {
 
 	public void setLangcode(String langcode) {
 		this.langcode = langcode;
-	}	
+	}
+
+		
 
 }

@@ -61,67 +61,69 @@ db.transaction.find({"transactiondate":{ $gte: '20/06/2020', $lt: '02/07/2020' }
 
 Menu Insert Query
 =================
-db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dashboard","Display Order":"1","langcode":"EN"});
-db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dasbor","Display Order":"1","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dashboard","displayOrder":"1","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dasbor","displayOrder":"1","langcode":"INDO"});
 
-db.menu.insertOne({ "menucode":"MEN10001","menuname":"Employees","Display Order":"2","langcode":"EN"});
-db.menu.insertOne({ "menucode":"MEN10001","menuname":"Para karyawan","Display Order":"2","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10001","menuname":"Employees","displayOrder":"2","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10001","menuname":"Para karyawan","displayOrder":"2","langcode":"INDO"});
 
-db.menu.insertOne({ "menucode":"MEN10002","menuname":"Vendors","Display Order":"3","langcode":"EN"});
-db.menu.insertOne({ "menucode":"MEN10002","menuname":"Vendor","Display Order":"3","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10002","menuname":"Vendors","displayOrder":"3","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10002","menuname":"Vendor","displayOrder":"3","langcode":"INDO"});
 
-db.menu.insertOne({ "menucode":"MEN10003","menuname":"Purchases","Display Order":"4","langcode":"EN"});
-db.menu.insertOne({ "menucode":"MEN10003","menuname":"Pembelian","Display Order":"4","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10003","menuname":"Purchases","displayOrder":"4","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10003","menuname":"Pembelian","displayOrder":"4","langcode":"INDO"});
 
-db.menu.insertOne({ "menucode":"MEN10004","menuname":"Product","Display Order":"5","langcode":"EN"});
-db.menu.insertOne({ "menucode":"MEN10004","menuname":"Produk","Display Order":"5","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10004","menuname":"Product","displayOrder":"5","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10004","menuname":"Produk","displayOrder":"5","langcode":"INDO"});
 
-db.menu.insertOne({ "menucode":"MEN10005","menuname":"Sales","Display Order":"6","langcode":"EN"});
-db.menu.insertOne({ "menucode":"MEN10005","menuname":"Penjualan","Display Order":"6","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10005","menuname":"Sales","displayOrder":"6","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10005","menuname":"Penjualan","displayOrder":"6","langcode":"INDO"});
 
-db.menu.insertOne({ "menucode":"MEN10006","menuname":"Stock","Display Order":"7","langcode":"EN"});
-db.menu.insertOne({ "menucode":"MEN10006","menuname":"persediaan","Display Order":"7","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10006","menuname":"Stock","displayOrder":"7","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10006","menuname":"persediaan","displayOrder":"7","langcode":"INDO"});
 
-db.menu.insertOne({ "menucode":"MEN10007","menuname":"Finance","Display Order":"8","langcode":"EN"});
-db.menu.insertOne({ "menucode":"MEN10007","menuname":"Keuangan","Display Order":"8","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10007","menuname":"Finance","displayOrder":"8","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10007","menuname":"Keuangan","displayOrder":"8","langcode":"INDO"});
 
-db.menu.insertOne({ "menucode":"MEN10008","menuname":"User Management","Display Order":"9","langcode":"EN"});
-db.menu.insertOne({ "menucode":"MEN10008","menuname":"manajemen pengguna","Display Order":"9","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10008","menuname":"User Management","displayOrder":"9","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10008","menuname":"manajemen pengguna","displayOrder":"9","langcode":"INDO"});
 
-
+db.menu.insertOne({ "menucode":"MEN0","menuname":"None","displayOrder":"","langcode":"EN"});
 
 
 SubMenu Insert Query
 ====================
-db.submenu.insertOne({ "menucode":"MEN10000","submenucode":"None","submenuname":"None","Display Order":"","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10001","submenucode":"None","submenuname":"None","Display Order":"","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10002","submenucode":"None","submenuname":"None","Display Order":"","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10000","submenucode":"None","submenuname":"None","displayOrder":"","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10001","submenucode":"None","submenuname":"None","displayOrder":"","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10002","submenucode":"None","submenuname":"None","displayOrder":"","langcode":"EN"});
 
-db.submenu.insertOne({ "menucode":"MEN10003","submenucode":"SUBMEN10001","submenuname":"Orders","Display Order":"1","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10003","submenucode":"SUBMEN10001","submenuname":"Pesanan","Display Order":"1","langcode":"INDO"});
-db.submenu.insertOne({ "menucode":"MEN10003","submenucode":"SUBMEN10002","submenuname":"Invoices","Display Order":"2","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10003","submenucode":"SUBMEN10002","submenuname":"Faktur","Display Order":"2","langcode":"INDO"});
-db.submenu.insertOne({ "menucode":"MEN10003","submenucode":"SUBMEN10003","submenuname":"Returns","Display Order":"3","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10003","submenucode":"SUBMEN10003","submenuname":"Kembali","Display Order":"3","langcode":"INDO"});
+db.submenu.insertOne({ "menucode":"MEN10003","submenucode":"SUBMEN10001","submenuname":"Orders","displayOrder":"1","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10003","submenucode":"SUBMEN10001","submenuname":"Pesanan","displayOrder":"1","langcode":"INDO"});
+db.submenu.insertOne({ "menucode":"MEN10003","submenucode":"SUBMEN10002","submenuname":"Invoices","displayOrder":"2","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10003","submenucode":"SUBMEN10002","submenuname":"Faktur","displayOrder":"2","langcode":"INDO"});
+db.submenu.insertOne({ "menucode":"MEN10003","submenucode":"SUBMEN10003","submenuname":"Returns","displayOrder":"3","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10003","submenucode":"SUBMEN10003","submenuname":"Kembali","displayOrder":"3","langcode":"INDO"});
 
-db.submenu.insertOne({ "menucode":"MEN10004","submenucode":"SUBMEN10004","submenuname":"product","Display Order":"1","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10004","submenucode":"SUBMEN10004","submenuname":"produk","Display Order":"1","langcode":"INDO"});
-db.submenu.insertOne({ "menucode":"MEN10004","submenucode":"SUBMEN10005","submenuname":"units","Display Order":"2","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10004","submenucode":"SUBMEN10005","submenuname":"unit","Display Order":"2","langcode":"INDO"});
-db.submenu.insertOne({ "menucode":"MEN10004","submenucode":"SUBMEN10006","submenuname":"category","Display Order":"3","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10004","submenucode":"SUBMEN10006","submenuname":"kategori","Display Order":"3","langcode":"INDO"});
+db.submenu.insertOne({ "menucode":"MEN10004","submenucode":"SUBMEN10004","submenuname":"product","displayOrder":"1","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10004","submenucode":"SUBMEN10004","submenuname":"produk","displayOrder":"1","langcode":"INDO"});
+db.submenu.insertOne({ "menucode":"MEN10004","submenucode":"SUBMEN10005","submenuname":"units","displayOrder":"2","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10004","submenucode":"SUBMEN10005","submenuname":"unit","displayOrder":"2","langcode":"INDO"});
+db.submenu.insertOne({ "menucode":"MEN10004","submenucode":"SUBMEN10006","submenuname":"category","displayOrder":"3","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10004","submenucode":"SUBMEN10006","submenuname":"kategori","displayOrder":"3","langcode":"INDO"});
 
-db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10007","submenuname":"Orders","Display Order":"1","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10007","submenuname":"Pesanan","Display Order":"1","langcode":"INDO"});
-db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10008","submenuname":"Invoices","Display Order":"2","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10008","submenuname":"Faktur","Display Order":"2","langcode":"INDO"});
-db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10009","submenuname":"Customer","Display Order":"3","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10009","submenuname":"Pelanggan","Display Order":"3","langcode":"INDO"});
-db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10010","submenuname":"Returns","Display Order":"4","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10010","submenuname":"Kembali","Display Order":"4","langcode":"INDO"});
-db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10011","submenuname":"Promotion","Display Order":"5","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10011","submenuname":"Promosi","Display Order":"5","langcode":"INDO"});
+db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10007","submenuname":"Orders","displayOrder":"1","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10007","submenuname":"Pesanan","displayOrder":"1","langcode":"INDO"});
+db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10008","submenuname":"Invoices","displayOrder":"2","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10008","submenuname":"Faktur","displayOrder":"2","langcode":"INDO"});
+db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10009","submenuname":"Customer","displayOrder":"3","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10009","submenuname":"Pelanggan","displayOrder":"3","langcode":"INDO"});
+db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10010","submenuname":"Returns","displayOrder":"4","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10010","submenuname":"Kembali","displayOrder":"4","langcode":"INDO"});
+db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10011","submenuname":"Promotion","displayOrder":"5","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10005","submenucode":"SUBMEN10011","submenuname":"Promosi","displayOrder":"5","langcode":"INDO"});
 
-db.submenu.insertOne({ "menucode":"MEN10006","submenucode":"None","submenuname":"None","Display Order":"","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10007","submenucode":"None","submenuname":"None","Display Order":"","langcode":"EN"});
-db.submenu.insertOne({ "menucode":"MEN10008","submenucode":"None","submenuname":"None","Display Order":"","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10006","submenucode":"None","submenuname":"None","displayOrder":"","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10007","submenucode":"None","submenuname":"None","displayOrder":"","langcode":"EN"});
+db.submenu.insertOne({ "menucode":"MEN10008","submenucode":"None","submenuname":"None","displayOrder":"","langcode":"EN"});
+
+db.submenu.insertOne({ "menucode":"0","submenucode":"None","submenuname":"None","displayOrder":"","langcode":"EN"});
