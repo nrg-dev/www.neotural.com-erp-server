@@ -22,7 +22,11 @@ public class EmployeeDto  implements Serializable{
 	 String checkouttime;
 	 String absent;
 	 String reason;
-	
+	 
+	 String reporttype;
+	 String monthname;
+	 String fromdate;
+	 String todate;
 	
 	public String getId() {
 		return id;
@@ -90,5 +94,31 @@ public class EmployeeDto  implements Serializable{
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
+	public String getReporttype() {
+		return reporttype;
+	}
+	public void setReporttype(String reporttype) {
+		this.reporttype = reporttype;
+	}
+	public String getMonthname() {
+		return monthname;
+	}
+	public void setMonthname(String monthname) {
+		this.monthname = monthname;
+	}
+	public String getFromdate() {
+		return fromdate;
+	}
+	public void setFromdate(String fromdate) {
+		this.fromdate = fromdate;
+	}
+	public String getTodate() {
+		return todate;
+	}
+	public void setTodate(String todate) {
+		this.todate = todate;
+	}
+	
+	
 	 
 }

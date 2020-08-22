@@ -6,8 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.erp.dto.EmployeeDto;
+import com.erp.mongo.model.AbsentList;
+import com.erp.mongo.model.DailyReport;
 import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.SOInvoice;
@@ -43,4 +48,12 @@ public class ReportImpl implements ReportDAL {
 		return saleslist;
 	}
 
+	public List<DailyReport> loadEmpDailyReport(List<DailyReport> dailyreportlist, EmployeeDto emprep) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("employeecode").is(emprep.getId()));
+		query.addCriteria(Criteria.where("date").gte(emprep.getFromdate()).lt(emprep.getTodate()));
+		dailyreportlist = mongoTemplate.find(query,DailyReport.class);
+		logger.debug("Daily ReportList Size -->"+dailyreportlist.size()); 
+		return dailyreportlist;
+	}
 }
