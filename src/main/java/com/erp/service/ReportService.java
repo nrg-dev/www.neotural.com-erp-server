@@ -36,6 +36,7 @@ import com.erp.mongo.model.DailyReport;
 import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.SOInvoice;
+import com.erp.util.Custom;
 
 @SpringBootApplication
 @RestController
@@ -145,12 +146,14 @@ public class ReportService implements Filter {
 			String[] res = emprep.getEmployeecode().split("-");
 			String employeeCode = res[1];
 			logger.debug("After Split Employee Name-->" + employeeCode);
-			emprep.setId(employeeCode); 
+			emprep.setId(employeeCode);
 			
+			String currentyear = Custom.getCurrentYear();
+			System.out.println("Year -->"+currentyear);
 			if(emprep.getReporttype().equalsIgnoreCase("monthlyreport")) {
 				logger.info("Monthly Report");
-				emprep.setFromdate("01/"+emprep.getMonthname()+"/2020"); 
-				emprep.setTodate("31/"+emprep.getMonthname()+"/2020"); 
+				emprep.setFromdate("01/"+emprep.getMonthname()+"/"+currentyear); 
+				emprep.setTodate("31/"+emprep.getMonthname()+"/"+currentyear); 
 			}else {
 				logger.info("Custom Report");
 				Date dt1 = format.parse(emprep.getFromdate());

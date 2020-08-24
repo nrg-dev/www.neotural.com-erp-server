@@ -24,6 +24,13 @@ public class Custom {
 	
 	public static final Logger logger = LoggerFactory.getLogger(Custom.class);
 
+	public static String getCurrentYear() {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+		Date year = new Date();
+		logger.debug(formatter.format(year));
+		logger.debug("Current Year -->"+year);
+		return formatter.format(year);
+	}
 
 	public static String getCurrentInvoiceDate() {
 		//SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
