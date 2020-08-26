@@ -12,8 +12,6 @@ public class UserRole {
 	private String username;
 	private String password;
 	private String userRole;
-	private String menuItem;
-	private String subMenuItem;
 	private String departmentname;
 	private String status;
 	private String menuItem1;
@@ -25,9 +23,17 @@ public class UserRole {
 	private String menuItem7;
 	private String menuItem8;
 
-	private String purchasesubmenu;
-	private String productsubmenu;
-	private String salessubmenu;
+	private String purchasesubmenu1;
+	private String purchasesubmenu2;
+	private String purchasesubmenu3;
+	private String productsubmenu1;
+	private String productsubmenu2;
+	private String productsubmenu3;
+	private String salessubmenu1;
+	private String salessubmenu2;
+	private String salessubmenu3;
+	private String salessubmenu4;
+	private String salessubmenu5;
 	
 	public String getId() {
 		return id;
@@ -53,18 +59,6 @@ public class UserRole {
 	}
 	public void setUserRole(String userRole) {
 		this.userRole = userRole;
-	}
-	public String getMenuItem() {
-		return menuItem;
-	}
-	public void setMenuItem(String menuItem) {
-		this.menuItem = menuItem;
-	}
-	public String getSubMenuItem() {
-		return subMenuItem;
-	}
-	public void setSubMenuItem(String subMenuItem) {
-		this.subMenuItem = subMenuItem;
 	}
 	public String getPassword() {
 		return password;
@@ -132,24 +126,73 @@ public class UserRole {
 	public void setMenuItem8(String menuItem8) {
 		this.menuItem8 = menuItem8;
 	}
-	public String getPurchasesubmenu() {
-		return purchasesubmenu;
+	public String getPurchasesubmenu1() {
+		return purchasesubmenu1;
 	}
-	public void setPurchasesubmenu(String purchasesubmenu) {
-		this.purchasesubmenu = purchasesubmenu;
+	public void setPurchasesubmenu1(String purchasesubmenu1) {
+		this.purchasesubmenu1 = purchasesubmenu1;
 	}
-	public String getProductsubmenu() {
-		return productsubmenu;
+	public String getPurchasesubmenu2() {
+		return purchasesubmenu2;
 	}
-	public void setProductsubmenu(String productsubmenu) {
-		this.productsubmenu = productsubmenu;
+	public void setPurchasesubmenu2(String purchasesubmenu2) {
+		this.purchasesubmenu2 = purchasesubmenu2;
 	}
-	public String getSalessubmenu() {
-		return salessubmenu;
+	public String getPurchasesubmenu3() {
+		return purchasesubmenu3;
 	}
-	public void setSalessubmenu(String salessubmenu) {
-		this.salessubmenu = salessubmenu;
+	public void setPurchasesubmenu3(String purchasesubmenu3) {
+		this.purchasesubmenu3 = purchasesubmenu3;
 	}
+	public String getProductsubmenu1() {
+		return productsubmenu1;
+	}
+	public void setProductsubmenu1(String productsubmenu1) {
+		this.productsubmenu1 = productsubmenu1;
+	}
+	public String getProductsubmenu2() {
+		return productsubmenu2;
+	}
+	public void setProductsubmenu2(String productsubmenu2) {
+		this.productsubmenu2 = productsubmenu2;
+	}
+	public String getProductsubmenu3() {
+		return productsubmenu3;
+	}
+	public void setProductsubmenu3(String productsubmenu3) {
+		this.productsubmenu3 = productsubmenu3;
+	}
+	public String getSalessubmenu1() {
+		return salessubmenu1;
+	}
+	public void setSalessubmenu1(String salessubmenu1) {
+		this.salessubmenu1 = salessubmenu1;
+	}
+	public String getSalessubmenu2() {
+		return salessubmenu2;
+	}
+	public void setSalessubmenu2(String salessubmenu2) {
+		this.salessubmenu2 = salessubmenu2;
+	}
+	public String getSalessubmenu3() {
+		return salessubmenu3;
+	}
+	public void setSalessubmenu3(String salessubmenu3) {
+		this.salessubmenu3 = salessubmenu3;
+	}
+	public String getSalessubmenu4() {
+		return salessubmenu4;
+	}
+	public void setSalessubmenu4(String salessubmenu4) {
+		this.salessubmenu4 = salessubmenu4;
+	}
+	public String getSalessubmenu5() {
+		return salessubmenu5;
+	}
+	public void setSalessubmenu5(String salessubmenu5) {
+		this.salessubmenu5 = salessubmenu5;
+	}
+	
 		
 	 
 }

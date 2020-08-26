@@ -33,6 +33,7 @@ import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.UserMgtDAL;
 import com.erp.mongo.model.Menu;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.Submenu;
 import com.erp.mongo.model.UserRole;
 
 @SpringBootApplication
@@ -114,7 +115,7 @@ public class UserMgtService implements Filter {
 			user.setUsername(jObject.getString("username"));
 		 	user.setPassword(jObject.getString("password"));
 		 	user.setDepartmentname(jObject.getString("departmentname"));
-		 	user.setMenuItem(jObject.getString("menuArray"));
+		 	//user.setMenuItem(jObject.getString("menuArray"));
 		 	
 		 	logger.debug("UserName-->"+user.getUsername());
 		 	logger.debug("Password-->"+user.getPassword());
@@ -125,20 +126,25 @@ public class UserMgtService implements Filter {
 		 	user.setMenuItem3(jObject.getString("menuItem3"));
 		 	
 		 	user.setMenuItem4(jObject.getString("menuItem4"));
-		 	user.setPurchasesubmenu(jObject.getString("purchasesubmenu"));
+		 	user.setPurchasesubmenu1(jObject.getString("purchasesubmenu1"));
+		 	user.setPurchasesubmenu2(jObject.getString("purchasesubmenu2"));
+		 	user.setPurchasesubmenu3(jObject.getString("purchasesubmenu3"));
 
 		 	user.setMenuItem5(jObject.getString("menuItem5"));
-		 	user.setProductsubmenu(jObject.getString("productsubmenu"));
+		 	user.setProductsubmenu1(jObject.getString("productsubmenu1"));
+		 	user.setProductsubmenu2(jObject.getString("productsubmenu2"));
+		 	user.setProductsubmenu3(jObject.getString("productsubmenu3"));
 
 		 	user.setMenuItem6(jObject.getString("menuItem6"));
-		 	user.setSalessubmenu(jObject.getString("salessubmenu"));
+		 	user.setSalessubmenu1(jObject.getString("salessubmenu1"));
+		 	user.setSalessubmenu2(jObject.getString("salessubmenu2"));
+		 	user.setSalessubmenu3(jObject.getString("salessubmenu3"));
+		 	user.setSalessubmenu4(jObject.getString("salessubmenu4"));
+		 	user.setSalessubmenu5(jObject.getString("salessubmenu5"));
 
 		 	user.setMenuItem7(jObject.getString("menuItem7"));
 		 	user.setMenuItem8(jObject.getString("menuItem8"));
 		 	user.setStatus("Active");
-		 	
-		 	logger.debug("Menu1 -->"+user.getMenuItem1()); 
-		 	logger.debug("Menu2-->"+user.getMenuItem2());
 		 	 
 		 	usermgtdal.save(user);
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
@@ -212,6 +218,24 @@ public class UserMgtService implements Filter {
 	}
 	
 	// get SubMenu
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/getSubMenuName", method = RequestMethod.GET)
+	public ResponseEntity<?> getSubMenuName(String submenuCode) {
+		logger.info("getMenuName");
+		List<Submenu> submenulist = null;
+		try {
+			submenulist = usermgtdal.getSubMenuName(submenuCode);
+			return new ResponseEntity<List<Submenu>>(submenulist, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+		} finally {
+
+		}
+	}
+	
+	//Remove User
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/removeUser", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removeUser(String id) {

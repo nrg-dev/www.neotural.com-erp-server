@@ -49,8 +49,26 @@ public class UserMgtImpl implements UserMgtDAL {
 		update.set("username", user.getUsername());
 		update.set("password", user.getPassword());
 		update.set("userRole", user.getUserRole());
-		update.set("menuItem", user.getMenuItem());
-		update.set("subMenuItem", user.getSubMenuItem());
+		update.set("status", "Active");
+		update.set("menuItem1", user.getMenuItem1());
+		update.set("menuItem2", user.getMenuItem2());
+		update.set("menuItem3", user.getMenuItem3());
+		update.set("menuItem4", user.getMenuItem4());
+		update.set("menuItem5", user.getMenuItem5());
+		update.set("menuItem6", user.getMenuItem6());
+		update.set("menuItem7", user.getMenuItem7());
+		update.set("menuItem8", user.getMenuItem8());
+		update.set("purchasesubmenu1", user.getPurchasesubmenu1());
+		update.set("purchasesubmenu2", user.getPurchasesubmenu2());
+		update.set("purchasesubmenu3", user.getPurchasesubmenu3());
+		update.set("productsubmenu1", user.getProductsubmenu1());
+		update.set("productsubmenu2", user.getProductsubmenu2());
+		update.set("productsubmenu3", user.getProductsubmenu3());
+		update.set("salessubmenu1", user.getSalessubmenu1());
+		update.set("salessubmenu2", user.getSalessubmenu2());
+		update.set("salessubmenu3", user.getSalessubmenu3());
+		update.set("salessubmenu4", user.getSalessubmenu4());
+		update.set("salessubmenu5", user.getSalessubmenu5());
 		update.set("departmentname", user.getDepartmentname());
 		mongoTemplate.updateFirst(query, update, UserRole.class);
 		return user;
@@ -72,10 +90,10 @@ public class UserMgtImpl implements UserMgtDAL {
 		return list;
 	}
 	
-	public List<Submenu> getSubMenuName(String subMenuCode1){
+	public List<Submenu> getSubMenuName(String subMenuCode){
 		List<Submenu> list=null;
 		Query query = new Query();
-		query.addCriteria(Criteria.where("submenucode").is(subMenuCode1));
+		query.addCriteria(Criteria.where("submenucode").is(subMenuCode));
 		list = mongoTemplate.find(query,Submenu.class);
 		return list;
 	}

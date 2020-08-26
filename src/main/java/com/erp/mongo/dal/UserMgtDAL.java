@@ -18,6 +18,6 @@ public interface UserMgtDAL {
 
 	public List<Menu> getMenuName(String menuCode);
 
-	public List<Submenu> getSubMenuName(String subMenuCode1);  
+	public List<Submenu> getSubMenuName(String subMenuCode);  
 
 }
