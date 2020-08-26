@@ -145,12 +145,12 @@ public class EmployeeService implements Filter {
 	// load
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
-	public ResponseEntity<?> load() {
+	public ResponseEntity<?> load(int pagination) {
 		logger.info("load");
 		List<Employee> responseList = null;
 		try {
-			responseList = employeedal.load(responseList);
-			logger.debug("Employee List Size-->"+responseList.size());
+			responseList = employeedal.load(responseList,pagination);
+			logger.info("Employee List Size-->"+responseList.size());
 			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
@@ -160,6 +160,23 @@ public class EmployeeService implements Filter {
 		}
 	}
 
+	    // load
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/getEmployeeTotalRowCount", method = RequestMethod.GET)
+		public ResponseEntity<?> getEmployeeTotalRowCount() {
+			logger.info("getEmployeeTotalRowCount");
+			try {
+				Integer employeeTotalRowCount = employeedal.getEmployeeTotalRowCount();
+				logger.info("Employee Total Row Count-->"+employeeTotalRowCount);
+				return new ResponseEntity<Integer>(employeeTotalRowCount, HttpStatus.CREATED);
+			} catch (Exception e) {
+				logger.error("Exception-->" + e.getMessage());
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			} finally {
+
+			}
+		}
+		
 	// get
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/get", method = RequestMethod.GET)

@@ -12,7 +12,9 @@ public interface EmployeeDAL {
 
 	public boolean save(Employee employeet,int temp);
 
-	public List<Employee> load(List<Employee> list);
+	public List<Employee> load(List<Employee> list, int pagination);
+
+	public Integer getEmployeeTotalRowCount();
 
 	public List<Employee> get(String id);
 	

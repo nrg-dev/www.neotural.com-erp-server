@@ -249,21 +249,7 @@ public class EmployeeImpl implements EmployeeDAL {
 		}
 	}
 	
-	/*
-	 * public boolean updateAbsentList(AbsentList absentList) { boolean status; try
-	 * { Update update = new Update(); Query query = new Query();
-	 * query.addCriteria(Criteria.where("employeecode").is(absentList.
-	 * getEmployeecode())); update.set("checkinreason",
-	 * absentList.getCheckinreason()); update.set("checkintime",
-	 * absentList.getCheckintime()); update.set("checkoutreason",
-	 * absentList.getCheckoutreason()); update.set("checkouttime",
-	 * absentList.getCheckouttime()); update.set("absent", absentList.getAbsent());
-	 * update.set("reason", absentList.getReason()); update.set("date",
-	 * absentList.getDate()); mongoTemplate.updateFirst(query, update,
-	 * AbsentList.class); status=true; return status; }catch(Exception e) {
-	 * logger.error("EmployeeImpl saveAbsentList error"+e.getMessage());
-	 * status=false; return status; } }
-	 */
+	
 
 	public boolean updateContractList(ContractList contractList) {
 		boolean status;
@@ -287,18 +273,25 @@ public class EmployeeImpl implements EmployeeDAL {
 	
 
 	// load
-	public List<Employee> load(List<Employee> list) {
-		//Query query = new Query();
-		//query.with(new Sort(Sort.Direction.DESC, "_id"));
+	public List<Employee> load(List<Employee> list, int pagination) {
+	    logger.info("Pagination number-->"+pagination);
 	    Query query = new Query();//.with(new Sort("_id", "-1"));
-	   // query.with(new Sort(new Order(Direction.ASC, "employeecode")));
-	  // query.with(new Sort(new Order(Direction.DESC, "addeddate")));
-	   query.with(new Sort(new Order(Direction.DESC, "employeecode")));
-	    //List<MyClass> allObjects = mongoTemplate.find(query, MyClass.class);
+	    query.with(new Sort(new Order(Direction.DESC, "employeecode")));
+	    query.skip(pagination);
+	    query.limit(20);
 		list = mongoTemplate.find(query,Employee.class);
 		logger.debug("Size-->"+list.size());
 		return list;
 	}
+	
+	// load
+	public Integer getEmployeeTotalRowCount() {
+	    Query query = null;
+	    query = new Query();
+	    long count = mongoTemplate.count(query,Employee.class);
+	    return (int) (long) count;
+	}
+	
 
 	public List<AbsentList> loadAbsentList(String employeecode,String date,String type){
 		List<AbsentList> list =null;
