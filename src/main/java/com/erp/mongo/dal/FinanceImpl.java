@@ -19,7 +19,6 @@ import org.springframework.stereotype.Repository;
 
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.PettyCash;
-import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
@@ -104,16 +103,23 @@ public class FinanceImpl implements FinanceDAL {
 		Query query = new Query();
 		if(fromdate.equalsIgnoreCase(todate)) {
 			logger.debug("-------- Both Dates are Equal --------");
-			String transdate = Custom.convertStringToData(fromdate);
+			String transdate = Custom.convertStringToData(fromdate); 
 			logger.debug("Transaction Date -->"+transdate);
+		    query.with(new Sort(new Order(Direction.DESC, "transactionnumber")));
 			query.addCriteria(Criteria.where("transactiondate").is(transdate));
 			list = mongoTemplate.find(query,Transaction.class);
 		}else {
 			logger.debug("-------- Both Dates are Not Equal --------");
 			String transfromdate = Custom.convertStringToData(fromdate);
 			String transtodate = Custom.convertStringToData(todate);
-			query.addCriteria(Criteria.where("transactiondate").gte(transfromdate).lte(transtodate));
+		    query.with(new Sort(new Order(Direction.DESC, "transactionnumber")));
+		    //query.addCriteria(new Criteria().andOperator(Criteria.where("transactiondate").gte(transfromdate),
+                //Criteria.where("transactiondate").lte(transtodate)));
+			query.addCriteria(Criteria.where("transactiondate").lte(transtodate).gte(transfromdate));
 			list = mongoTemplate.find(query,Transaction.class);
+			for(Transaction t : list) {
+				logger.debug("Invoice Number -->"+t.getInvoicenumber());
+			}
 			logger.info("Filter List Size -->"+list.size()); 
 		}	
 		return list;

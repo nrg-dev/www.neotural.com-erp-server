@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.erp.dto.EmployeeDto;
-import com.erp.mongo.model.AbsentList;
 import com.erp.mongo.model.DailyReport;
 import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.POInvoice;
@@ -50,9 +49,16 @@ public class ReportImpl implements ReportDAL {
 
 	public List<DailyReport> loadEmpDailyReport(List<DailyReport> dailyreportlist, EmployeeDto emprep) {
 		Query query = new Query();
-		query.addCriteria(Criteria.where("employeecode").is(emprep.getId()));
-		query.addCriteria(Criteria.where("date").gte(emprep.getFromdate()).lt(emprep.getTodate()));
-		dailyreportlist = mongoTemplate.find(query,DailyReport.class);
+		if(emprep.getFromdate().equalsIgnoreCase(emprep.getTodate())) {
+			logger.debug("-------- Both Dates are Equal --------");
+			query.addCriteria(Criteria.where("date").is(emprep.getFromdate()));
+			dailyreportlist = mongoTemplate.find(query,DailyReport.class);
+		}else {
+			logger.debug("-------- Both Dates are Not Equal --------");
+			query.addCriteria(Criteria.where("employeecode").is(emprep.getId()));
+			query.addCriteria(Criteria.where("date").gte(emprep.getFromdate()).lte(emprep.getTodate()));
+			dailyreportlist = mongoTemplate.find(query,DailyReport.class);
+		}	
 		logger.debug("Daily ReportList Size -->"+dailyreportlist.size()); 
 		return dailyreportlist;
 	}
