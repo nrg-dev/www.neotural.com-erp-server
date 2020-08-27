@@ -990,6 +990,7 @@ public class SalesService implements Filter {
 			}else {
 				soreturn.setPaymentstatus(paymentstatus1); 
 			}
+			soreturn.setStatus("Active"); 
 			salesdal.insertReturn(soreturn);
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			logger.info("createReturn done!");

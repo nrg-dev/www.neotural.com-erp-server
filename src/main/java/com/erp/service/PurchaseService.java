@@ -879,6 +879,7 @@ public class PurchaseService implements Filter {
 			}else {
 				poreturn.setPaymentstatus(paymentstatus1); 
 			}
+			poreturn.setStatus("Active"); 
 			purchasedal.insertReturn(poreturn);
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			logger.info("createReturn done!");
@@ -962,6 +963,78 @@ public class PurchaseService implements Filter {
 				template.setCompanylogo(nologo);
 			}
 			purchasedal.addTemplateDetails(template);
+			return new ResponseEntity<>(HttpStatus.OK); // 200
+		}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
+		}
+	}
+	
+	// Create Return
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/updateReturn", method = RequestMethod.POST)
+	public ResponseEntity<?> updateReturn(@RequestBody POReturnDetails poreturn) {
+		logger.info("updateReturn");
+		logger.debug("Invoice Number-->" + poreturn.getInvoicenumber());
+		logger.debug("Item Status-->" + poreturn.getItemStatus());
+		logger.debug("Payment Status-->" + poreturn.getReturnStatus());
+		logger.debug("Qty-->" + poreturn.getQty());
+		logger.debug("Price-->" + poreturn.getPrice());
+		Transaction trans = new Transaction();
+		List<Transaction> responselist = new ArrayList<Transaction>();
+		RandomNumber randomnumber = null;
+		int randomtrId=19;
+		try {
+			poreturn.setInvoicenumber(poreturn.getInvoicenumber());
+			poreturn.setCreateddate(Custom.getCurrentInvoiceDate());
+			if(poreturn.getReturnStatus().equalsIgnoreCase("cash")) {
+				poreturn.setPaymentstatus(paymentstatus2); 
+			}else {
+				poreturn.setPaymentstatus(paymentstatus1); 
+			}
+			poreturn.setStatus("Active"); 
+			purchasedal.updatePOReturn(poreturn,2);
+			logger.info("updateReturn done!");
+			
+			//-- Load Transaction Table ---
+			responselist = purchasedal.loadTransaction(responselist,poreturn.getInvoicenumber());
+			
+			//-- Transaction Table Insert
+			if(poreturn.getReturnStatus().equalsIgnoreCase("cash")) {
+				logger.info("Payment Type is cash!");				
+				if(responselist.size() > 0) {
+					logger.info("Already has transaction details!");				
+					trans.setInvoicenumber(poreturn.getInvoicenumber());
+					long totalAmount = poreturn.getPrice() * Integer.valueOf(poreturn.getQty());
+					trans.setCredit(0);
+					trans.setDebit(totalAmount);
+					purchasedal.updateTransaction(trans);
+					logger.info("Return Transation Update done!");
+				}else {
+					logger.info("Insert transaction details!");
+					randomnumber = randomnumberdal.getRandamNumber(randomtrId);
+					String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
+					logger.debug("Update Return Transaction Invoice number-->" + traninvoice);
+					trans.setTransactionnumber(traninvoice);
+					trans.setTransactiondate(Custom.getCurrentInvoiceDate());
+					trans.setDescription(poretcash);
+					trans.setInvoicenumber(poreturn.getInvoicenumber());
+					long totalAmount = poreturn.getPrice() * Integer.valueOf(poreturn.getQty());
+					trans.setCredit(0);
+					trans.setDebit(totalAmount);
+					trans.setStatus(transretstatus2);
+					trans.setCurrency(currency);
+					purchasedal.saveTransaction(trans);
+					randomnumberdal.updateRandamNumber(randomnumber,randomtrId);	
+				}
+				
+			}else {
+				logger.info("Update Payment Type is credit and voucher!");
+				if(responselist.size() > 0) {
+					boolean status = purchasedal.removeTransaction(poreturn.getInvoicenumber());
+					logger.info("Return Transation Remove done!");
+				}				
+			}	
 			return new ResponseEntity<>(HttpStatus.OK); // 200
 		}catch(Exception e) {
 			logger.error("Exception-->"+e.getMessage());

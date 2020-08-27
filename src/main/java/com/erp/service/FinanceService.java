@@ -443,7 +443,7 @@ public class FinanceService implements Filter {
 			
 			//---- Update Return Payment in Sales Return
 			poret.setInvoicenumber(trans.getInvoicenumber()); 
-			purchasedal.updatePOReturn(poret);
+			purchasedal.updatePOReturn(poret,1);
 			
 			return new ResponseEntity<>(HttpStatus.OK); // 200
 		}catch(Exception e) {

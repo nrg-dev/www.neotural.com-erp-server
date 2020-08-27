@@ -57,14 +57,17 @@ public interface PurchaseDAL {
 
 	public Transaction saveTransaction(Transaction tran);
 
-	public POReturnDetails updatePOReturn(POReturnDetails poret);
+	public POReturnDetails updatePOReturn(POReturnDetails poret, int i); 
 
 	public Template getTemplateDetails(String templatetype);
 
 	public Template addTemplateDetails(Template template);
 
-	public List<Template> getTemplateListDetails(List<Template> templist, String templatetype);    
-	
+	public List<Template> getTemplateListDetails(List<Template> templist, String templatetype);
 
+	public List<Transaction> loadTransaction(List<Transaction> translist,String invoicenumber);
+	public Transaction updateTransaction(Transaction trans);
+
+	public boolean removeTransaction(String invoicenumber);      
 
 }
