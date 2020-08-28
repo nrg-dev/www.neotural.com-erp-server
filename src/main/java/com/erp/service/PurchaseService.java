@@ -45,6 +45,7 @@ import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
+import com.erp.mongo.model.PettyCash;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Template;
@@ -1039,6 +1040,27 @@ public class PurchaseService implements Filter {
 		}catch(Exception e) {
 			logger.error("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
+		}
+	}
+	
+	// get Company Details
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/removePoReturn", method = RequestMethod.DELETE)
+	public ResponseEntity<?> removePoReturn(String id,String invoicenumber) {
+		try {
+			logger.debug("Remove POReturn-->" + id);
+			boolean status = purchasedal.removePoReturn(id);
+			logger.info("POReturn Removed Successfully");
+			boolean status1 = purchasedal.removeTransaction(invoicenumber);
+			logger.info("Transaction Removed Successfully");
+			return new ResponseEntity<>(HttpStatus.OK);
+
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+		} finally {
+
 		}
 	}
 	

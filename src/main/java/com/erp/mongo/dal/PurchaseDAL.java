@@ -68,6 +68,8 @@ public interface PurchaseDAL {
 	public List<Transaction> loadTransaction(List<Transaction> translist,String invoicenumber);
 	public Transaction updateTransaction(Transaction trans);
 
-	public boolean removeTransaction(String invoicenumber);      
+	public boolean removeTransaction(String invoicenumber);
+
+	public boolean removePoReturn(String id);       
 
 }

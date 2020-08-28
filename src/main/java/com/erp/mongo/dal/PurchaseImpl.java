@@ -523,12 +523,20 @@ public class PurchaseImpl implements PurchaseDAL {
 		return trans; 
 	}
 	
-	// Remove
+	// Remove Transaction
 	public boolean removeTransaction(String invoicenumber) {
 		logger.info("Transaction Invoice-->"+invoicenumber);
 		Query query = new Query();
 		query.addCriteria(Criteria.where("invoicenumber").is(invoicenumber));
 		mongoTemplate.remove(query, Transaction.class);
+		return true;
+	}
+	
+	// Remove POReturn
+	public boolean removePoReturn(String id) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(id));
+		mongoTemplate.remove(query, POReturnDetails.class);
 		return true;
 	}
 
