@@ -45,6 +45,7 @@ import com.erp.mongo.dal.SalesDAL;
 import com.erp.mongo.dal.StockDAL;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
+import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
@@ -783,8 +784,8 @@ public class SalesService implements Filter {
 	public ResponseEntity<?> updateSalesOrder(@RequestBody SalesOrder salesorder) {
 		logger.info("---------- updateSalesOrder ----------");
 		try {
-			boolean stauts = salesdal.updateSalesOrder(salesorder);
-			if(stauts) {
+			boolean status = salesdal.updateSalesOrder(salesorder,2);
+			if(status) {
 				return new ResponseEntity<>(HttpStatus.OK); 
 			}
 			else {
@@ -978,6 +979,7 @@ public class SalesService implements Filter {
 		int randomId=9;
 		int randomtrId=19;
 		Transaction trans = new Transaction();
+		SalesOrder salesorder = new SalesOrder();
 		try {
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
@@ -993,7 +995,10 @@ public class SalesService implements Filter {
 			soreturn.setStatus("Active"); 
 			salesdal.insertReturn(soreturn);
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
-			logger.info("createReturn done!");
+
+			salesorder.setInvoicenumber(soreturn.getSocode()); 
+			boolean status = salesdal.updateSalesOrder(salesorder,1);
+			logger.info("create SalesReturn done!");
 			
 			//-- Transaction Table Insert
 			if(soreturn.getReturnStatus().equalsIgnoreCase("cash")) {

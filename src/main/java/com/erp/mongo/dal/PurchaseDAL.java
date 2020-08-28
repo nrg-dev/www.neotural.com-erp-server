@@ -50,7 +50,7 @@ public interface PurchaseDAL {
 	
 	public PurchaseOrder savePO(PurchaseOrder purchaseorder);
 	public boolean removePO(String id);
-	public boolean updatePurchaseOrder(PurchaseOrder purchaseorder);
+	public boolean updatePurchaseOrder(PurchaseOrder purchaseorder, int i); 
 	public boolean updatePO(String invoice,String[] value);
 
 	public List<POReturnDetails> loadReturn(String paystatus);

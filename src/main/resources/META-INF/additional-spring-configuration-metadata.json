@@ -115,6 +115,11 @@
     "description": "A description for 'purchaseorderphase2.status'"
   },
   {
+    "name": "purchaseorderphase3.status",
+    "type": "java.lang.String",
+    "description": "A description for 'purchaseorderphase3.status'"
+  },
+  {
     "name": "salesorderphase1.status",
     "type": "java.lang.String",
     "description": "A description for 'salesorderphase1.status'"
@@ -123,6 +128,11 @@
     "name": "salesorderphase2.status",
     "type": "java.lang.String",
     "description": "A description for 'salesorderphase2.status'"
+  },
+  {
+    "name": "salesorderphase3.status",
+    "type": "java.lang.String",
+    "description": "A description for 'salesorderphase3.status'"
   },
   {
     "name": "enquiry.userName",

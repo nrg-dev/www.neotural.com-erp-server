@@ -600,8 +600,8 @@ public class PurchaseService implements Filter {
 		public ResponseEntity<?> updatePurchaseOrder(@RequestBody PurchaseOrder purchaseorder) {
 			logger.info("updatePurchaseOrder");
 			try {
-				boolean stauts = purchasedal.updatePurchaseOrder(purchaseorder);
-				if(stauts) {
+				boolean status = purchasedal.updatePurchaseOrder(purchaseorder,2);
+				if(status) {
 					return new ResponseEntity<>(HttpStatus.OK); 
 				}
 				else {
@@ -869,6 +869,7 @@ public class PurchaseService implements Filter {
 		int randomId=8;
 		int randomtrId=19;
 		Transaction trans = new Transaction();
+		PurchaseOrder purchaseorder = new PurchaseOrder();
 		try {
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
@@ -883,6 +884,8 @@ public class PurchaseService implements Filter {
 			poreturn.setStatus("Active"); 
 			purchasedal.insertReturn(poreturn);
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
+			purchaseorder.setInvoicenumber(poreturn.getPocode()); 
+			boolean status = purchasedal.updatePurchaseOrder(purchaseorder,1);
 			logger.info("createReturn done!");
 			
 			//-- Transaction Table Insert

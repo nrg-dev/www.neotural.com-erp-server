@@ -44,6 +44,9 @@ public class SalesImpl implements SalesDAL {
 	@Value("${salesorderphase2.status}")
 	private String salesorderstatus2;
 
+	@Value("${salesorderphase3.status}")
+	private String salesorderstatus3;
+	
 	/*
 	 * @Autowired ErpBo investmentBo1;
 	 */
@@ -261,23 +264,32 @@ public class SalesImpl implements SalesDAL {
 	}
 	
 	// Update PO order
-	public boolean updateSalesOrder(SalesOrder salesorder) {
+	public boolean updateSalesOrder(SalesOrder salesorder,int i) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("_id").is(salesorder.getId()));
-		update.set("categoryname", salesorder.getCategoryname());
-		update.set("categorycode", salesorder.getCategorycode());
-		update.set("productname", salesorder.getProductname());
-		update.set("productcode", salesorder.getProductcode());
-		update.set("customername", salesorder.getCustomername());
-		update.set("customercode", salesorder.getCustomercode());
-		update.set("qty", salesorder.getQty());
-		update.set("unit", salesorder.getUnit());
-		update.set("unitprice", salesorder.getUnitprice());
-		update.set("subtotal", salesorder.getSubtotal());
-		update.set("date", salesorder.getDate());
-		update.set("description", salesorder.getDescription());
-		mongoTemplate.updateFirst(query, update, SalesOrder.class);
+		if(i == 1) {
+			logger.debug("Sales Return Invoice Number -->"+salesorder.getInvoicenumber()+"  Sales Return Status -->"+salesorderstatus3); 
+			query.addCriteria(Criteria.where("socode").is(salesorder.getInvoicenumber()));
+			update.set("status", salesorderstatus3);
+			logger.info("After SOReturn Status Update -->");
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), SalesOrder.class);
+		}else if(i == 2) {
+			query.addCriteria(Criteria.where("_id").is(salesorder.getId()));
+			update.set("categoryname", salesorder.getCategoryname());
+			update.set("categorycode", salesorder.getCategorycode());
+			update.set("productname", salesorder.getProductname());
+			update.set("productcode", salesorder.getProductcode());
+			update.set("customername", salesorder.getCustomername());
+			update.set("customercode", salesorder.getCustomercode());
+			update.set("qty", salesorder.getQty());
+			update.set("unit", salesorder.getUnit());
+			update.set("unitprice", salesorder.getUnitprice());
+			update.set("subtotal", salesorder.getSubtotal());
+			update.set("date", salesorder.getDate());
+			update.set("description", salesorder.getDescription());
+			mongoTemplate.updateFirst(query, update, SalesOrder.class);
+		}
 		return true;
 	}
 	
@@ -397,7 +409,7 @@ public class SalesImpl implements SalesDAL {
 		update.set("paymentstatus", paymentstatus2);
 		mongoTemplate.findAndModify(query, update,
 				new FindAndModifyOptions().returnNew(true), SOReturnDetails.class);
-		logger.debug("After POReturn Payment Status Update -->");
+		logger.debug("After SOReturn Payment Status Update -->");
 		return soreturn; 
 	}
 

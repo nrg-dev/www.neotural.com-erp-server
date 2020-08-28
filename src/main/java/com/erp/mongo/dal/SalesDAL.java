@@ -49,7 +49,7 @@ public interface SalesDAL {
 	public List<SOInvoice> loadfilterData(List<SOInvoice> response, String fromdate, String todate);
 
 	public SalesOrder saveSO(SalesOrder salesorder);   
-	public boolean updateSalesOrder(SalesOrder salesorder);
+	public boolean updateSalesOrder(SalesOrder salesorder,int i);
 	public boolean removeSO(String id);
 	public List<SalesOrder> loadSO(int i, String string); 
 

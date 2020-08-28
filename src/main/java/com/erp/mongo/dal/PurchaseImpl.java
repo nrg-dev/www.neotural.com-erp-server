@@ -15,20 +15,16 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.erp.mongo.model.DailyReport;
-import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.Index;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
-import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
 
-import org.springframework.data.domain.Sort; 
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 
@@ -57,6 +53,9 @@ public class PurchaseImpl implements PurchaseDAL {
 	
 	@Value("${purchaseorderphase2.status}")
 	private String purchaseorderstatus2;
+	
+	@Value("${purchaseorderphase3.status}")
+	private String purchaseorderstatus3;
 	
 	/*
 	 * @Autowired ErpBo investmentBo1;
@@ -369,23 +368,32 @@ public class PurchaseImpl implements PurchaseDAL {
 	}
 	
 	// Update PO order
-	public boolean updatePurchaseOrder(PurchaseOrder purchaseorder) {
+	public boolean updatePurchaseOrder(PurchaseOrder purchaseorder,int i) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("_id").is(purchaseorder.getId()));
-		update.set("categoryname", purchaseorder.getCategoryname());
-		update.set("categorycode", purchaseorder.getCategorycode());
-		update.set("productname", purchaseorder.getProductname());
-		update.set("productcode", purchaseorder.getProductcode());
-		update.set("vendorname", purchaseorder.getVendorname());
-		update.set("vendorcode", purchaseorder.getVendorcode());
-		update.set("qty", purchaseorder.getQty());
-		update.set("unit", purchaseorder.getUnit());
-		update.set("unitprice", purchaseorder.getUnitprice());
-		update.set("subtotal", purchaseorder.getSubtotal());
-		update.set("date", purchaseorder.getDate());
-		update.set("description", purchaseorder.getDescription());
-		mongoTemplate.updateFirst(query, update, PurchaseOrder.class);
+		if(i == 1) {
+			logger.debug("Return Invoice Number -->"+purchaseorder.getInvoicenumber()+"  Return Status -->"+purchaseorderstatus3); 
+			query.addCriteria(Criteria.where("pocode").is(purchaseorder.getInvoicenumber()));
+			update.set("status", purchaseorderstatus3);
+			logger.info("After POReturn Status Update -->");
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), PurchaseOrder.class);
+		}else if(i == 2) {
+			query.addCriteria(Criteria.where("_id").is(purchaseorder.getId()));
+			update.set("categoryname", purchaseorder.getCategoryname());
+			update.set("categorycode", purchaseorder.getCategorycode());
+			update.set("productname", purchaseorder.getProductname());
+			update.set("productcode", purchaseorder.getProductcode());
+			update.set("vendorname", purchaseorder.getVendorname());
+			update.set("vendorcode", purchaseorder.getVendorcode());
+			update.set("qty", purchaseorder.getQty());
+			update.set("unit", purchaseorder.getUnit());
+			update.set("unitprice", purchaseorder.getUnitprice());
+			update.set("subtotal", purchaseorder.getSubtotal());
+			update.set("date", purchaseorder.getDate());
+			update.set("description", purchaseorder.getDescription());
+			mongoTemplate.updateFirst(query, update, PurchaseOrder.class);
+		}
 		return true;
 	}
 		
