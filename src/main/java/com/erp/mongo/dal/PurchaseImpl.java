@@ -99,10 +99,10 @@ public class PurchaseImpl implements PurchaseDAL {
 	 * .find(query, OwnTree.class); return return list; }
 	 */
 	
-	public List<POInvoice> loadInvoice(String paystatus){
-		// List<PurchaseOrder>
+	public List<POInvoice> loadInvoice(String paystatus,String invoicenumber){
+		// List<PurchaseOrder>loadInvoice
 		List<POInvoice> list = new ArrayList<POInvoice>();
-		if(paystatus.equalsIgnoreCase("All")) {
+		if(paystatus.equalsIgnoreCase("All") && invoicenumber.equalsIgnoreCase("All")) {
 			Query query = new Query();
 		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
 			list = mongoTemplate.find(query,POInvoice.class);
@@ -111,7 +111,12 @@ public class PurchaseImpl implements PurchaseDAL {
 		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
 		    query.addCriteria(Criteria.where("paymentstatus").is(paystatus));
 			list = mongoTemplate.find(query,POInvoice.class);
-		}		
+		}else if(paystatus.equalsIgnoreCase("All") && invoicenumber != null) {
+			Query query = new Query();
+		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+		    query.addCriteria(Criteria.where("invoicenumber").is(invoicenumber));
+			list = mongoTemplate.find(query,POInvoice.class);
+		}
 		logger.debug("Size-->"+list.size());
 		for (POInvoice e : list) {
 		    logger.debug("Invoice Number -->"+e.getInvoicenumber());    
@@ -410,9 +415,9 @@ public class PurchaseImpl implements PurchaseDAL {
 	}
 	
 	@Override
-	public List<POReturnDetails> loadReturn(String paystatus) {
+	public List<POReturnDetails> loadReturn(String paystatus,String pocode) {
 		List<POReturnDetails> list = new ArrayList<POReturnDetails>();
-		if(paystatus.equalsIgnoreCase("All")) {
+		if(paystatus.equalsIgnoreCase("All") && pocode.equalsIgnoreCase("All")) {
 			Query query = new Query();
 		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
 			query.addCriteria(Criteria.where("status").is("Active"));
@@ -422,6 +427,12 @@ public class PurchaseImpl implements PurchaseDAL {
 		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
 			query.addCriteria(Criteria.where("status").is("Active"));
 		    query.addCriteria(Criteria.where("paymentstatus").is(paystatus));
+			list = mongoTemplate.find(query,POReturnDetails.class);
+		}else if(paystatus.equalsIgnoreCase("All") && pocode != null) {
+			Query query = new Query();
+		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+			query.addCriteria(Criteria.where("pocode").is(pocode));
+			query.addCriteria(Criteria.where("status").is("Active"));
 			list = mongoTemplate.find(query,POReturnDetails.class);
 		}		
 		logger.debug("Return List Size-->"+list.size());

@@ -262,12 +262,12 @@ public class PurchaseService implements Filter {
 	}
 	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping(value = "/loadInvoice", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> loadInvoice() {
+	public ResponseEntity<?> loadInvoice(String invoicenumber) {
 		logger.info("loadInvoice");
 		List<POInvoice> responselist = new ArrayList<POInvoice>();
 		String paystatus = "All";
 		try {
-			responselist = purchasedal.loadInvoice(paystatus);
+			responselist = purchasedal.loadInvoice(paystatus,invoicenumber);
 			return new ResponseEntity<List<POInvoice>>(responselist, HttpStatus.OK);				
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
@@ -918,12 +918,12 @@ public class PurchaseService implements Filter {
 	
 	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping(value = "/loadReturn", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> loadReturn() {
+	public ResponseEntity<?> loadReturn(String pocode) {
 		logger.info("-------- loadReturn ----------");
 		List<POReturnDetails> responselist = new ArrayList<POReturnDetails>();
 		String paystatus = "All";
 		try {
-			responselist = purchasedal.loadReturn(paystatus);
+			responselist = purchasedal.loadReturn(paystatus,pocode);
 			return new ResponseEntity<List<POReturnDetails>>(responselist, HttpStatus.OK);				
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());

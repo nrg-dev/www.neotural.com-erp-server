@@ -200,4 +200,4 @@ db.submenu.insertOne({ "menucode":"MEN10006","submenucode":"None","submenuname":
 db.submenu.insertOne({ "menucode":"MEN10007","submenucode":"None","submenuname":"None","displayOrder":"","langcode":"EN"});
 db.submenu.insertOne({ "menucode":"MEN10008","submenucode":"None","submenuname":"None","displayOrder":"","langcode":"EN"});
 
-db.submenu.insertOne({ "menucode":"0","submenucode":"None","submenuname":"None","displayOrder":"","langcode":"EN
+db.submenu.insertOne({ "menucode":"0","submenucode":"None","submenuname":"None","displayOrder":"","langcode":"EN"});

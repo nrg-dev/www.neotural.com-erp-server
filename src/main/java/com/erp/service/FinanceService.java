@@ -250,8 +250,9 @@ public class FinanceService implements Filter {
 		List<Purchase> responselist = new ArrayList<Purchase>();
 		Purchase purchase = null;
 		String paystatus = "Pending";
+		String pocode = "All";
 		try {
-			polist = purchasedal.loadInvoice(paystatus);
+			polist = purchasedal.loadInvoice(paystatus,pocode);
 			solist = salesdal.loadInvoice(paystatus);
 			
 			for (POInvoice po : polist) {
@@ -369,8 +370,9 @@ public class FinanceService implements Filter {
 		List<Purchase> responselist = new ArrayList<Purchase>();
 		Purchase purchase = null;
 		String paystatus = "Pending";
+		String pocode = "All";
 		try {
-			polist = purchasedal.loadReturn(paystatus);
+			polist = purchasedal.loadReturn(paystatus,pocode);
 			solist = salesdal.loadReturn(paystatus);
 			
 			for (POReturnDetails po : polist) {

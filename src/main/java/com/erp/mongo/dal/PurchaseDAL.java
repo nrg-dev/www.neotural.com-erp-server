@@ -18,7 +18,7 @@ public interface PurchaseDAL {
 //	public POInvoiceDetails savePurchase(POInvoiceDetails purchaseorder);
 
 	//public List<POInvoice> loadPurchase(List<POInvoice> list);
-	public List<POInvoice> loadInvoice(String paystatus); 
+	public List<POInvoice> loadInvoice(String paystatus, String invoicenumber);  
 
 	public List<POInvoiceDetails> getPurchase(String id);
 
@@ -53,7 +53,7 @@ public interface PurchaseDAL {
 	public boolean updatePurchaseOrder(PurchaseOrder purchaseorder, int i); 
 	public boolean updatePO(String invoice,String[] value);
 
-	public List<POReturnDetails> loadReturn(String paystatus);
+	public List<POReturnDetails> loadReturn(String paystatus, String pocode); 
 
 	public Transaction saveTransaction(Transaction tran);
 
