@@ -88,7 +88,6 @@ public class ItemImpl implements ItemDAL {
 			logger.info("DAO item load all");
 			itemlist = mongoTemplate.find(query,Item.class);
 			logger.debug("DAO item size -->" + itemlist.size());
-
 		} 
 		else if (vendorcode!=null && category!=null && prodcode!=null) {
 			Query query = new Query();

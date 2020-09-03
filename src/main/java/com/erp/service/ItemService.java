@@ -97,7 +97,6 @@ public class ItemService implements Filter {
 		logger.info("saveItem");
 		RandomNumber randomnumber = null;
 		Stock stock = new Stock();
-		int randomId=16;
 		try {
 			randomnumber = randomnumberdal.getCategoryRandomNumber(2);
 			//logger.info("item Invoice random number-->" + randomnumber.getProductinvoicenumber());
