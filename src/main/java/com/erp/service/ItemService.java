@@ -120,7 +120,8 @@ public class ItemService implements Filter {
 				item.setVendorcode(vendorcode);
 				item.setVendorname(vendorname);
 			}
-
+			
+			item.setCreateddate(Custom.getCurrentInvoiceDate());
 			item.setProdcode(invoice);
 			logger.debug("Product Image Base64 -->"+item.getProductImage());
 			if(item.getProductImage().equals(null) || item.getProductImage().toString().isEmpty() || item.getProductImage().length == 0) {

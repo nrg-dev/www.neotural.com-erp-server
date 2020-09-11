@@ -24,6 +24,7 @@ public class Item {
 	String productImage[];
 	long recentStock;
 	String productImage1;
+	String createddate;
 
 	public String getId() {
 		return id;
@@ -159,6 +160,14 @@ public class Item {
 
 	public void setProductImage1(String productImage1) {
 		this.productImage1 = productImage1;
+	}
+
+	public String getCreateddate() {
+		return createddate;
+	}
+
+	public void setCreateddate(String createddate) {
+		this.createddate = createddate;
 	}
 
 	
