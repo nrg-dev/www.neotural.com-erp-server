@@ -86,6 +86,7 @@ public class ItemImpl implements ItemDAL {
 			query.fields().include("sellingprice");
 			query.fields().include("productImage1");
 			query.fields().include("createddate");
+			query.fields().include("description");
 			logger.info("DAO item load all");
 			itemlist = mongoTemplate.find(query,Item.class);
 			logger.debug("DAO item size -->" + itemlist.size());
