@@ -58,6 +58,12 @@ db.transaction.update({"_id" :ObjectId("5efc4550f4d49fd9bc9fb4be") },{$set : {"t
 
 db.transaction.find({"transactiondate":{ $gte: '11/08/2020', $lt: '26/08/2020' }}).pretty();
 
+Remove UserRole Empty Query
+===========================
+db.userRole.remove({"invnumber" : "INVUS001"});
+db.userRole.remove({"invnumber" : "INVUS002"});
+db.userRole.remove({"invnumber" : "INVUS003"});
+db.userRole.remove({"invnumber" : "INVUS004"});
 
 Menu Insert Query
 =================
