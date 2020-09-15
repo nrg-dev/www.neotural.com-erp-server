@@ -153,5 +153,10 @@
     "name": "noimage.base64",
     "type": "java.lang.String",
     "description": "A description for 'noimage.base64'"
+  },
+   {
+    "name": "productnoimage.base64",
+    "type": "java.lang.String",
+    "description": "A description for 'productnoimage.base64'"
   }
 ]}

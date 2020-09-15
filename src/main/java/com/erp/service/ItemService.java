@@ -51,10 +51,10 @@ public class ItemService implements Filter {
 	@Autowired
 	ErpBo erpBo;
 	
-	@Value("${noimage.base64}")
+	@Value("${productnoimage.base64}")
 	private String[] noimagebase64;
 	
-	@Value("${noimage.base64}")
+	@Value("${productnoimage.base64}")
 	private String noimage;
 
 	private final ItemDAL itemdal;
