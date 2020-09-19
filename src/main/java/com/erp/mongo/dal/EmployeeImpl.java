@@ -273,12 +273,13 @@ public class EmployeeImpl implements EmployeeDAL {
 	
 
 	// load
-	public List<Employee> load(List<Employee> list, int pagination) {
-	    logger.info("Pagination number-->"+pagination);
+	/* public List<Employee> load(List<Employee> list, int pagination) {
+	    logger.info("Pagination number-->"+pagination); */
+	public List<Employee> load(List<Employee> list) {
 	    Query query = new Query();//.with(new Sort("_id", "-1"));
 	    query.with(new Sort(new Order(Direction.DESC, "employeecode")));
-	    query.skip(pagination);
-	    query.limit(20);
+	    //query.skip(pagination);
+	    //query.limit(20);
 		list = mongoTemplate.find(query,Employee.class);
 		logger.debug("Size-->"+list.size());
 		return list;

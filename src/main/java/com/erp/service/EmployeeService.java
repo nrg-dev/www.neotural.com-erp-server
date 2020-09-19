@@ -145,11 +145,13 @@ public class EmployeeService implements Filter {
 	// load
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
-	public ResponseEntity<?> load(int pagination) {
+	//public ResponseEntity<?> load(int pagination) {
+	public ResponseEntity<?> load() {
 		logger.info("load");
 		List<Employee> responseList = null;
 		try {
-			responseList = employeedal.load(responseList,pagination);
+			//responseList = employeedal.load(responseList,pagination);
+			responseList = employeedal.load(responseList);
 			logger.info("Employee List Size-->"+responseList.size());
 			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
