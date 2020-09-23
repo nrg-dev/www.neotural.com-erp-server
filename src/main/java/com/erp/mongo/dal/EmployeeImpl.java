@@ -21,6 +21,7 @@ import com.erp.mongo.model.DailyReport;
 import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.Index;
 import com.erp.mongo.model.POReturnDetails;
+import com.erp.util.Custom;
 
 import org.springframework.data.domain.Sort; 
 import org.springframework.data.domain.Sort.Direction;
@@ -308,10 +309,37 @@ public class EmployeeImpl implements EmployeeDAL {
 			logger.debug("EmployeeImpl Single loadAbsentList-->"+list.size());
 		}
 		if(type.equalsIgnoreCase("M")) {
+
+			String[] res = date.split("/");
+			String monthname = res[1];
+			logger.debug("After Split month Name-->" + monthname);
+			String currentyear = Custom.getCurrentYear();
+			System.out.println("Current Year -->"+currentyear);
+			
 			Query query = new Query();
 			query.addCriteria(Criteria.where("employeecode").is(employeecode));
+			query.addCriteria(Criteria.where("date").gt("01/"+monthname+"/"+currentyear)
+			           .andOperator(Criteria.where("date").lt("31/"+monthname+"/"+currentyear)));
 			list = mongoTemplate.find(query,AbsentList.class);
 			logger.debug("EmployeeImpl Month loadAbsentList-->"+list.size());
+			
+		}
+		if(type.equalsIgnoreCase("Absent")) {
+
+			String[] res = date.split("/");
+			String monthname = res[1];
+			logger.debug("After Split month Name-->" + monthname);
+			String currentyear = Custom.getCurrentYear();
+			System.out.println("Current Year -->"+currentyear);
+			
+			Query query = new Query();
+			query.addCriteria(Criteria.where("employeecode").is(employeecode));
+			query.addCriteria(Criteria.where("absent").is("yes"));
+			query.addCriteria(Criteria.where("date").gt("01/"+monthname+"/"+currentyear)
+			           .andOperator(Criteria.where("date").lt("31/"+monthname+"/"+currentyear)));
+			list = mongoTemplate.find(query,AbsentList.class);
+			logger.debug("EmployeeImpl Month loadAbsentList-->"+list.size());
+			
 		}
 		else {
 			logger.info("EmployeeImpl No Type found");

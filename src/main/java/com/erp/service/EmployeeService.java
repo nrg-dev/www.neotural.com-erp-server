@@ -254,6 +254,7 @@ public class EmployeeService implements Filter {
 		public ResponseEntity<?> loadAbsentList(String employeecode,String date,String type) {
 			logger.info("loadAbsentList");
 			logger.debug("EmployeeCode-->"+employeecode);
+			logger.debug("Date -->"+date);
 			List<AbsentList> responseList = null;
 			try {
 				responseList = employeedal.loadAbsentList(employeecode,date,type);
