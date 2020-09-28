@@ -325,14 +325,8 @@ public class EmployeeService implements Filter {
 	@RequestMapping(value = "/updateDailyReport", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateDailyReport(@RequestBody EmployeeDto employeeDto) {
 		logger.info("updateDailyReport");
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat your_format = new SimpleDateFormat("dd/MMM/yyyy");
 		try {
 			logger.debug("Report Date-->" + employeeDto.getDate());
-			Date dt1 = format.parse(employeeDto.getDate());
-			String reportdate = your_format.format(dt1);
-			logger.debug("Change FormatedDate-->" + reportdate);
-			employeeDto.setDate(reportdate); 
 			boolean status = employeedal.saveUpdateDailyReport(employeeDto);
 			if(status) {
 				return new ResponseEntity<>(HttpStatus.OK); 
