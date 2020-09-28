@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 //import javax.enterprise.inject.Produces;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,7 +37,7 @@ import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.util.Custom;
 
-@SpringBootApplication
+
 @RestController
 @RequestMapping(value = "/reports")
 public class ReportService implements Filter {

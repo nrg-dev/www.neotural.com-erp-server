@@ -16,11 +16,6 @@ import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import org.springframework.beans.factory.annotation.Autowire;
-
-//import javax.enterprise.inject.Produces;
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,7 +31,6 @@ import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Submenu;
 import com.erp.mongo.model.UserRole;
 
-@SpringBootApplication
 @RestController
 @RequestMapping(value = "/userMgt")
 public class UserMgtService implements Filter {
@@ -72,26 +66,6 @@ public class UserMgtService implements Filter {
 	public void destroy() {
 	}
 
-	// Load customer / vendor name for populate for auto text box
-	/* @CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/loaddepartmentname", method = RequestMethod.GET)
-	public ResponseEntity<?> loaddepartmentname() {
-		logger.info("loaddepartmentname");
-		ArrayList<String> departmentlist = null;
-		try {
-			logger.info("Before Calling Load departmentname list");
-			//departmentlist = usermgtdal.loadCustomerVendorName();
-			logger.info("Successfully Called Load departmentname list");
-			return new ResponseEntity<ArrayList<String>>(departmentlist, HttpStatus.CREATED);
-
-		} catch (Exception e) {
-			logger.error("Exception-->" + e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		} finally {
-
-		}
-	} */
-
 	// save petty cash
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -104,51 +78,39 @@ public class UserMgtService implements Filter {
 			logger.debug("Mapped value -->" + menuarray);
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
-			logger.debug("Invoice number -->" + invoice);
-			 
+			logger.debug("Invoice number -->" + invoice);			 
 			String string = menuarray;
-			String userarray = StringUtils.removeStart(StringUtils.removeEnd(string, "]"), "[");
-			 
+			String userarray = StringUtils.removeStart(StringUtils.removeEnd(string, "]"), "[");			 
 			JSONObject jObject = new JSONObject(userarray);
-
 			user.setInvnumber(invoice);
 			user.setUsername(jObject.getString("username"));
 		 	user.setPassword(jObject.getString("password"));
-		 	user.setDepartmentname(jObject.getString("departmentname"));
-		 	//user.setMenuItem(jObject.getString("menuArray"));
-		 	
+		 	user.setDepartmentname(jObject.getString("departmentname"));		 	
 		 	logger.debug("UserName-->"+user.getUsername());
 		 	logger.debug("Password-->"+user.getPassword());
-		 	logger.debug("Department-->"+user.getDepartmentname());
-		 	
+		 	logger.debug("Department-->"+user.getDepartmentname());		 	
 		 	user.setMenuItem1(jObject.getString("menuItem1"));
 		 	user.setMenuItem2(jObject.getString("menuItem2"));
-		 	user.setMenuItem3(jObject.getString("menuItem3"));
-		 	
+		 	user.setMenuItem3(jObject.getString("menuItem3"));		 	
 		 	user.setMenuItem4(jObject.getString("menuItem4"));
 		 	user.setPurchasesubmenu1(jObject.getString("purchasesubmenu1"));
 		 	user.setPurchasesubmenu2(jObject.getString("purchasesubmenu2"));
 		 	user.setPurchasesubmenu3(jObject.getString("purchasesubmenu3"));
-
 		 	user.setMenuItem5(jObject.getString("menuItem5"));
 		 	user.setProductsubmenu1(jObject.getString("productsubmenu1"));
 		 	user.setProductsubmenu2(jObject.getString("productsubmenu2"));
 		 	user.setProductsubmenu3(jObject.getString("productsubmenu3"));
-
 		 	user.setMenuItem6(jObject.getString("menuItem6"));
 		 	user.setSalessubmenu1(jObject.getString("salessubmenu1"));
 		 	user.setSalessubmenu2(jObject.getString("salessubmenu2"));
 		 	user.setSalessubmenu3(jObject.getString("salessubmenu3"));
 		 	user.setSalessubmenu4(jObject.getString("salessubmenu4"));
 		 	user.setSalessubmenu5(jObject.getString("salessubmenu5"));
-
 		 	user.setMenuItem7(jObject.getString("menuItem7"));
 		 	user.setMenuItem8(jObject.getString("menuItem8"));
-		 	user.setStatus("Active");
-		 	 
+		 	user.setStatus("Active");		 	 
 		 	usermgtdal.save(user);
-			randomnumberdal.updateRandamNumber(randomnumber,randomId);
-			 
+			randomnumberdal.updateRandamNumber(randomnumber,randomId);			 
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
@@ -189,7 +151,6 @@ public class UserMgtService implements Filter {
 			usermgtdal.removeUser(id);
 			logger.info("Successfully Called remove user");
 			return new ResponseEntity<>(HttpStatus.OK);
-
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -211,7 +172,6 @@ public class UserMgtService implements Filter {
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
 		} finally {
 
 		}
@@ -229,7 +189,6 @@ public class UserMgtService implements Filter {
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
 		} finally {
 
 		}
@@ -242,8 +201,7 @@ public class UserMgtService implements Filter {
 		logger.info("removeUser");
 		try {
 			logger.debug("Remove UserID-->" + id);
-			usermgtdal.removeUser(id);
-			
+			usermgtdal.removeUser(id);			
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
@@ -252,6 +210,4 @@ public class UserMgtService implements Filter {
 
 		}
 	}
-
-
 }

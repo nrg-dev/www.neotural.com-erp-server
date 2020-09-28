@@ -16,11 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-//import org.springframework.beans.factory.annotation.Autowire;
-
-//import javax.enterprise.inject.Produces;
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,7 +30,6 @@ import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
 
-@SpringBootApplication
 @RestController
 @RequestMapping(value = "/vendor")
 public class VendorService implements Filter {
@@ -45,12 +39,6 @@ public class VendorService implements Filter {
 	@Value("${noimage.base64}")
 	private String noimagebase64;
 	
-	/*
-	 * @Autowired ErpBo erpBo;
-	 * 
-	 */
-	// private final RandamNumberRepository randamNumberRepository;
-
 	private final VendorDAL vendordal;
 	private final RandomNumberDAL randomnumberdal;
 	Vendor vendor = null;
@@ -124,9 +112,6 @@ public class VendorService implements Filter {
 		try {
 			responselist = vendordal.loadVendor(responselist);
 			logger.debug("Vendor List Size-->"+responselist.size());
-			/*
-			 * if(responselist.size()>0) { throw new Exception("Vendor Error"); }
-			 */
 			return new ResponseEntity<List<Vendor>>(responselist, HttpStatus.CREATED);
 
 		} catch (Exception e) {

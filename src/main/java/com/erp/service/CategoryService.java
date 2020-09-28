@@ -15,11 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import org.springframework.beans.factory.annotation.Autowire;
-
-//import javax.enterprise.inject.Produces;
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,7 +30,7 @@ import com.erp.mongo.model.Category;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Stock;
 
-@SpringBootApplication
+
 @RestController
 @RequestMapping(value = "/category")
 public class CategoryService implements Filter {

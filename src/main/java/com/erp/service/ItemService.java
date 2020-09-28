@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 //import javax.enterprise.inject.Produces;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -41,7 +40,6 @@ import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.Units;
 import com.erp.util.Custom;
 
-@SpringBootApplication
 @RestController
 @RequestMapping(value = "/item")
 public class ItemService implements Filter {
@@ -99,8 +97,6 @@ public class ItemService implements Filter {
 		Stock stock = new Stock();
 		try {
 			randomnumber = randomnumberdal.getCategoryRandomNumber(2);
-			//logger.info("item Invoice random number-->" + randomnumber.getProductinvoicenumber());
-			//logger.info("item Invoice random code-->" + randomnumber.getProductinvoicecode());
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			logger.debug("Product number-->" + invoice);
 			logger.debug("category code-->" + item.getCategorycode());
@@ -111,7 +107,6 @@ public class ItemService implements Filter {
 				String categoryname = categorynamecode[0];
 				item.setCategorycode(categorycode);
 				item.setCategoryname(categoryname);
-
 			}
 			if (item.getVendorcode() != null) {
 				String[] vendornamecode = item.getVendorcode().split("-");
@@ -119,8 +114,7 @@ public class ItemService implements Filter {
 				String vendorcode = vendornamecode[1];
 				item.setVendorcode(vendorcode);
 				item.setVendorname(vendorname);
-			}
-			
+			}			
 			item.setCreateddate(Custom.getCurrentInvoiceDate());
 			item.setProdcode(invoice);
 			logger.debug("Product Image Base64 -->"+item.getProductImage());
@@ -143,24 +137,15 @@ public class ItemService implements Filter {
 			stock.setRecentStock(0); 
 			stock.setStatus("Ready for Sales"); 
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
-			stock.setInvoicenumber("NONE");
-			/*randomnumber = randomnumberdal.getRandamNumber(randomId);
-			String invoiceno = randomnumber.getCode() + randomnumber.getNumber();
-			stock.setInvoicenumber(invoiceno);*/
-			stockdal.saveStock(stock);
-			/*if (stock.getStatus().equalsIgnoreCase("success")) {
-				randomnumberdal.updateRandamNumber(randomnumber,randomId);
-			}*/
+			stock.setInvoicenumber("NONE");		
+			stockdal.saveStock(stock);			
 			return new ResponseEntity<>(HttpStatus.OK);
-
 		} catch (Exception e) {
 			item.setStatus("failure");
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-
 		finally {
-
 		}
 	}
 
@@ -176,18 +161,15 @@ public class ItemService implements Filter {
 			discount.setDiscountcode(invoice);
 			logger.debug("Discount from date-->" + discount.getFromdate_promotionperiod());
 			logger.debug("Discount To date-->" + discount.getTodate_promotionperiod());
-
 			discount = itemdal.saveDiscount(discount);
 			if (discount.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updatediscountRandamNumber(randomnumber);
 			}
 			return new ResponseEntity<>(HttpStatus.OK);
-
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-
 		finally {
 
 		}
@@ -209,7 +191,6 @@ public class ItemService implements Filter {
 					logger.debug("product code-->" + item.getProdcode());
 				}
 				return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
-
 			} catch (Exception e) {
 				logger.error("Exception-->" + e.getMessage());
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -247,9 +228,6 @@ public class ItemService implements Filter {
 		}
 	}
 
-	
-	
-
 	// load units
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadunits", method = RequestMethod.GET)
@@ -281,7 +259,6 @@ public class ItemService implements Filter {
 			logger.debug("Remove ObjectID ------->" + id);
 			itemdal.removeUnit(id);
 			return new ResponseEntity<>(HttpStatus.OK);
-
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -290,32 +267,7 @@ public class ItemService implements Filter {
 
 		}
 	}
-	/*
-	 * // Load only item name for auto text box search for promotion add // load
-	 * 
-	 * @CrossOrigin(origins = "http://localhost:8080")
-	 * 
-	 * @RequestMapping(value = "/loadItemName", method = RequestMethod.GET) public
-	 * ResponseEntity<?> loadItemName() {
-	 * logger.info("------------- Inside loadItemName-----------------"); List<Item>
-	 * itemlist = new ArrayList<Item>(); List<String> itemnamecode = new
-	 * ArrayList<String>();
-	 * 
-	 * try { logger.info("-----------Inside loadItemName Called----------");
-	 * itemlist = itemdal.loadItem(itemlist); for (Item item : itemlist) {
-	 * itemnamecode.add(item.getProductname()+"-"+item.getProdcode());
-	 * logger.info("product code -->" + item.getProdcode());
-	 * 
-	 * } return new ResponseEntity<List<String>>(itemnamecode, HttpStatus.CREATED);
-	 * 
-	 * } catch (Exception e) { logger.info("loadItemName Exception ------------->" +
-	 * e.getMessage()); return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
-	 * finally {
-	 * 
-	 * } return new ResponseEntity<List<String>>(itemnamecode, HttpStatus.CREATED);
-	 * 
-	 * }
-	 */
+	
 	// Add Promotion load
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/discountload", method = RequestMethod.GET)
@@ -328,7 +280,6 @@ public class ItemService implements Filter {
 			logger.info("After Calling loadDiscount");
 			for (Discount disc : discountlist) {
 				logger.debug("discount code-->" + disc.getDiscountcode());
-
 			}
 			return new ResponseEntity<List<Discount>>(discountlist, HttpStatus.CREATED);
 
@@ -387,8 +338,7 @@ public class ItemService implements Filter {
 			}
 			logger.debug("After Set Vendor Name-->" + item.getVendorname());
 			logger.debug("After Set Vendor Code-->" + item.getVendorcode());
-			item = itemdal.updateItem(item);
-			
+			item = itemdal.updateItem(item);			
 			//------------ Update Stock Based on Product -----------
 			stocklist = stockdal.loadStock(stocklist,item.getProdcode());
 			for(int i=0; i< stocklist.size(); i++) {
@@ -490,9 +440,7 @@ public class ItemService implements Filter {
 				logger.debug("Product name-->" + item.getProductname());
 				list.add(item.getProductname() + "-" + item.getProdcode());
 			}
-
 			return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
-
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -16,11 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-//import org.springframework.beans.factory.annotation.Autowire;
-
-//import javax.enterprise.inject.Produces;
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,7 +31,6 @@ import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.util.Custom;
 
-@SpringBootApplication
 @RestController
 @RequestMapping(value = "/customer")
 public class CustomerService implements Filter {
@@ -49,14 +43,11 @@ public class CustomerService implements Filter {
 	@Value("${noimage.base64}")
 	private String noimagebase64;
 	
-	// private final RandamNumberRepository randamNumberRepository;
-
 	private final CustomerDAL customerdal;
 	private final RandomNumberDAL randomnumberdal;
 	Customer customer = null;
 
 	public CustomerService(CustomerDAL customerdal, RandomNumberDAL randomnumberdal) {
-		// this.randamNumberDAL = randamNumberDAL;
 		this.customerdal = customerdal;
 		this.randomnumberdal = randomnumberdal;
 	}
@@ -160,8 +151,6 @@ public class CustomerService implements Filter {
 		} finally {
 
 		}
-		//return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
-
 	}
 
 	// update

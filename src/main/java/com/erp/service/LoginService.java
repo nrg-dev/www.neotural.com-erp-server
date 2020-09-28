@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 //import javax.enterprise.inject.Produces;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,9 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erp.bo.ErpBo;
 import com.erp.dto.User;
 import com.erp.mongo.model.Index;
-import com.erp.mongo.model.Item;
 
-@SpringBootApplication
 @RestController
 @RequestMapping(value = "/auth")
 public class LoginService implements Filter {
@@ -76,10 +73,7 @@ public class LoginService implements Filter {
 			user = new User();
 			user.setUsername(username);
 			user.setPassword(password);
-			//user = bo.userLogin(user);
 			return new ResponseEntity<User>(user, HttpStatus.OK);
-			//logger.debug("Status-->" + user.getStatus());
-			//logger.debug("User Type-->" + user.getUserRole());
 		} catch (Exception e) {
 			user.setStatus("Network Error Please try again");
 			logger.error("Exception-->" + e.getMessage());
@@ -89,27 +83,27 @@ public class LoginService implements Filter {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
-			// load index data
-			@CrossOrigin(origins = "http://localhost:8080")
-			@RequestMapping(value = "/loadIndex", method = RequestMethod.GET)
-			public ResponseEntity<?> loadIndex() {
-				logger.info("loadIndex");
-				List<Index> indexlist = null;
-				try {
-					logger.info("Before Calling ItemLoad");
-					indexlist = new ArrayList<Index>();
-					indexlist = bo.loadIndex(indexlist);
-					logger.info("After Calling ItemLoad");
-					logger.info("Index Size-->"+indexlist.size());
-					return new ResponseEntity<List<Index>>(indexlist, HttpStatus.CREATED);
+	// load index data
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadIndex", method = RequestMethod.GET)
+	public ResponseEntity<?> loadIndex() {
+		logger.info("loadIndex");
+		List<Index> indexlist = null;
+		try {
+			logger.info("Before Calling ItemLoad");
+			indexlist = new ArrayList<Index>();
+			indexlist = bo.loadIndex(indexlist);
+			logger.info("After Calling ItemLoad");
+			logger.info("Index Size-->"+indexlist.size());
+			return new ResponseEntity<List<Index>>(indexlist, HttpStatus.CREATED);
 
-				} catch (Exception e) {
-					logger.error("Exception-->" + e.getMessage());
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-				} finally {
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
 
-				}
-			}
+		}
+	}
 			
 
 	@CrossOrigin(origins = "http://localhost:8080")

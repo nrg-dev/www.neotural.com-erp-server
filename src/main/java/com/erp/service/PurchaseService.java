@@ -20,11 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-//import org.springframework.beans.factory.annotation.Autowire;
-
-//import javax.enterprise.inject.Produces;
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +35,10 @@ import com.erp.dto.POInvoiceDto;
 import com.erp.dto.Purchase;
 import com.erp.mongo.dal.PurchaseDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
-import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
-import com.erp.mongo.model.PettyCash;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Template;
@@ -54,7 +47,6 @@ import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
 import com.erp.util.PDFGenerator;
 
-@SpringBootApplication
 @RestController
 @RequestMapping(value = "/purchase")
 public class PurchaseService implements Filter {
@@ -885,7 +877,7 @@ public class PurchaseService implements Filter {
 			purchasedal.insertReturn(poreturn);
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			purchaseorder.setInvoicenumber(poreturn.getPocode()); 
-			boolean status = purchasedal.updatePurchaseOrder(purchaseorder,1);
+			purchasedal.updatePurchaseOrder(purchaseorder,1);
 			logger.info("createReturn done!");
 			
 			//-- Transaction Table Insert
@@ -1035,7 +1027,7 @@ public class PurchaseService implements Filter {
 			}else {
 				logger.info("Update Payment Type is credit and voucher!");
 				if(responselist.size() > 0) {
-					boolean status = purchasedal.removeTransaction(poreturn.getInvoicenumber());
+					purchasedal.removeTransaction(poreturn.getInvoicenumber());
 					logger.info("Return Transation Remove done!");
 				}				
 			}	
@@ -1052,9 +1044,9 @@ public class PurchaseService implements Filter {
 	public ResponseEntity<?> removePoReturn(String id,String invoicenumber) {
 		try {
 			logger.debug("Remove POReturn-->" + id);
-			boolean status = purchasedal.removePoReturn(id);
+			purchasedal.removePoReturn(id);
 			logger.info("POReturn Removed Successfully");
-			boolean status1 = purchasedal.removeTransaction(invoicenumber);
+			purchasedal.removeTransaction(invoicenumber);
 			logger.info("Transaction Removed Successfully");
 			return new ResponseEntity<>(HttpStatus.OK);
 

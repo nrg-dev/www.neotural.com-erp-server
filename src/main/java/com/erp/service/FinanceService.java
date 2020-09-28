@@ -18,11 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-//import org.springframework.beans.factory.annotation.Autowire;
-
-//import javax.enterprise.inject.Produces;
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +42,6 @@ import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.Transaction;
 import com.erp.util.Custom;
 
-@SpringBootApplication
 @RestController
 @RequestMapping(value = "/finance")
 public class FinanceService implements Filter {
@@ -209,7 +203,6 @@ public class FinanceService implements Filter {
 			pettycashlist = financedal.load();
 			logger.info("Successfully Called load pettycash list");
 			return new ResponseEntity<List<PettyCash>>(pettycashlist, HttpStatus.CREATED);
-
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -230,7 +223,6 @@ public class FinanceService implements Filter {
 			pettycash.setStatus("success");
 			logger.info("Successfully Called  removePettyCash");
 			return new ResponseEntity<>(HttpStatus.OK);
-
 		} catch (Exception e) {
 			pettycash.setStatus("failure");
 			logger.error("Exception-->" + e.getMessage());
@@ -253,8 +245,7 @@ public class FinanceService implements Filter {
 		String pocode = "All";
 		try {
 			polist = purchasedal.loadInvoice(paystatus,pocode);
-			solist = salesdal.loadInvoice(paystatus);
-			
+			solist = salesdal.loadInvoice(paystatus);			
 			for (POInvoice po : polist) {
 				purchase = new Purchase();
 				purchase.setInvoiceNumber(po.getInvoicenumber());
@@ -264,8 +255,7 @@ public class FinanceService implements Filter {
 				purchase.setStatus(po.getStatus());
 				purchase.setPaymentStatus(po.getPaymentstatus());
 				responselist.add(purchase);
-			}
-			
+			}			
 			for (SOInvoice so : solist) {
 				purchase = new Purchase();
 				purchase.setInvoiceNumber(so.getInvoicenumber());
@@ -275,8 +265,7 @@ public class FinanceService implements Filter {
 				purchase.setStatus(so.getStatus());
 				purchase.setPaymentStatus(so.getPaymentstatus());
 				responselist.add(purchase);   
-			}
-			
+			}			
 			return new ResponseEntity<List<Purchase>>(responselist, HttpStatus.OK);				
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
@@ -290,8 +279,8 @@ public class FinanceService implements Filter {
 	@RequestMapping(value = "/makeInvPayment", method = RequestMethod.POST)
 	public ResponseEntity<?> makeInvPayment(@RequestBody Transaction trans) {
 		logger.info("--------- makeInvPayment -------");
-		logger.info("Invoice Number -->" + trans.getInvoicenumber());
-		logger.info("Debit Amount -->" + trans.getDebit());
+		logger.debug("Invoice Number -->" + trans.getInvoicenumber());
+		logger.debug("Debit Amount -->" + trans.getDebit());
 		RandomNumber randomnumber = null;
 		int randomtrId=19;
 		POInvoice poinv = new POInvoice();
@@ -310,12 +299,10 @@ public class FinanceService implements Filter {
 			trans.setCurrency(currency);
 			purchasedal.saveTransaction(trans);
 			randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
-			logger.info("Finance Make Invoice Payment Transation Insert done!");
-			
+			logger.info("Finance Make Invoice Payment Transation Insert done!");			
 			//---- Update Payment in SalesInvoice
 			poinv.setInvoicenumber(trans.getInvoicenumber()); 
-			purchasedal.updatePOInvoice(poinv,2);
-			
+			purchasedal.updatePOInvoice(poinv,2);			
 			return new ResponseEntity<>(HttpStatus.OK); // 200
 		}catch(Exception e) {
 			logger.error("Exception-->"+e.getMessage());
@@ -348,12 +335,10 @@ public class FinanceService implements Filter {
 			trans.setCurrency(currency);
 			salesdal.saveTransaction(trans);
 			randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
-			logger.info("Finance Receive Invoice Payment Transation Insert done!");
-			
+			logger.info("Finance Receive Invoice Payment Transation Insert done!");			
 			//---- Update Payment in SalesInvoice
 			soinv.setInvoicenumber(trans.getInvoicenumber()); 
-			salesdal.updateSOInvoice(soinv,2);
-			
+			salesdal.updateSOInvoice(soinv,2);			
 			return new ResponseEntity<>(HttpStatus.OK); // 200
 		}catch(Exception e) {
 			logger.error("Exception-->"+e.getMessage());
@@ -373,8 +358,7 @@ public class FinanceService implements Filter {
 		String pocode = "All";
 		try {
 			polist = purchasedal.loadReturn(paystatus,pocode);
-			solist = salesdal.loadReturn(paystatus);
-			
+			solist = salesdal.loadReturn(paystatus);			
 			for (POReturnDetails po : polist) {
 				purchase = new Purchase();
 				purchase.setInvoiceNumber(po.getInvoicenumber());
@@ -441,12 +425,10 @@ public class FinanceService implements Filter {
 			trans.setCurrency(currency);
 			purchasedal.saveTransaction(trans);
 			randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
-			logger.info("Finance Make Return Payment Transation Insert done!");
-			
+			logger.info("Finance Make Return Payment Transation Insert done!");			
 			//---- Update Return Payment in Sales Return
 			poret.setInvoicenumber(trans.getInvoicenumber()); 
-			purchasedal.updatePOReturn(poret,1);
-			
+			purchasedal.updatePOReturn(poret,1);			
 			return new ResponseEntity<>(HttpStatus.OK); // 200
 		}catch(Exception e) {
 			logger.error("Exception-->"+e.getMessage());
@@ -479,12 +461,10 @@ public class FinanceService implements Filter {
 			trans.setCurrency(currency);
 			salesdal.saveTransaction(trans);
 			randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
-			logger.info("Finance Receive Return Payment Transation Insert done!");
-			
+			logger.info("Finance Receive Return Payment Transation Insert done!");			
 			//---- Update Return Payment in Sales Return
 			soret.setInvoicenumber(trans.getInvoicenumber()); 
-			salesdal.updateSOReturn(soret);
-			
+			salesdal.updateSOReturn(soret);			
 			return new ResponseEntity<>(HttpStatus.OK); // 200
 		}catch(Exception e) {
 			logger.error("Exception-->"+e.getMessage());
@@ -503,7 +483,6 @@ public class FinanceService implements Filter {
 			profitlosslist = financedal.loadProfitLoss();
 			logger.info("Successfully Called load profitandloss list");
 			return new ResponseEntity<List<Transaction>>(profitlosslist, HttpStatus.CREATED);
-
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -522,8 +501,7 @@ public class FinanceService implements Filter {
 		try {
 			logger.info("----------- Before Calling  filterByDate ----------");
 			logger.info("From Date -->" + fromdate);
-			logger.info("To Date -->" + todate);
-			
+			logger.info("To Date -->" + todate);			
 			Date dt1 = format.parse(fromdate);
 			String startdate = your_format.format(dt1);
 			logger.debug("Start Date-->" + startdate);

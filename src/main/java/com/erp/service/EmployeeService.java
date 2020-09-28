@@ -12,18 +12,12 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-//import org.springframework.beans.factory.annotation.Autowire;
-
-//import javax.enterprise.inject.Produces;
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,7 +37,6 @@ import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.util.Custom;
 
-@SpringBootApplication
 @RestController
 @RequestMapping(value = "/employee")
 public class EmployeeService implements Filter {
@@ -55,8 +48,6 @@ public class EmployeeService implements Filter {
 	
 	@Value("${noimage.base64}")
 	private String noimagebase64;
-
-	// private final RandamNumberRepository randamNumberRepository;
 
 	private final EmployeeDAL employeedal;
 	private final RandomNumberDAL randomnumberdal;
@@ -132,8 +123,6 @@ public class EmployeeService implements Filter {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
 
 			}
-			//return new ResponseEntity<>(HttpStatus.OK); 
-
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -145,12 +134,10 @@ public class EmployeeService implements Filter {
 	// load
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
-	//public ResponseEntity<?> load(int pagination) {
 	public ResponseEntity<?> load() {
 		logger.info("load");
 		List<Employee> responseList = null;
 		try {
-			//responseList = employeedal.load(responseList,pagination);
 			responseList = employeedal.load(responseList);
 			logger.info("Employee List Size-->"+responseList.size());
 			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
@@ -361,24 +348,6 @@ public class EmployeeService implements Filter {
 		}
 	}
 	
-	/*
-	 * // Save Daily Report
-	 * 
-	 * @CrossOrigin(origins = "http://localhost:8080")
-	 * 
-	 * @RequestMapping(value = "/updateDailyReport", method = RequestMethod.PUT)
-	 * public ResponseEntity<?> updateDailyReport(@RequestBody EmployeeDto
-	 * employeeDto) { logger.info("updateDailyReport"); try { boolean status =
-	 * employeedal.saveUpdateDailyReport(employeeDto); if(status) { return new
-	 * ResponseEntity<>(HttpStatus.OK); } else { return new
-	 * ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); }
-	 * 
-	 * } catch (Exception e) { logger.info("Exception-->" + e.getMessage()); return
-	 * new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500 } finally {
-	 * 
-	 * } }
-	 */
-		
 		// Save Absent
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value = "/saveAbsent", method = RequestMethod.POST)
@@ -399,24 +368,6 @@ public class EmployeeService implements Filter {
 
 			}
 		}
-		
-	/*
-	 * // Update Absent
-	 * 
-	 * @CrossOrigin(origins = "http://localhost:8080")
-	 * 
-	 * @RequestMapping(value = "/updateAbsent", method = RequestMethod.PUT) public
-	 * ResponseEntity<?> updateAbsent(@RequestBody AbsentList absentList) {
-	 * logger.info("updateAbsent"); try { boolean status =
-	 * employeedal.updateAbsentList(absentList); if(status) { return new
-	 * ResponseEntity<>(HttpStatus.OK); } else { return new
-	 * ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); }
-	 * 
-	 * } catch (Exception e) { logger.info("Exception-->" + e.getMessage()); return
-	 * new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500 } finally {
-	 * 
-	 * } }
-	 */
 		
 		// Save Contract
 		@CrossOrigin(origins = "http://localhost:8080")

@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 //import javax.enterprise.inject.Produces;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,10 +35,9 @@ import com.erp.bo.ErpBo;
 import com.erp.dto.Career;
 import com.erp.dto.Enquiry;
 import com.erp.dto.User;
-import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.util.Custom;
 
-@SpringBootApplication
+
 @RestController
 @RequestMapping(value = "/enquiry")
 public class EnquiryService implements Filter {
@@ -53,13 +51,6 @@ public class EnquiryService implements Filter {
 	private String username;
 	@Value("${enquiry.passWord}")
 	private String password;
-
-	/*
-	 * private final RandomNumberDAL randomnumberdal;
-	 * 
-	 * public EnquiryService(RandomNumberDAL randomnumberdal) { this.randomnumberdal
-	 * = randomnumberdal; }
-	 */
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)

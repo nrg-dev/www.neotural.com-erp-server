@@ -21,17 +21,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-//import org.springframework.beans.factory.annotation.Autowire;
-
-//import javax.enterprise.inject.Produces;
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,7 +39,6 @@ import com.erp.mongo.dal.SalesDAL;
 import com.erp.mongo.dal.StockDAL;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
-import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
@@ -57,7 +50,7 @@ import com.erp.mongo.model.Transaction;
 import com.erp.util.Custom;
 import com.erp.util.PDFGenerator;
 
-@SpringBootApplication
+
 @RestController
 @RequestMapping(value = "/sales")
 public class SalesService implements Filter {
@@ -97,8 +90,6 @@ public class SalesService implements Filter {
 	
 	@Value("${noimage.base64}")
 	private String nologo;
-
-	// private final RandamNumberRepository randamNumberRepository;
 
 	private final SalesDAL salesdal;
 	private final RandomNumberDAL randomnumberdal;
@@ -157,126 +148,6 @@ public class SalesService implements Filter {
 
 	}
 
-//	// Save
-//	@CrossOrigin(origins = "http://localhost:4200")
-//	@PostMapping(value = "/save")
-//	public ResponseEntity<?> saveSales(@RequestBody String salesorderarray) {
-//		logger.info("saveSales");
-//		String temp = salesorderarray;
-//		Sales sales = null;
-//		SOInvoice soinvoice = null;
-//		SOInvoiceDetails sodetails = null;
-//		RandomNumber randomnumber = null;
-//		int totalQty = 0;
-//		int totalPrice = 0;
-//		int totalitem = 0;
-//		try {
-//			sales = new Sales();
-//			logger.debug("Post Json -->" + salesorderarray);
-//			// logger.info("Vendor name --->"+vendorName);
-//			// Store into parent table to show in first data table view
-//			randomnumber = randomnumberdal.getRandamNumber(2);
-//			//logger.info("SO Invoice random number-->" + randomnumber.getSalesinvoicenumber());
-//			//logger.info("SO Invoice random code-->" + randomnumber.getSalesinvoicecode());
-//			String invoice = randomnumber.getCode() + randomnumber.getNumber();
-//			logger.debug("Invoice number -->" + invoice);
-//			ArrayList<String> list = new ArrayList<String>();
-//			JSONArray jsonArr = new JSONArray(salesorderarray);
-//			int remove = 0;
-//			if (jsonArr != null) {
-//				for (int i = 0; i < jsonArr.length(); i++) {
-//					list.add(jsonArr.get(i).toString());
-//					remove++;
-//				}
-//			}
-//			int postion = remove - 1;
-//			logger.debug("Position-->" + postion);
-//			list.remove(postion);
-//			logger.debug("Size -------->" + jsonArr.length());
-//			int l = 1;
-//			for (int i = 0; i < jsonArr.length(); i++) {
-//				logger.debug("Loop 1...." + i);
-//				JSONArray arr2 = jsonArr.optJSONArray(i);
-//				if (l == jsonArr.length()) {
-//					logger.info("Last Value");
-//					JSONObject jObject = arr2.getJSONObject(0);
-//					logger.debug("SO Date -->" + jObject.getString("sodate"));
-//					// logger.info("Customer Name -->" + jObject.getString("customername"));
-//					logger.info("Delivery Cost -->" + jObject.getString("deliveryCost"));
-//					// sales.setCustomerName(jObject.getString("customername"));
-//					sales.setDeliveryCost(jObject.getString("deliveryCost"));
-//
-//				} else {
-//					if (jsonArr.optJSONArray(i) != null) {
-//						// JSONArray arr2 = jsonArr.optJSONArray(i);
-//						for (int j = 0; j < arr2.length(); j++) {
-//							logger.info("Loop 2...." + j);
-//							if (arr2.getJSONObject(j) != null) {
-//								JSONObject jObject = arr2.getJSONObject(j);
-//								logger.info(jObject.getString("productName"));
-//								logger.info(jObject.getString("category"));
-//								sodetails = new SOInvoiceDetails();
-//								sodetails.setInvoicenumber(invoice);// random table..
-//								sales.setCustomerName(jObject.getString("customerName"));
-//								sodetails.setCategory(jObject.getString("category"));
-//								sodetails.setItemname(jObject.getString("productName"));
-//								sodetails.setDescription(jObject.getString("description"));
-//								sodetails.setUnitprice(jObject.getString("unitPrice"));
-//								sodetails.setQty(jObject.getString("quantity"));
-//								sodetails.setSubtotal(jObject.getDouble("netAmount"));
-//								sodetails.setSoDate(Custom.getCurrentInvoiceDate());
-//								logger.info("SOInvoice Date --->" + sodetails.getSoDate());
-//								salesdal.saveSales(sodetails);
-//								String str = jObject.getString("quantity");
-//								str = str.replaceAll("\\D", "");
-//								totalQty += Integer.valueOf(str);
-//								totalPrice += jObject.getDouble("netAmount");
-//								totalitem = j + 1;
-//							} else {
-//								logger.info("Null....");
-//							}
-//						}
-//					} else {
-//						logger.info("Outer Null....");
-//					}
-//				}
-//				l++;
-//			}
-//			soinvoice = new SOInvoice();
-//			soinvoice.setInvoicedate(Custom.getCurrentInvoiceDate());
-//			logger.info("Invoice Date --->" + soinvoice.getInvoicedate());
-//			soinvoice.setCustomername(sales.getCustomerName());
-//			soinvoice.setInvoicenumber(invoice);
-//			soinvoice.setStatus("Pending");
-//			soinvoice.setQty(totalQty);
-//			soinvoice.setTotalprice(totalPrice);
-//			//soinvoice.setTotalitem(totalitem);
-//			soinvoice.setDeliveryprice(Integer.valueOf(sales.getDeliveryCost()));
-//			salesdal.saveSOInvoice(soinvoice);
-//			logger.info("Service call start.....");
-//			sales.setStatus("success");
-//			randomnumberdal.updateSalesRandamNumber(randomnumber);
-//			return new ResponseEntity<>(HttpStatus.OK);
-//		}
-//
-//		/*
-//		 * catch (NullPointerException ne) { sales = new Sales();
-//		 * logger.info("Inside null pointer exception ....");
-//		 * sales.setStatus("success"); boolean status =
-//		 * randomnumberdal.updateRandamNumber(randomnumber); return new
-//		 * ResponseEntity<Sales>(sales, HttpStatus.CREATED);
-//		 * 
-//		 * }
-//		 */ catch (Exception e) {
-//			logger.info("Exception ------------->" + e.getMessage());
-//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//		}
-//
-//		finally {
-//
-//		}
-//	}
-
 	// load
 	ArrayList<JSONArray> res = new ArrayList<JSONArray>();
 
@@ -315,12 +186,10 @@ public class SalesService implements Filter {
 				sales.setCustomerName(res.getCustomername());
 				sales.setNetAmount(totalAmountlist);
 				sales.setTotalAmount(res.getTotalprice());
-				//sales.setDeliveryCost(res.getDeliveryprice());
 				sales.setStatus(res.getStatus());
 				sales.setProductName(itemnameList);
 				sales.setQuantity(qtylist);
 				sales.setUnitPrice(totalAmountlist);
-				//sales.setTotalItem(res.getTotalitem());
 				sales.setDescription(prodList);
 				responseList.add(sales);
 			}
@@ -392,7 +261,6 @@ public class SalesService implements Filter {
 			sales.setStatus(status);
 			logger.info("Successfully Calling removeSales");
 			return new ResponseEntity<>(HttpStatus.OK);
-
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			sales.setStatus("failure");
@@ -400,7 +268,6 @@ public class SalesService implements Filter {
 		} finally {
 
 		}
-
 	}
 
 	// Remove
@@ -414,7 +281,6 @@ public class SalesService implements Filter {
 			logger.info("----------- Before Calling  getUnitPrice Sales ----------");
 			logger.info("Product Name -->" + productName);
 			logger.info("category -->" + category);
-
 			String[] res = productName.split("-");
 			String productCode = res[1];
 			logger.info("After Split productCode -->" + productCode);
@@ -422,8 +288,7 @@ public class SalesService implements Filter {
 			String categoryCode = response[1];
 			logger.info("After Split categoryCode -->" + categoryCode);
 			item = salesdal.getUnitPrice(productCode, categoryCode);
-			logger.info("Unit Price ----------" + item.getPrice());
-			
+			logger.info("Unit Price ----------" + item.getPrice());			
 			stock = stockdal.getAvailableqty(productCode);
 			item.setRecentStock(stock.getRecentStock()); 
 			logger.debug("Available Qty --->"+stock.getRecentStock());
@@ -479,7 +344,6 @@ public class SalesService implements Filter {
 			logger.info("Before Calling  remove Particular Sales");
 			logger.debug("ObjectID -->" + id);
 			logger.debug("salesCode -->" + invoiceNumber);
-			// ---- Check List Size from SOInvoiceDetails Table
 			responseList = salesdal.getSales(invoiceNumber);
 			logger.debug("List Size-->" + responseList.size());
 			if (responseList.size() == 0 || responseList.size() == 1) {
@@ -487,12 +351,10 @@ public class SalesService implements Filter {
 			} else {
 				temp = 2;
 			}
-
 			String status = salesdal.removePartId(id, invoiceNumber, temp);
 			sales.setStatus(status);
 			logger.info("Successfully Called  removeSales");
 			return new ResponseEntity<>(HttpStatus.OK);
-
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			sales.setStatus("failure");
@@ -577,7 +439,6 @@ public class SalesService implements Filter {
 			soinvoice.setTotalprice(totalPrice);
 			logger.info("After soInvoice Total Qty -->" + soinvoice.getQty());
 			logger.info("After soInvoice Total Price -->" + soinvoice.getTotalprice());
-			//soinvoice.setTotalitem(totalitem);
 			salesdal.updateSOInvoice(soinvoice,1);
 			sales.setStatus("success");
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -587,89 +448,7 @@ public class SalesService implements Filter {
 		} finally {
 
 		}
-	}
-
-	// SaveReturn
-	/*@CrossOrigin(origins = "http://localhost:4200")
-	@PostMapping(value = "/saveReturn")
-	public ResponseEntity<?> saveSalesReturn(@RequestBody String returnarray) {
-		logger.info("saveSalesReturn");
-		String temp = returnarray;
-		logger.info("Mapped value -->" + temp);
-		Sales sales = null;
-		SOReturnDetails soreturndetails = null;
-		RandomNumber randomnumber = null;
-
-		try {
-			sales = new Sales();
-			logger.info("Post Json -->" + returnarray);
-
-			JSONArray jsonArr = new JSONArray(returnarray);
-			ArrayList<String> list = new ArrayList<String>();
-			logger.info("length =====" + jsonArr.length());
-			int remove = 0;
-			if (jsonArr != null) {
-				for (int i = 0; i < jsonArr.length(); i++) {
-					list.add(jsonArr.get(i).toString());
-					remove++;
-				}
-			}
-
-			int postion = remove - 1;
-			logger.info("Position-->" + postion);
-			list.remove(postion);
-			logger.info("Size -------->" + jsonArr.length());
-			// int l = 1;
-			for (int i = 0; i < jsonArr.length(); i++) {
-				JSONArray arr2 = jsonArr.optJSONArray(i);
-				if (jsonArr.optJSONArray(i) != null) {
-					for (int j = 0; j < arr2.length(); j++) {
-						randomnumber = randomnumberdal.getReturnRandamNumber(2);
-						//logger.info("SO Return random number-->" + randomnumber.getSoreturninvoicenumber());
-						//logger.info("SO Return random code-->" + randomnumber.getSoreturninvoicecode());
-						String invoice = randomnumber.getCode() + randomnumber.getNumber();
-						logger.info("Sales Return Invoice number -->" + invoice);
-						if (arr2.getJSONObject(j) != null) {
-							JSONObject jObject = arr2.getJSONObject(j);
-							logger.info(jObject.getString("productName"));
-							logger.info(jObject.getString("category"));
-							soreturndetails = new SOReturnDetails();
-							soreturndetails.setInvoicenumber(invoice);// random table..
-							soreturndetails.setCustomername(jObject.getString("customerName"));
-							soreturndetails.setCategory(jObject.getString("category"));
-							soreturndetails.setItemname(jObject.getString("productName"));
-							soreturndetails.setQty(jObject.getString("quantity"));
-							soreturndetails.setItemStatus(jObject.getString("itemStatus"));
-							soreturndetails.setReturnStatus(jObject.getString("returnStatus"));
-							soreturndetails.setSoDate(Custom.getCurrentInvoiceDate());
-							soreturndetails.setInvid(j + 1);
-							logger.info("POInvoice Date --->" + soreturndetails.getSoDate());
-							salesdal.insertReturn(soreturndetails);
-							//logger.info("Invoice Number --->" + randomnumber.getSoreturninvoicenumber());
-							randomnumberdal.updateSalesReturnRandamNumber(randomnumber);
-						//	logger.info(
-						//			"After Increament Invoice Number --->" + randomnumber.getSoreturninvoicenumber());
-
-						} else {
-							logger.info("Null....");
-						}
-						// l++;
-					}
-				} else {
-					logger.info("Outer Null....");
-				}
-			}
-			sales.setStatus("success");
-			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (Exception e) {
-			logger.error("Exception-->" + e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-
-		finally {
-
-		}
-	}*/
+	}	
 
 	// Load customer for populate for auto text box
 	@CrossOrigin(origins = "http://localhost:8080")
@@ -997,7 +776,7 @@ public class SalesService implements Filter {
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
 
 			salesorder.setInvoicenumber(soreturn.getSocode()); 
-			boolean status = salesdal.updateSalesOrder(salesorder,1);
+			salesdal.updateSalesOrder(salesorder,1);
 			logger.info("create SalesReturn done!");
 			
 			//-- Transaction Table Insert

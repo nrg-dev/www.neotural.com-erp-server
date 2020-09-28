@@ -20,11 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-//import org.springframework.beans.factory.annotation.Autowire;
-
-//import javax.enterprise.inject.Produces;
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +50,7 @@ import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
 import com.erp.util.PDFGenerator;
 
-@SpringBootApplication
+
 @RestController
 @RequestMapping(value = "/stock")
 public class StockService implements Filter {
@@ -67,21 +62,18 @@ public class StockService implements Filter {
 
 	private final StockDAL stockdal;
 	private final PurchaseDAL purchasedal;
-	//private final SalesDAL salesdal;
 	private final RandomNumberDAL randomnumberdal;
 
 	public StockService(StockDAL stockdal, 
 			RandomNumberDAL randomnumberdal, PurchaseDAL purchasedal) {
 		this.stockdal = stockdal;
 		this.purchasedal = purchasedal;
-		//this.salesdal = salesdal;
 		this.randomnumberdal = randomnumberdal;
 	}
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
-
 		HttpServletResponse response = (HttpServletResponse) res;
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -148,7 +140,6 @@ public class StockService implements Filter {
 		} finally {
 
 		}
-		// return new ResponseEntity<List<Purchase>>(list, HttpStatus.CREATED);
 	}
 
 	// Save Stock Return
@@ -177,7 +168,6 @@ public class StockService implements Filter {
 		finally {
 
 		}
-		// return new ResponseEntity<StockReturn>(stockreturn, HttpStatus.CREATED);
 	}
 
 	// Save StockDamage
@@ -207,7 +197,6 @@ public class StockService implements Filter {
 		finally {
 
 		}
-		// return new ResponseEntity<StockDamage>(stockdamage, HttpStatus.CREATED);
 	}
 
 	// Load
@@ -225,7 +214,6 @@ public class StockService implements Filter {
 		} finally {
 
 		}
-		// return new ResponseEntity<List<StockDamage>>(damagelist, HttpStatus.CREATED);
 	}
 
 	// update
@@ -243,7 +231,6 @@ public class StockService implements Filter {
 		} finally {
 
 		}
-		// return new ResponseEntity<StockDamage>(damage, HttpStatus.CREATED);
 	}
 
 	// ----- get Invoice List ----
@@ -269,7 +256,6 @@ public class StockService implements Filter {
 		} finally {
 
 		}
-		// return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 	}
 
 	// -------- Save FullStockIn Details -----
@@ -292,7 +278,6 @@ public class StockService implements Filter {
 		try {
 			purchase = new Purchase();
 			logger.info("Post Json -->" + stockInarray);
-			// Store into parent table to show in first data table view
 			ArrayList<String> list = new ArrayList<String>();
 			JSONArray jsonArr = new JSONArray(stockInarray);
 			int remove = 0;
@@ -312,8 +297,6 @@ public class StockService implements Filter {
 				if (jsonArr.optJSONArray(i) != null) {
 					for (int j = 0; j < arr2.length(); j++) {
 						randomnumber = randomnumberdal.getStockRandamNumber();
-						//logger.info("StockIn random number-->" + randomnumber.getStockIninvoicenumber());
-						//logger.info("StockIn random code-->" + randomnumber.getStockIninvoicecode());
 						String invoice = randomnumber.getCode() + randomnumber.getNumber();
 						logger.info("Invoice number -->" + invoice);
 						if (arr2.getJSONObject(j) != null) {
@@ -367,14 +350,13 @@ public class StockService implements Filter {
 			purchase.setStatus("success");
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
-			logger.info("saveStockIn Exception ------------->" + e.getMessage());
+			logger.info("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		finally {
 
 		}
-		// return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 	}
 
 	// -------- Save FullStockIn Details -----
@@ -438,14 +420,10 @@ public class StockService implements Filter {
 							POInvoiceDetails podetails = new POInvoiceDetails();
 							podetails = stockdal.loadStockInTotal(stockIndetails);
 							int totalQty = 0;
-							// for(int n=0; n<stockIn.size(); n++) {
-							// logger.info("Size -->"+stockIn.size()+"---"+n+"th TotalQty
-							// ====>"+stockIn.get(n).getQty());
 							String str = podetails.getQty();
 							str = str.replaceAll("\\D", "");
 							totalQty += Integer.valueOf(str);
 							logger.info("Stock RecentStock Total ====>" + totalQty);
-							// }
 							recentStockList = recentStockList + totalQty + ",";
 							String str1 = stockIndetails.getQty();
 							str1 = str1.replaceAll("\\D", "");
@@ -469,7 +447,6 @@ public class StockService implements Filter {
 				} else {
 					logger.info("Outer Null....");
 				}
-				// l++;
 			}
 			stock = new Stock();
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
@@ -483,13 +460,13 @@ public class StockService implements Filter {
 			Stock st = new Stock();
 			st = stockdal.loadStockInvoice(stock.getStockCategory(),1);
 			if (st != null) {
-				logger.info("----------- Stock Category match--------" + st.getId());
-				logger.info("StockInCategory  --->" + stock.getStockCategory());
-				logger.info("Itemname  --->" + stock.getItemname());
-				logger.info("Category  --->" + stock.getCategory());
-				logger.info("Addedqty  --->" + stock.getAddedqty());
-				logger.info("RecentStock  --->" + stock.getRecentStock());
-				logger.info("Status  --->" + stock.getStatus());
+				logger.debug("----------- Stock Category match--------" + st.getId());
+				logger.debug("StockInCategory  --->" + stock.getStockCategory());
+				logger.debug("Itemname  --->" + stock.getItemname());
+				logger.debug("Category  --->" + stock.getCategory());
+				logger.debug("Addedqty  --->" + stock.getAddedqty());
+				logger.debug("RecentStock  --->" + stock.getRecentStock());
+				logger.debug("Status  --->" + stock.getStatus());
 				stockdal.updateStock(stock, st.getId());
 			} else {
 				logger.info("----------- Stock Category not match--------");
@@ -508,7 +485,6 @@ public class StockService implements Filter {
 		finally {
 
 		}
-		// return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 	}
 
 	// Load StockInDetails
@@ -526,7 +502,6 @@ public class StockService implements Filter {
 		} finally {
 
 		}
-		// return new ResponseEntity<List<Stock>>(stocklist, HttpStatus.CREATED);
 	}
 
 	// Save StockOut
@@ -537,8 +512,6 @@ public class StockService implements Filter {
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getStockRandamNumber();
-			//logger.info("StockOut Invoice random number-->" + randomnumber.getStockOutinvoicenumber());
-			//logger.info("StockOut Invoice random code-->" + randomnumber.getStockOutinvoicecode());
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			logger.info("Invoice number -->" + invoice);
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
@@ -592,8 +565,7 @@ public class StockService implements Filter {
 			
 			logger.info("--------- Before Calling PDF Generator -----------");
 			poinv = purchasedal.loadPOInvoice(invoiceNumber);
-			polist = purchasedal.loadPO(2,invoiceNumber);
-			
+			polist = purchasedal.loadPO(2,invoiceNumber);			
 			Vendor vendor = purchasedal.getVendorDetails(poinv.getVendorcode());
 			purchase.setVendorName(vendor.getVendorName());
 			purchase.setVendorCity(vendor.getCity());
@@ -601,14 +573,11 @@ public class StockService implements Filter {
 			purchase.setVendorPhone(vendor.getPhoneNumber());
 			purchase.setVendorEmail(vendor.getEmail()); 
 			poinv.setStatus(invoicestatus2);
-
 			Template template = purchasedal.getTemplateDetails("Purchase Invoice");
-
 			String base64=PDFGenerator.getBase64(poinv,purchase,polist,template);
 			logger.info("--------- After Calling PDF Generator -----------");
 			poinv.setBase64(base64); 
 			purchasedal.updatePOInvoice(poinv,1);
-
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
@@ -635,5 +604,4 @@ public class StockService implements Filter {
 
 		}
 	}
-
 }
