@@ -35,6 +35,10 @@ public class PurchaseImpl implements PurchaseDAL {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Autowired
+	private SequenceDAL sequencedal;
+	
 
 	@Value("${stockphase1.status}")
 	private String stockstatus1;
@@ -340,6 +344,7 @@ public class PurchaseImpl implements PurchaseDAL {
 		index.setKey(purchaseorder.getInvoicenumber());
 		index.setValue(purchaseorder.getInvoicenumber()+"-"+purchaseorder.getStatus()+" -purchaseorder");
 		mongoTemplate.save(index);
+		purchaseorder.setId(sequencedal.generateSequence("order"));
 		mongoTemplate.save(purchaseorder);
 		purchaseorder.setStatus("success"); 
 		return purchaseorder;

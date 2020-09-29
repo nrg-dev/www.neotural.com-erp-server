@@ -551,8 +551,10 @@ public class PurchaseService implements Filter {
 	// ------- Load Purchase Order --
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadPO", method = RequestMethod.GET)
-	public ResponseEntity<?> loadPO() {
+	public ResponseEntity<?> loadPO(Integer pageNumber, Integer pageSize) {
 		logger.info("loadPO");
+		logger.info("pageNumber-->"+pageNumber);
+		logger.info("pageSize"+pageSize);
 		List<PurchaseOrder> polist = null;// new ArrayList<PurchaseOrder>();
 		try {
 			polist = purchasedal.loadPO(1,"all");

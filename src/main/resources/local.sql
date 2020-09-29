@@ -21,6 +21,10 @@ db.randomNumber.insert({ "randomID" : 19,"number": 10000,"code" : "TR","descript
 db.randomNumber.insert({ "randomID" : 20,"number": 10000,"code" : "PC","description" : "Petty Cash"})
 db.randomNumber.insert({ "randomID" : 21,"number": 10000,"code" : "U","description" : "User"})
 
+db.DatabaseSequence.insert({ seq: 0,"sequencename" : "order"})
+
+
+
 db.employee.remove( { } )
 db.absentList.remove( { } )
 db.dailyReport.remove( { } )
