@@ -15,6 +15,7 @@ import com.erp.mongo.model.DailyReport;
 import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.SOInvoice;
+import com.erp.util.Custom;
 
 @Repository
 public class ReportImpl implements ReportDAL {
@@ -49,16 +50,30 @@ public class ReportImpl implements ReportDAL {
 
 	public List<DailyReport> loadEmpDailyReport(List<DailyReport> dailyreportlist, EmployeeDto emprep) {
 		Query query = new Query();
-		if(emprep.getFromdate().equalsIgnoreCase(emprep.getTodate())) {
-			logger.debug("-------- Both Dates are Equal --------");
-			query.addCriteria(Criteria.where("date").is(emprep.getFromdate()));
+		if(emprep.getReporttype().equalsIgnoreCase("monthlyreport")) {
+			logger.info("Monthly Report");
+			String currentyear = Custom.getCurrentYear();
+			logger.debug("CurrentYear -->"+currentyear+"MonthName -->"+emprep.getMonthname());
+			
+			query.addCriteria(Criteria.where("employeecode").is(emprep.getId()));
+			query.addCriteria(Criteria.where("monthname").is(emprep.getMonthname()));
+			query.addCriteria(Criteria.where("year").is(currentyear)); 
 			dailyreportlist = mongoTemplate.find(query,DailyReport.class);
 		}else {
-			logger.debug("-------- Both Dates are Not Equal --------");
-			query.addCriteria(Criteria.where("employeecode").is(emprep.getId()));
-			query.addCriteria(Criteria.where("date").gte(emprep.getFromdate()).lte(emprep.getTodate()));
-			dailyreportlist = mongoTemplate.find(query,DailyReport.class);
-		}	
+			logger.info("DAoImpl Custom Report");
+			if(emprep.getFromdate().equalsIgnoreCase(emprep.getTodate())) {
+				logger.info("-------- Both Dates are Equal --------");
+				query.addCriteria(Criteria.where("employeecode").is(emprep.getId()));
+				query.addCriteria(Criteria.where("date").is(emprep.getFromdate()));
+				dailyreportlist = mongoTemplate.find(query,DailyReport.class);
+			}else {
+				logger.info("-------- Both Dates are Not Equal --------");
+				query.addCriteria(Criteria.where("employeecode").is(emprep.getId()));
+				query.addCriteria(Criteria.where("date").gte(emprep.getFromdate()).lte(emprep.getTodate()));
+				dailyreportlist = mongoTemplate.find(query,DailyReport.class);
+			}
+		}
+			
 		logger.debug("Daily ReportList Size -->"+dailyreportlist.size()); 
 		return dailyreportlist;
 	}

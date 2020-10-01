@@ -149,11 +149,7 @@ public class ReportService implements Filter {
 			
 			String currentyear = Custom.getCurrentYear();
 			System.out.println("Year -->"+currentyear);
-			if(emprep.getReporttype().equalsIgnoreCase("monthlyreport")) {
-				logger.info("Monthly Report");
-				emprep.setFromdate("01/"+emprep.getMonthname()+"/"+currentyear); 
-				emprep.setTodate("31/"+emprep.getMonthname()+"/"+currentyear); 
-			}else {
+			if(emprep.getReporttype().equalsIgnoreCase("customreport")) {
 				logger.info("Custom Report");
 				Date dt1 = format.parse(emprep.getFromdate());
 				String fromdate = your_format.format(dt1);
