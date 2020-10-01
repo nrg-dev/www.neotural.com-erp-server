@@ -305,6 +305,13 @@ public class EmployeeService implements Filter {
 	public ResponseEntity<?> saveDailyReport(@RequestBody EmployeeDto employeeDto) {
 		logger.info("saveDailyReport");
 		try {
+			String[] res = employeeDto.getDate().split("/");
+			String monthname = res[1];
+			logger.debug("DailyReport Month Name-->" + monthname);
+			String currentyear = Custom.getCurrentYear();
+			System.out.println("DailyReport Current Year -->"+currentyear);
+			employeeDto.setMonthname(monthname); 
+			employeeDto.setYear(currentyear);
 			boolean status = employeedal.saveUpdateDailyReport(employeeDto);
 			if(status) {
 				return new ResponseEntity<>(HttpStatus.OK); 
@@ -348,6 +355,13 @@ public class EmployeeService implements Filter {
 		public ResponseEntity<?> saveAbsent(@RequestBody EmployeeDto employeeDto) {
 			logger.info("saveAbsent");
 			try {
+				String[] res = employeeDto.getDate().split("/");
+				String monthname = res[1];
+				logger.debug("AbsentReport Month Name-->" + monthname);
+				String currentyear = Custom.getCurrentYear();
+				System.out.println("AbsentReport CurrentYear -->"+currentyear);
+				employeeDto.setMonthname(monthname); 
+				employeeDto.setYear(currentyear); 
 				boolean status = employeedal.saveAbsentList(employeeDto);
 				if(status) {
 					return new ResponseEntity<>(HttpStatus.OK); 

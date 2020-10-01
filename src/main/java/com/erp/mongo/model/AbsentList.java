@@ -8,7 +8,7 @@ public class AbsentList {
 
 	@Id
 	private String id;
-	 String employeecode 	;
+	 String employeecode;
 	 String checkinreason;
 	 String checkintime;
 	 String checkoutreason;
@@ -16,9 +16,11 @@ public class AbsentList {
 	 String absent;
 	 String reason;
 	 String date;
+	 String monthname;
+	 String year;
 	 
-	 public AbsentList(String employeecode,String checkinreason,String checkintime,
-			 String checkoutreason,String checkouttime,String absent,String reason,String date){
+	 public AbsentList(String employeecode,String checkinreason,String checkintime,String checkoutreason,
+			 String checkouttime,String absent,String reason,String date,String monthname,String year){
 		 this.employeecode=employeecode;
 		 this.checkinreason=checkinreason;
 		 this.checkintime=checkintime;
@@ -27,6 +29,8 @@ public class AbsentList {
 		 this.absent=absent;
 		 this.reason=reason;
 		 this.date=date;
+		 this.monthname=monthname;
+		 this.year=year;
 	 }
 	 
 	public String getId() {
@@ -84,6 +88,22 @@ public class AbsentList {
 	}
 	public void setCheckoutreason(String checkoutreason) {
 		this.checkoutreason = checkoutreason;
+	}
+
+	public String getMonthname() {
+		return monthname;
+	}
+
+	public void setMonthname(String monthname) {
+		this.monthname = monthname;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
 	}
 
 	

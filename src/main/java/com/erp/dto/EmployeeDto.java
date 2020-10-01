@@ -25,6 +25,7 @@ public class EmployeeDto  implements Serializable{
 	 
 	 String reporttype;
 	 String monthname;
+	 String year;
 	 String fromdate;
 	 String todate;
 	
@@ -117,6 +118,12 @@ public class EmployeeDto  implements Serializable{
 	}
 	public void setTodate(String todate) {
 		this.todate = todate;
+	}
+	public String getYear() {
+		return year;
+	}
+	public void setYear(String year) {
+		this.year = year;
 	}
 	
 	

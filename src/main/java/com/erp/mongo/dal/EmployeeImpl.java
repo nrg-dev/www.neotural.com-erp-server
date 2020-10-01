@@ -116,11 +116,14 @@ public class EmployeeImpl implements EmployeeDAL {
 				query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
 				query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
 				update.set("report", employeeDto.getReport());
+				update.set("monthname", employeeDto.getMonthname());
+				update.set("year", employeeDto.getYear());
 				mongoTemplate.updateFirst(query, update, DailyReport.class);
 				status=true;
 			} else {
 	            // save
-				dailyReport=new DailyReport(employeeDto.getEmployeecode(),employeeDto.getDate(),employeeDto.getReport());
+				dailyReport=new DailyReport(employeeDto.getEmployeecode(),employeeDto.getDate(),employeeDto.getReport(),
+						employeeDto.getMonthname(),employeeDto.getYear());
 				mongoTemplate.save(dailyReport);
 				status=true;
 			} 
@@ -181,6 +184,8 @@ public class EmployeeImpl implements EmployeeDAL {
 				update.set("absent", employeeDto.getAbsent());
 				update.set("reason", employeeDto.getReason());
 				update.set("date", employeeDto.getDate());
+				update.set("monthname", employeeDto.getMonthname());
+				update.set("year", employeeDto.getYear());
 				mongoTemplate.updateFirst(query, update, AbsentList.class);
 			
 			}
@@ -190,8 +195,8 @@ public class EmployeeImpl implements EmployeeDAL {
 				absentList=new AbsentList(
 						employeeDto.getEmployeecode(),employeeDto.getCheckinreason(),
 						employeeDto.getCheckintime(),employeeDto.getCheckoutreason(),
-						employeeDto.getCheckouttime(),employeeDto.getAbsent(),
-						employeeDto.getReason(),employeeDto.getDate());
+						employeeDto.getCheckouttime(),employeeDto.getAbsent(),employeeDto.getReason(),
+						employeeDto.getDate(),employeeDto.getMonthname(),employeeDto.getYear());
 				mongoTemplate.save(absentList);
 			
 			}
@@ -318,8 +323,8 @@ public class EmployeeImpl implements EmployeeDAL {
 			
 			Query query = new Query();
 			query.addCriteria(Criteria.where("employeecode").is(employeecode));
-			query.addCriteria(Criteria.where("date").gt("01/"+monthname+"/"+currentyear)
-			           .andOperator(Criteria.where("date").lt("31/"+monthname+"/"+currentyear)));
+			query.addCriteria(Criteria.where("monthname").is(monthname));
+			query.addCriteria(Criteria.where("year").is(currentyear));
 			list = mongoTemplate.find(query,AbsentList.class);
 			logger.debug("EmployeeImpl Month loadAbsentList-->"+list.size());
 			
@@ -335,8 +340,8 @@ public class EmployeeImpl implements EmployeeDAL {
 			Query query = new Query();
 			query.addCriteria(Criteria.where("employeecode").is(employeecode));
 			query.addCriteria(Criteria.where("absent").is("yes"));
-			query.addCriteria(Criteria.where("date").gt("01/"+monthname+"/"+currentyear)
-			           .andOperator(Criteria.where("date").lt("31/"+monthname+"/"+currentyear)));
+			query.addCriteria(Criteria.where("monthname").is(monthname));
+			query.addCriteria(Criteria.where("year").is(currentyear));
 			list = mongoTemplate.find(query,AbsentList.class);
 			logger.debug("EmployeeImpl Month loadAbsentList-->"+list.size());
 			
@@ -377,8 +382,18 @@ public class EmployeeImpl implements EmployeeDAL {
 			logger.debug("EmployeeImpl Single loadDailyReport-->"+list.size());
 		}
 		if(type.equalsIgnoreCase("M")) {
+			
+			String[] res = date.split("/");
+			String monthname = res[1];
+			logger.debug("MonthName-->" + monthname);
+			String currentyear = Custom.getCurrentYear();
+			System.out.println("CurrentYear -->"+currentyear);
+			
 			Query query = new Query();
 			query.addCriteria(Criteria.where("employeecode").is(employeecode));
+			query.addCriteria(Criteria.where("monthname").is(monthname));
+			query.addCriteria(Criteria.where("year").is(currentyear));
+			
 			list = mongoTemplate.find(query,DailyReport.class);
 			logger.debug("EmployeeImpl Month loadDailyReport-->"+list.size());
 		}
