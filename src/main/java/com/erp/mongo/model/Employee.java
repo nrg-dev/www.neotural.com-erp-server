@@ -26,6 +26,7 @@ public class Employee {
 	 private String addeddate;
 	 String departmentname;
 	 String location;
+	 long overtimesalary;
 
 	public String getId() {
 		return id;
@@ -177,6 +178,14 @@ public class Employee {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public long getOvertimesalary() {
+		return overtimesalary;
+	}
+
+	public void setOvertimesalary(long overtimesalary) {
+		this.overtimesalary = overtimesalary;
 	}
 
 	

@@ -77,6 +77,7 @@ public class EmployeeImpl implements EmployeeDAL {
 				update.set("annualLeave", employee.getAnnualLeave());
 				update.set("departmentname", employee.getDepartmentname());
 				update.set("location", employee.getLocation());
+				update.set("overtimesalary", employee.getOvertimesalary());
 				mongoTemplate.updateFirst(query, update, Employee.class);
 				status=true;
 			}
@@ -411,7 +412,7 @@ public class EmployeeImpl implements EmployeeDAL {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("employeecode").is(employeecode));
 		list = mongoTemplate.find(query,Employee.class);
-		logger.debug("EmployeeImpl Single DailyReportSize-->"+list.size());
+		logger.debug("EmployeeImpl Single List Size-->"+list.size());
 		return list;
 	}
 
@@ -434,6 +435,7 @@ public class EmployeeImpl implements EmployeeDAL {
 		update.set("annualLeave", employee.getAnnualLeave());
 		update.set("departmentname", employee.getDepartmentname());
 		update.set("location", employee.getLocation());
+		update.set("overtimesalary", employee.getOvertimesalary());
 		mongoTemplate.updateFirst(query, update, Employee.class);
 		return employee;
 
