@@ -41,6 +41,7 @@ import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.StockDamage;
 import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
@@ -89,6 +90,12 @@ public class PurchaseService implements Filter {
 	
 	@Value("${noimage.base64}")
 	private String nologo;
+	
+	@Value("${pophase1.status}")
+	private String pophase1status;
+	
+	@Value("${pophase2.status}")
+	private String pophase2status;
 
 	private final PurchaseDAL purchasedal;
 	private final RandomNumberDAL randomnumberdal;
@@ -175,7 +182,7 @@ public class PurchaseService implements Filter {
 				poinvoice.setInvoicedate(poinvoicedto.getCreateddate());
 				logger.debug("Invoice Date-->" + poinvoice.getInvoicedate());
 				poinvoice.setInvoicenumber(invoice);
-				poinvoice.setStatus(purchaseorderstatus1);
+				poinvoice.setStatus(pophase1status);
 				poinvoice.setStockstatus(stockstatus1);
 				poinvoice.setPaymenttype(poinvoicedto.getPaymenttype());
 				if(poinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
@@ -1061,4 +1068,39 @@ public class PurchaseService implements Filter {
 		}
 	}
 	
+	// update
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/poStatusReceived", method = RequestMethod.PUT)
+	public ResponseEntity<?> poStatusReceived(@RequestBody String invoicenumber) {
+		logger.info("PO Status Received");
+		POInvoice poinv = new POInvoice();
+		List<PurchaseOrder> polist = new ArrayList<PurchaseOrder>();
+		Purchase purchase = new Purchase();		
+		try {
+			logger.debug("PO Status InvoiceNumber -->"+invoicenumber);
+			
+			poinv = purchasedal.loadPOInvoice(invoicenumber);
+			polist = purchasedal.loadPO(2,invoicenumber);			
+			Vendor vendor = purchasedal.getVendorDetails(poinv.getVendorcode());
+			purchase.setVendorName(vendor.getVendorName());
+			purchase.setVendorCity(vendor.getCity());
+			purchase.setVendorCountry(vendor.getCountry());
+			purchase.setVendorPhone(vendor.getPhoneNumber());
+			purchase.setVendorEmail(vendor.getEmail()); 
+			poinv.setStatus(pophase2status);
+			Template template = purchasedal.getTemplateDetails("Purchase Invoice");
+			String base64=PDFGenerator.getBase64(poinv,purchase,polist,template);
+			logger.info("--------- After Calling PDF Generator -----------");
+			
+			poinv.setBase64(base64); 
+			poinv.setInvoicenumber(invoicenumber); 
+			purchasedal.updatePOInvoice(poinv,4);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
 }

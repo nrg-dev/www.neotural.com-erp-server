@@ -61,6 +61,9 @@ public class PurchaseImpl implements PurchaseDAL {
 	@Value("${purchaseorderphase3.status}")
 	private String purchaseorderstatus3;
 	
+	@Value("${pophase2.status}")
+	private String pophase2status;
+	
 	/*
 	 * @Autowired ErpBo investmentBo1;
 	 */
@@ -269,6 +272,12 @@ public class PurchaseImpl implements PurchaseDAL {
 			//update.set("stockstatus", stockstatus2);
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), POInvoice.class);
+		}else if(i == 4) {
+			update.set("status", pophase2status);
+			update.set("base64", purchase.getBase64());
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), POInvoice.class);
+			logger.debug("After POInvoice Received Status Update -->");
 		}
 		return purchase; 
 	}

@@ -59,6 +59,10 @@ public class StockService implements Filter {
 	
 	@Value("${invoicephase2.status}")
 	private String invoicestatus2;
+	
+	@Value("${pophase3.status}")
+	private String pophase3status;
+
 
 	private final StockDAL stockdal;
 	private final PurchaseDAL purchasedal;
@@ -572,7 +576,7 @@ public class StockService implements Filter {
 			purchase.setVendorCountry(vendor.getCountry());
 			purchase.setVendorPhone(vendor.getPhoneNumber());
 			purchase.setVendorEmail(vendor.getEmail()); 
-			poinv.setStatus(invoicestatus2);
+			poinv.setStatus(pophase3status);
 			Template template = purchasedal.getTemplateDetails("Purchase Invoice");
 			String base64=PDFGenerator.getBase64(poinv,purchase,polist,template);
 			logger.info("--------- After Calling PDF Generator -----------");
