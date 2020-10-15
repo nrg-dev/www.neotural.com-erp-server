@@ -35,13 +35,14 @@ import com.erp.dto.POInvoiceDto;
 import com.erp.dto.Purchase;
 import com.erp.mongo.dal.PurchaseDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.dal.StockDAL;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
-import com.erp.mongo.model.StockDamage;
+import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
@@ -99,10 +100,12 @@ public class PurchaseService implements Filter {
 
 	private final PurchaseDAL purchasedal;
 	private final RandomNumberDAL randomnumberdal;
+	private final StockDAL stockdal;
 
-	public PurchaseService(PurchaseDAL purchasedal, RandomNumberDAL randomnumberdal) {
+	public PurchaseService(PurchaseDAL purchasedal, RandomNumberDAL randomnumberdal, StockDAL stockdal) {
 		this.purchasedal = purchasedal;
 		this.randomnumberdal = randomnumberdal;
+		this.stockdal = stockdal;
 	}
 
 	@Override
@@ -859,6 +862,7 @@ public class PurchaseService implements Filter {
 		logger.info("createReturn");
 		logger.debug("Vendor Name-->" + poreturn.getVendorname());
 		logger.debug("Item Name-->" + poreturn.getItemname());
+		logger.debug("Item Code-->" + poreturn.getItemcode());
 		logger.debug("Invoiced Qty-->" + poreturn.getInvoicedqty());
 		logger.debug("Date-->" + poreturn.getInvoiceddate());
 		logger.debug("Item Status-->" + poreturn.getItemStatus());
@@ -866,12 +870,17 @@ public class PurchaseService implements Filter {
 		logger.debug("Qty-->" + poreturn.getQty());
 		logger.debug("Price-->" + poreturn.getPrice());
 		logger.debug("PoCode-->" + poreturn.getPocode());
+		logger.debug("Invoice Number -->"+poreturn.getInvoicenumber());
 		RandomNumber randomnumber = null;
 		int randomId=8;
 		int randomtrId=19;
 		Transaction trans = new Transaction();
 		PurchaseOrder purchaseorder = new PurchaseOrder();
+		POInvoice poinv = new POInvoice();
+		List<PurchaseOrder> polist = new ArrayList<PurchaseOrder>();
+		Stock stock = new Stock();
 		try {
+			poinv.setInvoicenumber(poreturn.getInvoicenumber());
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			logger.debug("Invoice number -->" + invoice);
@@ -882,34 +891,63 @@ public class PurchaseService implements Filter {
 			}else {
 				poreturn.setPaymentstatus(paymentstatus1); 
 			}
-			poreturn.setStatus("Active"); 
-			purchasedal.insertReturn(poreturn);
-			randomnumberdal.updateRandamNumber(randomnumber,randomId);
+			poreturn.setStatus("Active");
+			if(poreturn.getQty().equalsIgnoreCase("0")) {
+				logger.info("Zero Quantity for Return"); 
+			}else {
+				purchasedal.insertReturn(poreturn);
+				randomnumberdal.updateRandamNumber(randomnumber,randomId);
+				
+				//-- Transaction Table Insert
+				if(poreturn.getReturnStatus().equalsIgnoreCase("cash")) {
+					logger.info("Payment Type is cash!");
+					randomnumber = randomnumberdal.getRandamNumber(randomtrId);
+					String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
+					logger.debug("Return Transaction Invoice number-->" + traninvoice);
+					trans.setTransactionnumber(traninvoice);
+					trans.setTransactiondate(Custom.getCurrentInvoiceDate());
+					trans.setDescription(poretcash);
+					trans.setInvoicenumber(invoice);
+					long totalAmount = poreturn.getPrice() * Integer.valueOf(poreturn.getQty());
+					trans.setCredit(0);
+					trans.setDebit(totalAmount);
+					trans.setStatus(transretstatus2);
+					trans.setCurrency(currency);
+					purchasedal.saveTransaction(trans);
+					randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
+					logger.info("Return Transation Insert done!");
+				}else {
+					logger.info("Payment Type is credit and voucher!");
+				}	
+				
+			}
+			
 			purchaseorder.setInvoicenumber(poreturn.getPocode()); 
+			purchaseorder.setReturnqty(Integer.valueOf(poreturn.getQty()));
+			purchaseorder.setPostatus("Returned"); 
 			purchasedal.updatePurchaseOrder(purchaseorder,1);
 			logger.info("createReturn done!");
+			purchasedal.updatePOInvoice(poinv,5);
+			logger.info("Invoice Update done!");
 			
-			//-- Transaction Table Insert
-			if(poreturn.getReturnStatus().equalsIgnoreCase("cash")) {
-				logger.info("Payment Type is cash!");
-				randomnumber = randomnumberdal.getRandamNumber(randomtrId);
-				String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
-				logger.debug("Return Transaction Invoice number-->" + traninvoice);
-				trans.setTransactionnumber(traninvoice);
-				trans.setTransactiondate(Custom.getCurrentInvoiceDate());
-				trans.setDescription(poretcash);
-				trans.setInvoicenumber(invoice);
-				long totalAmount = poreturn.getPrice() * Integer.valueOf(poreturn.getQty());
-				trans.setCredit(0);
-				trans.setDebit(totalAmount);
-				trans.setStatus(transretstatus2);
-				trans.setCurrency(currency);
-				purchasedal.saveTransaction(trans);
-				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
-				logger.info("Return Transation Insert done!");
-			}else {
-				logger.info("Payment Type is credit and voucher!");
-			}	
+			polist = purchasedal.loadPO(4,poreturn.getPocode());
+			stock.setCategory(polist.get(0).getCategoryname());
+			stock.setCategorycode(polist.get(0).getCategorycode());
+			stock.setItemname(polist.get(0).getProductname());
+			stock.setItemcode(polist.get(0).getProductcode());
+			stock.setUnit(polist.get(0).getUnit()); 
+			stock.setRecentStock(polist.get(0).getQty() - polist.get(0).getReturnqty()); 
+			stock.setStatus("Stock In"); 
+			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
+			stock.setInvoicenumber(polist.get(0).getPocode());
+			stockdal.saveStock(stock);
+			Stock st = new Stock();
+			st = stockdal.loadStockInvoice(poreturn.getItemcode(),2);
+			long currentStock = stock.getRecentStock()+st.getRecentStock();
+			st.setAddedqty(currentStock); 
+			stockdal.updateStock(st,"all");
+			logger.info("Stock Update done!");
+			
 			return new ResponseEntity<>(HttpStatus.OK); // 200
 		}catch(Exception e) {
 			logger.error("Exception-->"+e.getMessage());
@@ -1103,4 +1141,23 @@ public class PurchaseService implements Filter {
 
 		}
 	}
+	
+	// ------- Load Purchase Order --
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadReturnPO", method = RequestMethod.GET)
+	public ResponseEntity<?> loadReturnPO(String invoicenumber) {
+		logger.info("loadPO");
+		List<PurchaseOrder> polist = null;
+		try {
+			polist = purchasedal.loadPO(3,invoicenumber);
+			return new ResponseEntity<List<PurchaseOrder>>(polist, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			logger.error("loadReturnPO Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
+	
 }

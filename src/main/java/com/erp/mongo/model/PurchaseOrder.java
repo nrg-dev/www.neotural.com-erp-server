@@ -23,6 +23,9 @@ public class PurchaseOrder {
 	private String status;
 	private String pocode;
 	private String invoicenumber;
+	private String postatus;
+	private long returnqty;
+	
 	public long  getId() {
 		return id;
 	}
@@ -121,6 +124,18 @@ public class PurchaseOrder {
 	}
 	public void setInvoicenumber(String invoicenumber) {
 		this.invoicenumber = invoicenumber;
+	}
+	public String getPostatus() {
+		return postatus;
+	}
+	public void setPostatus(String postatus) {
+		this.postatus = postatus;
+	}
+	public long getReturnqty() {
+		return returnqty;
+	}
+	public void setReturnqty(long returnqty) {
+		this.returnqty = returnqty;
 	}
 
 

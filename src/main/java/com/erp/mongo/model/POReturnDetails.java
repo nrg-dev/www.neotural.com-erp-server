@@ -23,6 +23,7 @@ public class POReturnDetails {
 	private long price;
 	private String pocode;
 	private String paymentstatus;
+	private String itemcode;
 
 	public String getId() {
 		return id;
@@ -151,6 +152,14 @@ public class POReturnDetails {
 
 	public void setPaymentstatus(String paymentstatus) {
 		this.paymentstatus = paymentstatus;
+	}
+
+	public String getItemcode() {
+		return itemcode;
+	}
+
+	public void setItemcode(String itemcode) {
+		this.itemcode = itemcode;
 	}
 
 	

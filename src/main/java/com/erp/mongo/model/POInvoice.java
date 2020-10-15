@@ -24,6 +24,7 @@ public class POInvoice {
 	private String productname;
 	private String paymenttype;
 	private String paymentstatus;
+	private String pophasestatus;
 
 	public String getId() {
 		return id;
@@ -143,6 +144,14 @@ public class POInvoice {
 
 	public void setPaymentstatus(String paymentstatus) {
 		this.paymentstatus = paymentstatus;
+	}
+
+	public String getPophasestatus() {
+		return pophasestatus;
+	}
+
+	public void setPophasestatus(String pophasestatus) {
+		this.pophasestatus = pophasestatus;
 	}
 
 	

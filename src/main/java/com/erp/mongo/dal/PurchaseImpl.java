@@ -240,7 +240,8 @@ public class PurchaseImpl implements PurchaseDAL {
 		return poinvoice;
 	}
 	
-	@Override public POInvoice updatePOInvoice(POInvoice purchase, int i) {
+	@Override 
+	public POInvoice updatePOInvoice(POInvoice purchase, int i) {
 		logger.info("Update POInvoice Number --->"+purchase.getInvoicenumber());
 		Update update = new Update();
 		Query query = new Query();
@@ -257,6 +258,7 @@ public class PurchaseImpl implements PurchaseDAL {
 			update.set("status", invoicestatus2);
 			update.set("stockstatus", stockstatus2);
 			update.set("base64", purchase.getBase64());
+			update.set("pophasestatus", "Completed");
 			//mongoTemplate.updateFirst(query,update, POInvoice.class);
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), POInvoice.class);
@@ -278,6 +280,11 @@ public class PurchaseImpl implements PurchaseDAL {
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), POInvoice.class);
 			logger.debug("After POInvoice Received Status Update -->");
+		}else if(i == 5) {
+			update.set("pophasestatus", "Returned");
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), POInvoice.class);
+			logger.debug("After POInvoice Returned Status Update -->");
 		}
 		return purchase; 
 	}
@@ -340,6 +347,15 @@ public class PurchaseImpl implements PurchaseDAL {
 		}else if(temp == 2) {
 			query.addCriteria(Criteria.where("invoicenumber").is(invoice));
 			list = mongoTemplate.find(query,PurchaseOrder.class);
+		}else if(temp == 3) {
+			query.addCriteria(Criteria.where("invoicenumber").is(invoice));
+			query.addCriteria( new Criteria().orOperator(
+					Criteria.where("postatus").is(""),Criteria.where("postatus").is(null) ));
+			list = mongoTemplate.find(query,PurchaseOrder.class);
+		}else if(temp == 4) {
+			query.addCriteria(Criteria.where("pocode").is(invoice));
+			query.addCriteria(Criteria.where("postatus").is("Returned"));
+			list = mongoTemplate.find(query,PurchaseOrder.class);
 		}
 		
 		logger.debug("Size-->"+list.size());
@@ -394,6 +410,8 @@ public class PurchaseImpl implements PurchaseDAL {
 			logger.debug("Return Invoice Number -->"+purchaseorder.getInvoicenumber()+"  Return Status -->"+purchaseorderstatus3); 
 			query.addCriteria(Criteria.where("pocode").is(purchaseorder.getInvoicenumber()));
 			update.set("status", purchaseorderstatus3);
+			update.set("returnqty", purchaseorder.getReturnqty());
+			update.set("postatus", "Returned");
 			logger.info("After POReturn Status Update -->");
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), PurchaseOrder.class);
