@@ -64,6 +64,12 @@ public class PurchaseImpl implements PurchaseDAL {
 	@Value("${pophase2.status}")
 	private String pophase2status;
 	
+	@Value("${pophase3.status}")
+	private String pophasestatus3;
+	
+	@Value("${pophase4.status}")
+	private String pophasestatus4;
+	
 	/*
 	 * @Autowired ErpBo investmentBo1;
 	 */
@@ -255,10 +261,10 @@ public class PurchaseImpl implements PurchaseDAL {
 			update.set("subtotal", purchase.getSubtotal());
 			update.set("deliveryprice",purchase.getDeliveryprice());
 			update.set("totalprice", purchase.getTotalprice());
-			update.set("status", invoicestatus2);
+			update.set("status", pophasestatus3);
 			update.set("stockstatus", stockstatus2);
 			update.set("base64", purchase.getBase64());
-			update.set("pophasestatus", "Completed");
+			update.set("pophasestatus", pophasestatus3);
 			//mongoTemplate.updateFirst(query,update, POInvoice.class);
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), POInvoice.class);
@@ -282,6 +288,13 @@ public class PurchaseImpl implements PurchaseDAL {
 			logger.debug("After POInvoice Received Status Update -->");
 		}else if(i == 5) {
 			update.set("pophasestatus", "Returned");
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), POInvoice.class);
+			logger.debug("After POInvoice Returned Status Update -->");
+		}else if(i == 6) {
+			update.set("status", pophasestatus4);
+			update.set("base64", purchase.getBase64());
+			update.set("pophasestatus", pophasestatus4);
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), POInvoice.class);
 			logger.debug("After POInvoice Returned Status Update -->");
@@ -430,6 +443,13 @@ public class PurchaseImpl implements PurchaseDAL {
 			update.set("date", purchaseorder.getDate());
 			update.set("description", purchaseorder.getDescription());
 			mongoTemplate.updateFirst(query, update, PurchaseOrder.class);
+		}if(i == 3) {
+			logger.debug("Return Invoice Number -->"+purchaseorder.getInvoicenumber()+"  Partial Status -->"+pophasestatus4); 
+			query.addCriteria(Criteria.where("pocode").is(purchaseorder.getInvoicenumber()));
+			update.set("postatus", pophasestatus4);
+			logger.info("After Partial Status Update -->");
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), PurchaseOrder.class);
 		}
 		return true;
 	}

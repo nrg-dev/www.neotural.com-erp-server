@@ -97,6 +97,12 @@ public class PurchaseService implements Filter {
 	
 	@Value("${pophase2.status}")
 	private String pophase2status;
+	
+	@Value("${pophase3.status}")
+	private String pophasestatus3;
+	
+	@Value("${pophase4.status}")
+	private String pophasestatus4;
 
 	private final PurchaseDAL purchasedal;
 	private final RandomNumberDAL randomnumberdal;
@@ -1157,6 +1163,48 @@ public class PurchaseService implements Filter {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
+		}
+	}
+	
+	// Create Return
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/addPartialOrder", method = RequestMethod.POST)
+	public ResponseEntity<?> addPartialOrder(@RequestBody String invoicenumber) {
+		logger.info("addPartialOrder");
+		logger.debug("Invoice Number-->" + invoicenumber);
+		PurchaseOrder purchaseorder = new PurchaseOrder();
+		POInvoice poinv = new POInvoice();
+		List<PurchaseOrder> polist = new ArrayList<PurchaseOrder>();
+		Purchase purchase = new Purchase();
+		try {
+			purchaseorder.setInvoicenumber(invoicenumber); 
+			purchaseorder.setPostatus(pophasestatus4); 
+			purchasedal.updatePurchaseOrder(purchaseorder,3);
+			logger.info("addPartial Order Update done!");
+			
+			logger.info("--------- Before Calling Partial PDF Generator -----------");
+			poinv = purchasedal.loadPOInvoice(invoicenumber);
+			polist = purchasedal.loadPO(2,invoicenumber);			
+			Vendor vendor = purchasedal.getVendorDetails(poinv.getVendorcode());
+			purchase.setVendorName(vendor.getVendorName());
+			purchase.setVendorCity(vendor.getCity());
+			purchase.setVendorCountry(vendor.getCountry());
+			purchase.setVendorPhone(vendor.getPhoneNumber());
+			purchase.setVendorEmail(vendor.getEmail()); 
+			poinv.setStatus(pophasestatus4);
+			Template template = purchasedal.getTemplateDetails("Purchase Invoice");
+			String base64=PDFGenerator.getBase64(poinv,purchase,polist,template);
+			logger.info("--------- After Calling Partial PDF Generator -----------");
+			poinv.setBase64(base64); 				
+			poinv.setInvoicenumber(invoicenumber); 
+			
+			purchasedal.updatePOInvoice(poinv,6);
+			logger.info("addPartial Invoice Update done!");
+				
+			return new ResponseEntity<>(HttpStatus.OK); // 200
+		}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
 		}
 	}
 	

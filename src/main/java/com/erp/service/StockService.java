@@ -267,7 +267,7 @@ public class StockService implements Filter {
 	@PostMapping(value = "/saveFullStockIn")
 	public ResponseEntity<?> saveFullStockIn(@RequestBody String stockInarray) {
 		logger.info("saveFullStockIn");
-		String temp = stockInarray;
+		//String temp = stockInarray;
 		Purchase purchase = null;
 		Stock stock = null;
 		StockInDetails stockIndetails = null;
@@ -277,8 +277,6 @@ public class StockService implements Filter {
 		String itemnameList = "";
 		String categoryList = "";
 		int tempNo = 1;
-		int addtotalQty = 0;
-		int totalQty = 0;
 		try {
 			purchase = new Purchase();
 			logger.info("Post Json -->" + stockInarray);
