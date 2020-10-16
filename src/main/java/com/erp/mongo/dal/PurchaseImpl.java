@@ -356,6 +356,7 @@ public class PurchaseImpl implements PurchaseDAL {
 		Query query = new Query();
 		if(temp == 1) {
 			query.with(new Sort(new Order(Direction.DESC, "pocode")));
+			query.addCriteria(Criteria.where("status").is("Open"));
 			list = mongoTemplate.find(query,PurchaseOrder.class);
 		}else if(temp == 2) {
 			query.addCriteria(Criteria.where("invoicenumber").is(invoice));
