@@ -353,6 +353,7 @@ public class PurchaseImpl implements PurchaseDAL {
 	
 	public List<PurchaseOrder> loadPO(int temp,String invoice){
 		List<PurchaseOrder> list=null;
+		logger.debug("POCode --->"+invoice);
 		Query query = new Query();
 		if(temp == 1) {
 			query.with(new Sort(new Order(Direction.DESC, "pocode")));
@@ -449,6 +450,14 @@ public class PurchaseImpl implements PurchaseDAL {
 			query.addCriteria(Criteria.where("pocode").is(purchaseorder.getInvoicenumber()));
 			update.set("postatus", pophasestatus4);
 			logger.info("After Partial Status Update -->");
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), PurchaseOrder.class);
+		}else if(i == 4) {
+			logger.debug("Return Invoice Number -->"+purchaseorder.getPocode()); 
+			query.addCriteria(Criteria.where("pocode").is(purchaseorder.getPocode()));
+			update.set("status", purchaseorderstatus2);
+			update.set("postatus", "");
+			logger.info("After POReturn Status Update -->");
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), PurchaseOrder.class);
 		}

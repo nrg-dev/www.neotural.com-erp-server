@@ -14,6 +14,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.ObjectDeletedException;
 import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1094,13 +1095,18 @@ public class PurchaseService implements Filter {
 	// get Company Details
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/removePoReturn", method = RequestMethod.DELETE)
-	public ResponseEntity<?> removePoReturn(String id,String invoicenumber) {
+	public ResponseEntity<?> removePoReturn(String id,String invoicenumber,String pocode) {
+		PurchaseOrder purchaseorder = new PurchaseOrder();
 		try {
 			logger.debug("Remove POReturn-->" + id);
 			purchasedal.removePoReturn(id);
 			logger.info("POReturn Removed Successfully");
 			purchasedal.removeTransaction(invoicenumber);
 			logger.info("Transaction Removed Successfully");
+			logger.debug("POCode -->"+pocode);
+			purchaseorder.setPocode(pocode); 
+			boolean status = purchasedal.updatePurchaseOrder(purchaseorder,4);
+			//polist = purchasedal.loadPO(4,poreturn.getPocode());
 			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
