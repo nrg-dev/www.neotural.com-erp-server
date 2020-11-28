@@ -112,6 +112,12 @@ public class FinanceImpl implements FinanceDAL {
 			logger.debug("-------- Both Dates are Not Equal --------");
 			String transfromdate = Custom.convertStringToData(fromdate);
 			String transtodate = Custom.convertStringToData(todate);
+			/* db.getCollection('user').find({
+				transactiondate: {
+			        $gt: ISODate(transfromdate),
+			        $lt: ISODate(transtodate)
+			    }
+			}); */
 		    query.with(new Sort(new Order(Direction.DESC, "transactionnumber")));
 		    //query.addCriteria(new Criteria().andOperator(Criteria.where("transactiondate").gte(transfromdate),
                 //Criteria.where("transactiondate").lte(transtodate)));

@@ -210,4 +210,45 @@ public class UserMgtService implements Filter {
 
 		}
 	}
+	
+	//-------- Update User --------
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public ResponseEntity<?> update(@RequestBody String menuarray) {
+		logger.info("Update User");
+		UserRole user = new UserRole();
+		try {
+			logger.debug("Mapped value -->" + menuarray);		 
+			String string = menuarray;
+			String userarray = StringUtils.removeStart(StringUtils.removeEnd(string, "]"), "[");			 
+			JSONObject jObject = new JSONObject(userarray);
+			user.setId(jObject.getString("id"));  
+		 	user.setMenuItem1(jObject.getString("menuItem1"));
+		 	user.setMenuItem2(jObject.getString("menuItem2"));
+		 	user.setMenuItem3(jObject.getString("menuItem3"));		 	
+		 	user.setMenuItem4(jObject.getString("menuItem4"));
+		 	user.setPurchasesubmenu1(jObject.getString("purchasesubmenu1"));
+		 	user.setPurchasesubmenu2(jObject.getString("purchasesubmenu2"));
+		 	user.setPurchasesubmenu3(jObject.getString("purchasesubmenu3"));
+		 	user.setMenuItem5(jObject.getString("menuItem5"));
+		 	user.setProductsubmenu1(jObject.getString("productsubmenu1"));
+		 	user.setProductsubmenu2(jObject.getString("productsubmenu2"));
+		 	user.setProductsubmenu3(jObject.getString("productsubmenu3"));
+		 	user.setMenuItem6(jObject.getString("menuItem6"));
+		 	user.setSalessubmenu1(jObject.getString("salessubmenu1"));
+		 	user.setSalessubmenu2(jObject.getString("salessubmenu2"));
+		 	user.setSalessubmenu3(jObject.getString("salessubmenu3"));
+		 	user.setSalessubmenu4(jObject.getString("salessubmenu4"));
+		 	user.setSalessubmenu5(jObject.getString("salessubmenu5"));
+		 	user.setMenuItem7(jObject.getString("menuItem7"));
+		 	user.setMenuItem8(jObject.getString("menuItem8"));
+		 	usermgtdal.updateUser(user);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
 }

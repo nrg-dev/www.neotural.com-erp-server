@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -43,13 +44,15 @@ public class UserMgtImpl implements UserMgtDAL {
 	}
 
 	public UserRole updateUser(UserRole user) {
+		logger.debug("User Id -->"+user.getId());
 		Update update = new Update();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("id").is(user.getId()));
-		update.set("invnumber", user.getInvnumber());
-		update.set("username", user.getUsername());
-		update.set("password", user.getPassword());
-		update.set("userRole", user.getUserRole());
+		//date.set("invnumber", user.getInvnumber());
+		//pdate.set("username", user.getUsername());
+		//update.set("password", user.getPassword());
+		//pdate.set("userRole", user.getUserRole());
+		//update.set("departmentname", user.getDepartmentname());
 		update.set("status", "Active");
 		update.set("menuItem1", user.getMenuItem1());
 		update.set("menuItem2", user.getMenuItem2());
@@ -70,8 +73,8 @@ public class UserMgtImpl implements UserMgtDAL {
 		update.set("salessubmenu3", user.getSalessubmenu3());
 		update.set("salessubmenu4", user.getSalessubmenu4());
 		update.set("salessubmenu5", user.getSalessubmenu5());
-		update.set("departmentname", user.getDepartmentname());
-		mongoTemplate.updateFirst(query, update, UserRole.class);
+		mongoTemplate.findAndModify(query, update,
+				new FindAndModifyOptions().returnNew(true), UserRole.class);
 		return user;
 	}
 
