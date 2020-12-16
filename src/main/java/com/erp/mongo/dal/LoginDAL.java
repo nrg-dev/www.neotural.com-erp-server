@@ -6,11 +6,11 @@ import com.erp.dto.Career;
 import com.erp.dto.Enquiry;
 import com.erp.dto.User;
 import com.erp.mongo.model.Index;
-import com.erp.mongo.model.Login;
+import com.erp.mongo.model.UserRole;
 
 public interface LoginDAL {
 
-	public List<Login> userLogin(User user, List<Login> result);
+	public List<UserRole> userLogin(User user, List<UserRole> result);
 
 	public User Checkuser(User user);
 

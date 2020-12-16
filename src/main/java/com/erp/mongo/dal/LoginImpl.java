@@ -22,6 +22,7 @@ import com.erp.mongo.model.Login;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.StockDamage;
+import com.erp.mongo.model.UserRole;
 import com.erp.mongo.model.Vendor;
 
 @Repository
@@ -33,16 +34,16 @@ public class LoginImpl implements LoginDAL {
 	private MongoTemplate mongoTemplate;
 
 	@Override
-	public List<Login> userLogin(User user, List<Login> result) {
+	public List<UserRole> userLogin(User user, List<UserRole> result) {
 		Query query = new Query();
-		logger.info("userLogin");
+		logger.info("LoginImpl UserLogin");
 		try {
 			if(user.getId()==1) {
 				logger.info("User Name Validation");
 				query.addCriteria( new Criteria().andOperator(
 						Criteria.where("username").is(user.getUsername()),
 						Criteria.where("status").is("Active") ) );
-				result = mongoTemplate.find(query, Login.class);
+				result = mongoTemplate.find(query, UserRole.class);
 			}
 			if(user.getId()==2){
 				logger.info("User Name and Password Validation");
@@ -50,7 +51,7 @@ public class LoginImpl implements LoginDAL {
 						Criteria.where("username").is(user.getUsername()),Criteria.where("status").is("Active"),
 						Criteria.where("password").is(user.getPassword()) ) );
 				
-				result = mongoTemplate.find(query, Login.class);
+				result = mongoTemplate.find(query, UserRole.class);
 			}
 			
 		}catch(Exception e) {
@@ -65,12 +66,17 @@ public class LoginImpl implements LoginDAL {
 	@Override
 	public User Checkuser(User user){
 		Query query = new Query();
+		List<UserRole> list = new ArrayList<UserRole>();
 		try {
 			query.addCriteria( new Criteria().andOperator(
 					Criteria.where("username").is(user.getUsername()),
 					Criteria.where("status").is("Active") ) );
-			mongoTemplate.findOne(query, Login.class);
-			user.setStatus("success");
+			list = mongoTemplate.find(query, UserRole.class);
+			if(list.size() > 0) {
+				user.setStatus("success");
+			}else {
+				user.setStatus("failure");
+			}
 		}catch(Exception e) {
 			logger.error("Exception -->"+e.getMessage());
 			user.setStatus("failure");

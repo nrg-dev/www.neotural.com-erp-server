@@ -14,6 +14,7 @@ import com.erp.mongo.dal.LoginDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.model.Index;
 import com.erp.mongo.model.Login;
+import com.erp.mongo.model.UserRole;
 
 
 @Service("bo")
@@ -32,8 +33,8 @@ public class ErpBoImpl implements ErpBo{
 	
 	@Override
 	public User userLogin(User user){
-		logger.info("userLogin");
-		List<Login> result=null;
+		logger.info("BoImpl UserLogin");
+		List<UserRole> result = null;
 		try {
 			user.setId(1);
 			result = logindal.userLogin(user,result);
@@ -70,12 +71,12 @@ public class ErpBoImpl implements ErpBo{
 	public User Checkuser(User user,int temp){
 		if(temp ==1 ){
 			user = logindal.Checkuser(user);
-			logger.debug("User status-->"+user.getStatus());
+			logger.debug("UserName Check status-->"+user.getStatus());
 		}
 		
 		if(temp == 2) {
 			user = logindal.resetPassword(user);	 		
-			logger.debug("User status-->"+user.getStatus());
+			logger.debug("Userpassword check status-->"+user.getStatus());
 		}
 		
 		return user;

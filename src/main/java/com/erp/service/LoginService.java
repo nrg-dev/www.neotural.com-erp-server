@@ -73,6 +73,7 @@ public class LoginService implements Filter {
 			user = new User();
 			user.setUsername(username);
 			user.setPassword(password);
+			user = bo.userLogin(user);
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		} catch (Exception e) {
 			user.setStatus("Network Error Please try again");
@@ -116,15 +117,12 @@ public class LoginService implements Filter {
 			user = new User();
 			user.setUsername(username);
 			user = bo.Checkuser(user, 1);
-			return new ResponseEntity<>(HttpStatus.OK); 
 		} catch (Exception e) {
-			user.setStatus("Network Error Please try again");
 			logger.error("Exception-->" + e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
 		} finally {
 
 		}
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
 	@CrossOrigin(origins = "http://localhost:8080")
