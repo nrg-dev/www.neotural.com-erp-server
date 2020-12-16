@@ -26,9 +26,13 @@ public class UserMgtImpl implements UserMgtDAL {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Autowired
+	private SequenceDAL sequencedal;
 
 	// save
 	public UserRole save(UserRole user) {
+		user.setId(sequencedal.generateSequence("user")); 
 		mongoTemplate.save(user);
 		return user;
 	}
@@ -53,7 +57,7 @@ public class UserMgtImpl implements UserMgtDAL {
 		//update.set("password", user.getPassword());
 		//pdate.set("userRole", user.getUserRole());
 		//update.set("departmentname", user.getDepartmentname());
-		update.set("status", "Active");
+		//update.set("status", "Active");
 		update.set("menuItem1", user.getMenuItem1());
 		update.set("menuItem2", user.getMenuItem2());
 		update.set("menuItem3", user.getMenuItem3());
@@ -62,9 +66,11 @@ public class UserMgtImpl implements UserMgtDAL {
 		update.set("menuItem6", user.getMenuItem6());
 		update.set("menuItem7", user.getMenuItem7());
 		update.set("menuItem8", user.getMenuItem8());
+		update.set("menuItem9", user.getMenuItem9());
 		update.set("purchasesubmenu1", user.getPurchasesubmenu1());
 		update.set("purchasesubmenu2", user.getPurchasesubmenu2());
 		update.set("purchasesubmenu3", user.getPurchasesubmenu3());
+		update.set("purchasesubmenu4", user.getPurchasesubmenu4());
 		update.set("productsubmenu1", user.getProductsubmenu1());
 		update.set("productsubmenu2", user.getProductsubmenu2());
 		update.set("productsubmenu3", user.getProductsubmenu3());
@@ -73,6 +79,12 @@ public class UserMgtImpl implements UserMgtDAL {
 		update.set("salessubmenu3", user.getSalessubmenu3());
 		update.set("salessubmenu4", user.getSalessubmenu4());
 		update.set("salessubmenu5", user.getSalessubmenu5());
+		update.set("salessubmenu6", user.getSalessubmenu6());
+		update.set("financesubmenu1", user.getFinancesubmenu1());
+		update.set("financesubmenu2", user.getFinancesubmenu2());
+		update.set("financesubmenu3", user.getFinancesubmenu3());
+		update.set("financesubmenu4", user.getFinancesubmenu4());
+		update.set("reportsubmenu1", user.getReportsubmenu1());
 		mongoTemplate.findAndModify(query, update,
 				new FindAndModifyOptions().returnNew(true), UserRole.class);
 		return user;

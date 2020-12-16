@@ -96,6 +96,7 @@ public class UserMgtService implements Filter {
 		 	user.setPurchasesubmenu1(jObject.getString("purchasesubmenu1"));
 		 	user.setPurchasesubmenu2(jObject.getString("purchasesubmenu2"));
 		 	user.setPurchasesubmenu3(jObject.getString("purchasesubmenu3"));
+		 	user.setPurchasesubmenu4(jObject.getString("purchasesubmenu4"));
 		 	user.setMenuItem5(jObject.getString("menuItem5"));
 		 	user.setProductsubmenu1(jObject.getString("productsubmenu1"));
 		 	user.setProductsubmenu2(jObject.getString("productsubmenu2"));
@@ -106,8 +107,15 @@ public class UserMgtService implements Filter {
 		 	user.setSalessubmenu3(jObject.getString("salessubmenu3"));
 		 	user.setSalessubmenu4(jObject.getString("salessubmenu4"));
 		 	user.setSalessubmenu5(jObject.getString("salessubmenu5"));
+		 	user.setSalessubmenu6(jObject.getString("salessubmenu6"));
 		 	user.setMenuItem7(jObject.getString("menuItem7"));
 		 	user.setMenuItem8(jObject.getString("menuItem8"));
+		 	user.setFinancesubmenu1(jObject.getString("financesubmenu1"));
+		 	user.setFinancesubmenu2(jObject.getString("financesubmenu2"));
+		 	user.setFinancesubmenu3(jObject.getString("financesubmenu3"));
+		 	user.setFinancesubmenu4(jObject.getString("financesubmenu4"));
+		 	user.setMenuItem9(jObject.getString("menuItem9"));
+		 	user.setReportsubmenu1(jObject.getString("reportsubmenu1"));
 		 	user.setStatus("Active");		 	 
 		 	usermgtdal.save(user);
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);			 
@@ -222,14 +230,15 @@ public class UserMgtService implements Filter {
 			String string = menuarray;
 			String userarray = StringUtils.removeStart(StringUtils.removeEnd(string, "]"), "[");			 
 			JSONObject jObject = new JSONObject(userarray);
-			user.setId(jObject.getString("id"));  
-		 	user.setMenuItem1(jObject.getString("menuItem1"));
+			user.setId(jObject.getLong("id"));  
+			user.setMenuItem1(jObject.getString("menuItem1"));
 		 	user.setMenuItem2(jObject.getString("menuItem2"));
 		 	user.setMenuItem3(jObject.getString("menuItem3"));		 	
 		 	user.setMenuItem4(jObject.getString("menuItem4"));
 		 	user.setPurchasesubmenu1(jObject.getString("purchasesubmenu1"));
 		 	user.setPurchasesubmenu2(jObject.getString("purchasesubmenu2"));
 		 	user.setPurchasesubmenu3(jObject.getString("purchasesubmenu3"));
+		 	user.setPurchasesubmenu4(jObject.getString("purchasesubmenu4"));
 		 	user.setMenuItem5(jObject.getString("menuItem5"));
 		 	user.setProductsubmenu1(jObject.getString("productsubmenu1"));
 		 	user.setProductsubmenu2(jObject.getString("productsubmenu2"));
@@ -240,8 +249,15 @@ public class UserMgtService implements Filter {
 		 	user.setSalessubmenu3(jObject.getString("salessubmenu3"));
 		 	user.setSalessubmenu4(jObject.getString("salessubmenu4"));
 		 	user.setSalessubmenu5(jObject.getString("salessubmenu5"));
+		 	user.setSalessubmenu6(jObject.getString("salessubmenu6"));
 		 	user.setMenuItem7(jObject.getString("menuItem7"));
 		 	user.setMenuItem8(jObject.getString("menuItem8"));
+		 	user.setFinancesubmenu1(jObject.getString("financesubmenu1"));
+		 	user.setFinancesubmenu2(jObject.getString("financesubmenu2"));
+		 	user.setFinancesubmenu3(jObject.getString("financesubmenu3"));
+		 	user.setFinancesubmenu4(jObject.getString("financesubmenu4"));
+		 	user.setMenuItem9(jObject.getString("menuItem9"));
+		 	user.setReportsubmenu1(jObject.getString("reportsubmenu1"));
 		 	usermgtdal.updateUser(user);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {

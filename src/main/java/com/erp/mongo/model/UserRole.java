@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class UserRole {
 
 	@Id
-	private String id;
+	private long  id;
 	private String invnumber;
 	private String username;
 	private String password;
@@ -22,10 +22,12 @@ public class UserRole {
 	private String menuItem6;
 	private String menuItem7;
 	private String menuItem8;
+	private String menuItem9;
 
 	private String purchasesubmenu1;
 	private String purchasesubmenu2;
 	private String purchasesubmenu3;
+	private String purchasesubmenu4;
 	private String productsubmenu1;
 	private String productsubmenu2;
 	private String productsubmenu3;
@@ -34,11 +36,17 @@ public class UserRole {
 	private String salessubmenu3;
 	private String salessubmenu4;
 	private String salessubmenu5;
+	private String salessubmenu6;
+	private String financesubmenu1;
+	private String financesubmenu2;
+	private String financesubmenu3;
+	private String financesubmenu4;
+	private String reportsubmenu1;
 	
-	public String getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getInvnumber() {
@@ -191,6 +199,54 @@ public class UserRole {
 	}
 	public void setSalessubmenu5(String salessubmenu5) {
 		this.salessubmenu5 = salessubmenu5;
+	}
+	public String getMenuItem9() {
+		return menuItem9;
+	}
+	public void setMenuItem9(String menuItem9) {
+		this.menuItem9 = menuItem9;
+	}
+	public String getPurchasesubmenu4() {
+		return purchasesubmenu4;
+	}
+	public void setPurchasesubmenu4(String purchasesubmenu4) {
+		this.purchasesubmenu4 = purchasesubmenu4;
+	}
+	public String getSalessubmenu6() {
+		return salessubmenu6;
+	}
+	public void setSalessubmenu6(String salessubmenu6) {
+		this.salessubmenu6 = salessubmenu6;
+	}
+	public String getFinancesubmenu1() {
+		return financesubmenu1;
+	}
+	public void setFinancesubmenu1(String financesubmenu1) {
+		this.financesubmenu1 = financesubmenu1;
+	}
+	public String getFinancesubmenu2() {
+		return financesubmenu2;
+	}
+	public void setFinancesubmenu2(String financesubmenu2) {
+		this.financesubmenu2 = financesubmenu2;
+	}
+	public String getFinancesubmenu3() {
+		return financesubmenu3;
+	}
+	public void setFinancesubmenu3(String financesubmenu3) {
+		this.financesubmenu3 = financesubmenu3;
+	}
+	public String getFinancesubmenu4() {
+		return financesubmenu4;
+	}
+	public void setFinancesubmenu4(String financesubmenu4) {
+		this.financesubmenu4 = financesubmenu4;
+	}
+	public String getReportsubmenu1() {
+		return reportsubmenu1;
+	}
+	public void setReportsubmenu1(String reportsubmenu1) {
+		this.reportsubmenu1 = reportsubmenu1;
 	}
 	
 		
