@@ -28,7 +28,7 @@ public interface StockDAL {
 
 	public StockInDetails saveStockIn(StockInDetails stockIndetails);
 
-	public Stock saveStock(Stock stock); 
+	public Stock saveStock(Stock stock,int i); 
 
 	public POInvoiceDetails loadStockInTotal(StockInDetails stockIndetails);
 

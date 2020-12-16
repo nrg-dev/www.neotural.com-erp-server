@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
+import com.erp.mongo.model.RecentUpdates;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.Stock;
@@ -29,6 +30,9 @@ public class StockImpl implements StockDAL {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Autowired
+	private SequenceDAL sequencedal;
 
 	// loadPurchae Return
 	public List<POReturnDetails> loadPurchaseReturn(List<POReturnDetails> polist) {
@@ -105,11 +109,25 @@ public class StockImpl implements StockDAL {
 	}
 	
 	// Save Stock
-	public Stock saveStock(Stock stock) {
+	public Stock saveStock(Stock stock,int i) {
 		logger.info("Before Save Stock");
 		mongoTemplate.save(stock);
 		stock.setStatus("success");
 		logger.info("After Save Stock");
+		
+		if(i == 1) {
+			//---- Insert into RecentUpdate Table
+			RecentUpdates recent = new RecentUpdates();
+			recent.setDate(stock.getInvoicedate());
+			recent.setId(sequencedal.generateSequence("recent")); 
+			recent.setInvoicenumber(stock.getInvoicenumber());
+			recent.setProductcode(stock.getItemcode());
+			recent.setProductname(stock.getItemname());
+			recent.setQty(stock.getRecentStock());
+			recent.setStatus("stock");
+			mongoTemplate.save(recent);
+		}
+		
 		return stock;
 	}
 	

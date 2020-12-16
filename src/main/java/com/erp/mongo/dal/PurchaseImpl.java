@@ -21,6 +21,7 @@ import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
+import com.erp.mongo.model.RecentUpdates;
 import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
@@ -84,6 +85,20 @@ public class PurchaseImpl implements PurchaseDAL {
 		mongoTemplate.save(index);
 		mongoTemplate.save(poinvoice);
 		logger.info("After save Invoice");
+		
+		//---- Insert into RecentUpdate Table
+		RecentUpdates recent = new RecentUpdates();
+		recent.setDate(poinvoice.getInvoicedate());
+		recent.setId(sequencedal.generateSequence("recent")); 
+		recent.setInvoicenumber(poinvoice.getInvoicenumber());
+		recent.setProductname(poinvoice.getProductname());
+		recent.setQty(poinvoice.getQty());
+		recent.setStatus("invoice");
+		recent.setUnitprice(poinvoice.getSubtotal());
+		recent.setVendorcode(poinvoice.getVendorcode());
+		recent.setVendorname(poinvoice.getVendorname()); 
+		mongoTemplate.save(recent);
+		
 		return poinvoice;
 	}
 
@@ -387,6 +402,21 @@ public class PurchaseImpl implements PurchaseDAL {
 		purchaseorder.setId(sequencedal.generateSequence("order"));
 		mongoTemplate.save(purchaseorder);
 		purchaseorder.setStatus("success"); 
+		
+		//---- Insert into RecentUpdate Table
+		RecentUpdates recent = new RecentUpdates();
+		recent.setDate(purchaseorder.getDate());
+		recent.setId(sequencedal.generateSequence("recent")); 
+		recent.setInvoicenumber(purchaseorder.getPocode());
+		recent.setProductcode(purchaseorder.getProductcode());
+		recent.setProductname(purchaseorder.getProductname());
+		recent.setQty(purchaseorder.getQty());
+		recent.setStatus("Order");
+		recent.setUnitprice(purchaseorder.getUnitprice());
+		recent.setVendorcode(purchaseorder.getVendorcode());
+		recent.setVendorname(purchaseorder.getVendorname()); 
+		mongoTemplate.save(recent);
+		
 		return purchaseorder;
 	}
 	
@@ -421,6 +451,7 @@ public class PurchaseImpl implements PurchaseDAL {
 	public boolean updatePurchaseOrder(PurchaseOrder purchaseorder,int i) {
 		Update update = new Update();
 		Query query = new Query();
+		Query query1 = new Query();
 		if(i == 1) {
 			logger.debug("Return Invoice Number -->"+purchaseorder.getInvoicenumber()+"  Return Status -->"+purchaseorderstatus3); 
 			query.addCriteria(Criteria.where("pocode").is(purchaseorder.getInvoicenumber()));
@@ -445,6 +476,19 @@ public class PurchaseImpl implements PurchaseDAL {
 			update.set("date", purchaseorder.getDate());
 			update.set("description", purchaseorder.getDescription());
 			mongoTemplate.updateFirst(query, update, PurchaseOrder.class);
+			
+			//---- Update into RecentUpdate Table
+			logger.info("Recent InvoiceNumber -->"+purchaseorder.getPocode());
+			query1.addCriteria(Criteria.where("invoicenumber").is(purchaseorder.getPocode()));
+			update.set("productname", purchaseorder.getProductname());
+			update.set("productcode", purchaseorder.getProductcode());
+			update.set("vendorname", purchaseorder.getVendorname());
+			update.set("vendorcode", purchaseorder.getVendorcode());
+			update.set("qty", purchaseorder.getQty());
+			update.set("unitprice", purchaseorder.getUnitprice());
+			mongoTemplate.findAndModify(query1, update,
+					new FindAndModifyOptions().returnNew(true), RecentUpdates.class);
+			
 		}if(i == 3) {
 			logger.debug("Return Invoice Number -->"+purchaseorder.getInvoicenumber()+"  Partial Status -->"+pophasestatus4); 
 			query.addCriteria(Criteria.where("pocode").is(purchaseorder.getInvoicenumber()));
@@ -621,5 +665,11 @@ public class PurchaseImpl implements PurchaseDAL {
 		return true;
 	}
 
+	public List<RecentUpdates> loadRecentList(List<RecentUpdates> responseList){
+		Query query = new Query();
+		query.with(new Sort(new Order(Direction.DESC, "id"))).limit(10);
+		responseList = mongoTemplate.find(query, RecentUpdates.class);
+		return responseList;
+	}
 		
 }

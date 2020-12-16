@@ -8,6 +8,7 @@ import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
+import com.erp.mongo.model.RecentUpdates;
 import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Vendor;
 import com.erp.mongo.model.Transaction;
@@ -70,6 +71,8 @@ public interface PurchaseDAL {
 
 	public boolean removeTransaction(String invoicenumber);
 
-	public boolean removePoReturn(String id);       
+	public boolean removePoReturn(String id);
+
+	public List<RecentUpdates> loadRecentList(List<RecentUpdates> responseList);        
 
 }

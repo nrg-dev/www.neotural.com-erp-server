@@ -43,6 +43,7 @@ import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.RecentUpdates;
 import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.Template;
 import com.erp.mongo.model.Transaction;
@@ -947,7 +948,7 @@ public class PurchaseService implements Filter {
 			stock.setStatus("Stock In"); 
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 			stock.setInvoicenumber(polist.get(0).getPocode());
-			stockdal.saveStock(stock);
+			stockdal.saveStock(stock,1);
 			Stock st = new Stock();
 			st = stockdal.loadStockInvoice(poreturn.getItemcode(),2);
 			long currentStock = stock.getRecentStock()+st.getRecentStock();
@@ -1212,6 +1213,24 @@ public class PurchaseService implements Filter {
 			logger.error("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
 		}
+	}
+	
+	// ------- Load Vendor ----
+	@CrossOrigin(origins = "http://localhost:8080")
+	@GetMapping(value = "/getRecentUpdateList", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getRecentUpdateList() {
+		logger.info("getRecentUpdateList");
+		List<RecentUpdates> responseList = new ArrayList<RecentUpdates>();
+		try {
+			responseList = purchasedal.loadRecentList(responseList);
+			logger.info("Recent List Size --->"+responseList.size());
+			return new ResponseEntity<List<RecentUpdates>>(responseList, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.error("RecentUpdate Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
+		} finally {
+		}
+
 	}
 	
 }

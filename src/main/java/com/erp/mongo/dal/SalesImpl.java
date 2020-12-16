@@ -323,6 +323,9 @@ public class SalesImpl implements SalesDAL {
 		}else if(temp == 2) {
 			query.addCriteria(Criteria.where("invoicenumber").is(invoice));
 			list = mongoTemplate.find(query,SalesOrder.class);
+		}else if(temp == 3) {
+			query.addCriteria(Criteria.where("status").is(invoice));
+			list = mongoTemplate.find(query,SalesOrder.class);
 		}
 		
 		logger.debug("Size-->"+list.size());

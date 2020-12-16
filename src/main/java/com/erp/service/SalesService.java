@@ -866,4 +866,22 @@ public class SalesService implements Filter {
 		}
 	}
 	
+	// ------- Load Purchase Order --
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadDashSO", method = RequestMethod.GET)
+	public ResponseEntity<?> loadDashSO() {
+		logger.info("loadDashSO");
+		List<SalesOrder> solist = null;
+		try {
+			solist = salesdal.loadSO(3,"Open");
+			return new ResponseEntity<List<SalesOrder>>(solist, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
+	
 }

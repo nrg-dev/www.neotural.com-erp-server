@@ -346,7 +346,7 @@ public class StockService implements Filter {
 			stock.setAddedqty(Integer.valueOf(addedQty));
 			stock.setRecentStock(Integer.valueOf(recentStockList));
 			stock.setStatus("StockIn");
-			stockdal.saveStock(stock);
+			stockdal.saveStock(stock,1);
 			logger.info("Service call start.....");
 
 			purchase.setStatus("success");
@@ -472,7 +472,7 @@ public class StockService implements Filter {
 				stockdal.updateStock(stock, st.getId());
 			} else {
 				logger.info("----------- Stock Category not match--------");
-				stockdal.saveStock(stock);
+				stockdal.saveStock(stock,1);
 			}
 
 			logger.info("Service call start.....");
@@ -556,7 +556,7 @@ public class StockService implements Filter {
 				stock.setStatus("Stock In"); 
 				stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 				stock.setInvoicenumber(po.getPocode());
-				stockdal.saveStock(stock);
+				stockdal.saveStock(stock,1);
 				logger.debug("Item Code -->"+stock.getItemcode());
 				Stock st = new Stock();
 				st = stockdal.loadStockInvoice(stock.getItemcode(),2);

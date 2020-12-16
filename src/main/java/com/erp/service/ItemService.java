@@ -138,7 +138,7 @@ public class ItemService implements Filter {
 			stock.setStatus("Ready for Sales"); 
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 			stock.setInvoicenumber("NONE");		
-			stockdal.saveStock(stock);			
+			stockdal.saveStock(stock,2);			
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			item.setStatus("failure");
