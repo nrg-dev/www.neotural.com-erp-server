@@ -21,8 +21,10 @@ public interface LoginDAL {
 	public List<Enquiry> loadEnquiry(List<Enquiry> enquirylist);
 
 	public List<Index> loadIndex(List<Index> indexlist);
+ 
+	public Career saveCareer(Career career);
 
-	public Career saveCareer(Career career);   
+	public List<UserRole> getUser(List<UserRole> userlist, String invoice);    
 
 	
 

@@ -6,6 +6,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -141,6 +144,14 @@ public class LoginImpl implements LoginDAL {
 		mongoTemplate.save(career);
 		career.setStatus("Success"); 
 		return career;
+	}
+	
+	public List<UserRole> getUser(List<UserRole> userlist,String invoice) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("invnumber").is(invoice));
+		query.addCriteria(Criteria.where("status").is("Active"));
+		userlist = mongoTemplate.find(query,UserRole.class);
+		return userlist;
 	}
 
 }

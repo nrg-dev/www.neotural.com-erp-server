@@ -6,6 +6,7 @@ import com.erp.dto.Career;
 import com.erp.dto.Enquiry;
 import com.erp.dto.User;
 import com.erp.mongo.model.Index;
+import com.erp.mongo.model.UserRole;
 
 public interface ErpBo {
 
@@ -19,6 +20,8 @@ public interface ErpBo {
 
 	public List<Index> loadIndex(List<Index> indexlist);
 
-	public Career saveCareer(Career career);    
+	public Career saveCareer(Career career);
+
+	public List<UserRole> getUser(List<UserRole> userlist, String invoice);     
 	
 }

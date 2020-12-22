@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erp.bo.ErpBo;
 import com.erp.dto.User;
 import com.erp.mongo.model.Index;
+import com.erp.mongo.model.RecentUpdates;
+import com.erp.mongo.model.UserRole;
 
 @RestController
 @RequestMapping(value = "/auth")
@@ -144,6 +146,24 @@ public class LoginService implements Filter {
 
 		} finally {
 
+		}
+	}
+	
+	// load User data
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/getUser", method = RequestMethod.GET)
+	public ResponseEntity<?> getUser(@RequestParam String invoice) {
+		logger.info("getUser");
+		List<UserRole> userlist = null;
+		try {
+			userlist = new ArrayList<UserRole>();
+			userlist = bo.getUser(userlist,invoice);
+			logger.info("User List Size --->"+userlist.size());
+			return new ResponseEntity<List<UserRole>>(userlist, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.error("RecentUpdate Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
+		} finally {
 		}
 	}
 

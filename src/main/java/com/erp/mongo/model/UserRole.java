@@ -23,6 +23,7 @@ public class UserRole {
 	private String menuItem7;
 	private String menuItem8;
 	private String menuItem9;
+	private String menuItem10;
 
 	private String purchasesubmenu1;
 	private String purchasesubmenu2;
@@ -247,6 +248,12 @@ public class UserRole {
 	}
 	public void setReportsubmenu1(String reportsubmenu1) {
 		this.reportsubmenu1 = reportsubmenu1;
+	}
+	public String getMenuItem10() {
+		return menuItem10;
+	}
+	public void setMenuItem10(String menuItem10) {
+		this.menuItem10 = menuItem10;
 	}
 	
 		

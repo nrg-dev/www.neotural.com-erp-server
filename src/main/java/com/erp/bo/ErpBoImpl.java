@@ -4,6 +4,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.erp.dto.Career;
@@ -45,6 +50,7 @@ public class ErpBoImpl implements ErpBo{
 				if(result.size() > 0) {
 					if(result.get(0).getStatus().equalsIgnoreCase("Active")){
 						user.setStatus("success");
+						user.setInvoiceNumber(result.get(0).getInvnumber()); 
 					}
 					if(result.get(0).getStatus().equalsIgnoreCase("De-Active")){
 						user.setStatus("Your Account was De-Active");
@@ -103,5 +109,11 @@ public class ErpBoImpl implements ErpBo{
 		career = logindal.saveCareer(career);
 		return career;
 	} 
+	
+	public List<UserRole> getUser(List<UserRole> userlist,String invoice) {
+		userlist = logindal.getUser(userlist,invoice);
+		return userlist;
+	}
+
 	
 }

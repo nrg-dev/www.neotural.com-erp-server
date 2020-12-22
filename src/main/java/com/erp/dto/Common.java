@@ -13,6 +13,7 @@ public abstract class Common {
 	
 	double TotalOverriding;
 	double TotalCommission;
+	String invoiceNumber;
 	
 	
 	String memberID1;
@@ -98,6 +99,12 @@ public abstract class Common {
 	}
 	public void setMemberID2(String memberID2) {
 		this.memberID2 = memberID2;
+	}
+	public String getInvoiceNumber() {
+		return invoiceNumber;
+	}
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
 	}
 	
 	
