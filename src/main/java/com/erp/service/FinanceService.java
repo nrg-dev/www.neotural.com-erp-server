@@ -144,7 +144,7 @@ public class FinanceService implements Filter {
 		try {
 			finance.setStatus("Active"); 
 			logger.debug("PettyCash Id-->"+finance.getId());
-			if(finance.getId() != null) {
+			if(finance.getId() != 0) {
 				finance = financedal.updatePettyCash(finance);
 				if(finance.getType().equalsIgnoreCase("Credit")) {
 					tran.setDebit(0);

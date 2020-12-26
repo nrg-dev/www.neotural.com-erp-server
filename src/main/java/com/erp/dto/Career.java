@@ -7,7 +7,7 @@ public class Career {
 	 * 
 	 */
 	@Id
-	private String id;
+	private long id;
 	String name; // return status
 	String phonenumber;	
 	String email_ID;
@@ -19,11 +19,10 @@ public class Career {
     String addeddate;
 	private String resume;
 
-	
-	public String getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getName() {

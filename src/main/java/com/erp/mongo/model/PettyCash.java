@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class PettyCash {
 
 	@Id
-	private String id;
+	private long id;
 	private String description;
 	private String addedDate;
 	private String type;;
@@ -18,11 +18,11 @@ public class PettyCash {
 	private String currency;
 	private String invoicenumber;
 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

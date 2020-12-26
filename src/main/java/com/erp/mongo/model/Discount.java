@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Discount {
 
 	@Id
-	private String id;
+	private long id;
 	String discountcode;
 	String productname;
 	String discountType;
@@ -19,13 +19,13 @@ public class Discount {
 	String todate_promotionperiod;
 	String status;
 	String categorycode;
-	public String getId() {
+	
+	public long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
-	
 	public String getDiscountType() {
 		return discountType;
 	}

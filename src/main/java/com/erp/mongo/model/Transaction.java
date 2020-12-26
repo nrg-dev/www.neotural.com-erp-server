@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Transaction {
 
 	@Id
-	private String id;
+	private long id;
 	private String transactionnumber;
 	private String transactiondate;
 	private String description;
@@ -17,10 +17,10 @@ public class Transaction {
 	private String status;
 	private String currency;
 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getTransactionnumber() {

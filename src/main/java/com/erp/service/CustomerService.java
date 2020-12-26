@@ -80,7 +80,7 @@ public class CustomerService implements Filter {
 		logger.info("Save Customer ang Update Customer Call");
 		RandomNumber randomnumber = null;
 		try {
-			if(customer.getId() != null) {
+			if(customer.getId() != 0) {
 				logger.info("Update");
 				customer.setLastedit(Custom.getCurrentInvoiceDate());
 				customer = customerdal.updateCustomer(customer);

@@ -308,7 +308,7 @@ public class StockService implements Filter {
 							stockIndetails = new StockInDetails();
 							stockIndetails.setStockInNumber(invoice);
 							stockIndetails.setInvoicenumber(jObject.getString("invoiceNumber"));
-							stockIndetails.setId(jObject.getString("id"));
+							stockIndetails.setId(jObject.getLong("id"));
 							stockIndetails.setCategory(jObject.getString("category"));
 							stockIndetails.setItemname(jObject.getString("productName"));
 							stockIndetails.setDescription(jObject.getString("description"));
@@ -408,7 +408,7 @@ public class StockService implements Filter {
 							stockIndetails = new StockInDetails();
 							stockIndetails.setStockInNumber(invoice);
 							stockIndetails.setInvoicenumber(jObject.getString("invoiceNumber"));
-							stockIndetails.setId(jObject.getString("id"));
+							stockIndetails.setId(jObject.getLong("id"));
 							stockIndetails.setCategory(jObject.getString("category"));
 							stockIndetails.setItemname(jObject.getString("productName"));
 							stockIndetails.setDescription(jObject.getString("description"));
@@ -469,7 +469,7 @@ public class StockService implements Filter {
 				logger.debug("Addedqty  --->" + stock.getAddedqty());
 				logger.debug("RecentStock  --->" + stock.getRecentStock());
 				logger.debug("Status  --->" + stock.getStatus());
-				stockdal.updateStock(stock, st.getId());
+				//stockdal.updateStock(stock, st.getId());
 			} else {
 				logger.info("----------- Stock Category not match--------");
 				stockdal.saveStock(stock,1);

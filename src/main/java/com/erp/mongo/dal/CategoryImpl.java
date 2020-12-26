@@ -21,6 +21,9 @@ public class CategoryImpl implements CategoryDAL {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Autowired
+	private SequenceDAL sequencedal;
 
 	// save & update
 	public boolean saveCategory(Category category,int i) {
@@ -46,9 +49,10 @@ public class CategoryImpl implements CategoryDAL {
 			else {
 				logger.info("Inside Save");
 				Index index = new Index();
-				index.setKey(category.getId());
+				index.setKey(category.getCategorycode());
 				index.setValue(category.getName()+" -category");
 				mongoTemplate.save(index);
+				category.setId(sequencedal.generateSequence("category")); 
 				mongoTemplate.save(category);
 				status=true;		
 			}
@@ -90,7 +94,6 @@ public class CategoryImpl implements CategoryDAL {
 	 */
 	// remove
 	public boolean removeCategory(String categorycode) {
-		Category response = null;
 		Query query = new Query();
 		query.addCriteria(Criteria.where("categorycode").is(categorycode));
 		mongoTemplate.remove(query, Category.class);

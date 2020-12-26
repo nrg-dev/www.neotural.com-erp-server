@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class DailyReport {
 
 	@Id
-	private String id;
+	private long id;
 	private String employeecode;
 	private String date;
 	private String report;
@@ -21,12 +21,15 @@ public class DailyReport {
 		 this.monthname=monthname;
 		 this.year=year;
 	 }
-	public String getId() {
+
+	public long getId() {
 		return id;
 	}
-	public void setId(String id) {
+
+	public void setId(long id) {
 		this.id = id;
 	}
+
 	public String getEmployeecode() {
 		return employeecode;
 	}

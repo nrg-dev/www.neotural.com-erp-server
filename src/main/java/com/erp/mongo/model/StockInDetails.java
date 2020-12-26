@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class StockInDetails {
 
 	@Id
-	private String id;
+	private long id;
 	private String stockInNumber;
 	private String invoicenumber;
 	private String itemid;
@@ -22,11 +22,11 @@ public class StockInDetails {
 	private String status;
 	private String poDate;
 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

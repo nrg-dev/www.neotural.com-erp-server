@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 public class SalesOrder {
 
 	@Id
-	private String id;
+	private long id;
 	private String categoryname;
 	private String categorycode;
 	private String productname;
@@ -28,10 +28,10 @@ public class SalesOrder {
 	private String socode;
 	private String invoicenumber;
 	
-	public String getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getCategoryname() {

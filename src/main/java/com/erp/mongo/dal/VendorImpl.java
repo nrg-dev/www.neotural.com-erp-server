@@ -31,11 +31,14 @@ public class VendorImpl implements VendorDAL {
 	@Autowired
 	ErpBo investmentBo1;
 
+	@Autowired
+	private SequenceDAL sequencedal;
 	// save
 
 	@Override
 	public Vendor saveVendor(Vendor vendor) {
 		logger.info("Save Vendor");
+		vendor.setId(sequencedal.generateSequence("vendor")); 
 		mongoTemplate.save(vendor);
 		vendor.setStatus("success");
 		return vendor;

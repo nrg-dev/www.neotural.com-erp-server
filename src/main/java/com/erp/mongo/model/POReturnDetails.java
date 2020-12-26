@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class POReturnDetails {
 
 	@Id
-	private String id;
+	private long id;
 	private String invoicenumber;
 	private String returnStatus;
 	private String itemname;
@@ -25,11 +25,11 @@ public class POReturnDetails {
 	private String paymentstatus;
 	private String itemcode;
 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

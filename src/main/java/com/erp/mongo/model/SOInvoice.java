@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class SOInvoice {
 
 	@Id
-	private String id;
+	private long id;
 	private String invoicedate;
 	private String invoicenumber;
 	private String customername;
@@ -22,11 +22,11 @@ public class SOInvoice {
 	private String paymenttype;
 	private String paymentstatus;
 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

@@ -7,16 +7,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Units {
 
 	@Id
-	private String id;
+	private long id;
 	private String unitname;
 	private String unitsymbol	;
 	private String quantityname	;
 	private String quantitysymbol	;
 	private String dimensionsymbol ;
-	public String getId() {
+	
+	public long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getUnitname() {

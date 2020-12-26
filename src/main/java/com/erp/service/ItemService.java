@@ -205,12 +205,6 @@ public class ItemService implements Filter {
 	public ResponseEntity<?> saveUnits(@RequestBody Units units) {
 		logger.info("saveUnits");
 		try {
-			if(units.getId()!=null) {
-				// update
-			}else {
-				// save
-				
-			}
 			boolean status = itemdal.saveUnits(units);
 			if(status) {
 				return new ResponseEntity<>(HttpStatus.OK);	

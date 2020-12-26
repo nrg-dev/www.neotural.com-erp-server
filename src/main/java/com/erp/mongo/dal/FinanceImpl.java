@@ -31,6 +31,9 @@ public class FinanceImpl implements FinanceDAL {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
+	@Autowired
+	private SequenceDAL sequencedal;
+	
 	// load customer and vendor name & code
 	public ArrayList<String> loadCustomerVendorName() {
 		ArrayList<String> list = new ArrayList<String>();
@@ -51,6 +54,7 @@ public class FinanceImpl implements FinanceDAL {
 
 	// save
 	public PettyCash save(PettyCash finance) {
+		finance.setId(sequencedal.generateSequence("pettyCash")); 
 		mongoTemplate.save(finance);
 		return finance;
 	}

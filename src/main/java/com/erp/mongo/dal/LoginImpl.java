@@ -36,6 +36,9 @@ public class LoginImpl implements LoginDAL {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
+	@Autowired
+	private SequenceDAL sequencedal;
+
 	@Override
 	public List<UserRole> userLogin(User user, List<UserRole> result) {
 		Query query = new Query();
@@ -120,6 +123,7 @@ public class LoginImpl implements LoginDAL {
 	
 
 	public Enquiry saveEnquiry(Enquiry enquiry) {
+		enquiry.setId(sequencedal.generateSequence("enquiry")); 
 		mongoTemplate.save(enquiry);
 		enquiry.setStatus("Success"); 
 		return enquiry;
@@ -141,6 +145,7 @@ public class LoginImpl implements LoginDAL {
 
 	
 	public Career saveCareer(Career career) {
+		career.setId(sequencedal.generateSequence("career")); 
 		mongoTemplate.save(career);
 		career.setStatus("Success"); 
 		return career;

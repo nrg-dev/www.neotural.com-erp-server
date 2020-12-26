@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Template {
 
 	@Id
-	private String id;
+	private long id;
 	private String companyname;
 	private String address;
 	private String city;
@@ -15,11 +15,11 @@ public class Template {
 	private String templateType;
 	private String companylogo;
 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

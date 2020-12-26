@@ -30,12 +30,16 @@ public class ItemImpl implements ItemDAL {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
+	@Autowired
+	private SequenceDAL sequencedal;
+	
 	// item save
 	public Item saveItem(Item product) {
 		Index index = new Index();
 		index.setKey(product.getProdcode());
 		index.setValue(product.getProductname()+"-"+product.getVendorname()+" -product");
 		mongoTemplate.save(index);
+		product.setId(sequencedal.generateSequence("item")); 
 		mongoTemplate.save(product);
 		product.setStatus("success");
 		return product;
@@ -196,6 +200,7 @@ public class ItemImpl implements ItemDAL {
 
 	// item save
 	public Discount saveDiscount(Discount discount) {
+		discount.setId(sequencedal.generateSequence("discount")); 
 		mongoTemplate.save(discount);
 		discount.setStatus("success");
 		return discount;
@@ -203,7 +208,7 @@ public class ItemImpl implements ItemDAL {
 
 	// units save and update
 	public boolean saveUnits(Units units) {
-		if(units.getId()!=null) {
+		if(units.getId()!=0) {
 			logger.info("DAO Update Units");
 			Update update = new Update();
 			Query query = new Query();
@@ -218,6 +223,7 @@ public class ItemImpl implements ItemDAL {
 		}else {
 			// save
 			logger.info("DAO Save Units");
+			units.setId(sequencedal.generateSequence("units")); 
 			mongoTemplate.save(units);
 		}
 		return true;

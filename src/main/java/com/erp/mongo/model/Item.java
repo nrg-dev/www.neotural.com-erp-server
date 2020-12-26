@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Item {
 
 	@Id
-	private String id;
+	private long id;
 	String prodcode;
 	String productname;
 	String description;
@@ -26,11 +26,11 @@ public class Item {
 	String productImage1;
 	String createddate;
 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

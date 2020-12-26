@@ -7,18 +7,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Category {
 
 	@Id
-	private String id;
+	private long  id;
 	String categorycode;
 	String name;
 	String description;
 	String updateddate;
 	String status;
 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

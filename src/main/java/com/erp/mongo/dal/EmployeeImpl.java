@@ -35,6 +35,9 @@ public class EmployeeImpl implements EmployeeDAL {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
+	@Autowired
+	private SequenceDAL sequencedal;
+	
 	/*
 	 * @Autowired ErpBo investmentBo1;
 	 */
@@ -88,6 +91,7 @@ public class EmployeeImpl implements EmployeeDAL {
 				index.setKey(employee.getEmployeecode());
 				index.setValue(employee.getName()+"-"+employee.getPhonenumber()+"-"+employee.getEmail()+" -employee");
 				mongoTemplate.save(index);
+				employee.setId(sequencedal.generateSequence("employee")); 
 				mongoTemplate.save(employee);
 				status=true;		
 			}
@@ -125,6 +129,7 @@ public class EmployeeImpl implements EmployeeDAL {
 	            // save
 				dailyReport=new DailyReport(employeeDto.getEmployeecode(),employeeDto.getDate(),employeeDto.getReport(),
 						employeeDto.getMonthname(),employeeDto.getYear());
+				dailyReport.setId(sequencedal.generateSequence("dailyReport")); 
 				mongoTemplate.save(dailyReport);
 				status=true;
 			} 
@@ -198,6 +203,7 @@ public class EmployeeImpl implements EmployeeDAL {
 						employeeDto.getCheckintime(),employeeDto.getCheckoutreason(),
 						employeeDto.getCheckouttime(),employeeDto.getAbsent(),employeeDto.getReason(),
 						employeeDto.getDate(),employeeDto.getMonthname(),employeeDto.getYear());
+				absentList.setId(sequencedal.generateSequence("absentList")); 
 				mongoTemplate.save(absentList);
 			
 			}
@@ -246,6 +252,7 @@ public class EmployeeImpl implements EmployeeDAL {
 	public boolean saveContractList(ContractList contractList) {
 		boolean status;
 		try {
+			contractList.setId(sequencedal.generateSequence("contractList")); 
 			mongoTemplate.save(contractList);
 			status=true;
 			return status;

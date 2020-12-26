@@ -20,9 +20,6 @@ import org.springframework.stereotype.Repository;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Index;
 import com.erp.mongo.model.Item;
-import com.erp.mongo.model.POInvoice;
-import com.erp.mongo.model.POReturnDetails;
-import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
@@ -37,6 +34,9 @@ public class SalesImpl implements SalesDAL {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Autowired
+	private SequenceDAL sequencedal;
 	
 	@Value("${paymentphase2.status}")
 	private String paymentstatus2;
@@ -58,6 +58,7 @@ public class SalesImpl implements SalesDAL {
 		index.setKey(soinvoice.getInvoicenumber());
 		index.setValue(soinvoice.getInvoicenumber()+"-"+soinvoice.getStatus()+" -salesinvoice");
 		mongoTemplate.save(index);
+		soinvoice.setId(sequencedal.generateSequence("soinvoice")); 
 		mongoTemplate.save(soinvoice);
 		logger.info("After save Invoice");
 		return soinvoice;
@@ -224,6 +225,7 @@ public class SalesImpl implements SalesDAL {
 	@Override
 	public SOReturnDetails insertReturn(SOReturnDetails salesreturn) {
 		logger.info("Before save SO Return details");
+		salesreturn.setId(sequencedal.generateSequence("soreturn")); 
 		mongoTemplate.save(salesreturn);
 		logger.info("After save SO Return details");
 		return salesreturn;
@@ -258,6 +260,7 @@ public class SalesImpl implements SalesDAL {
 		index.setKey(salesorder.getSocode());
 		index.setValue(salesorder.getSocode()+"-"+salesorder.getCustomername()+" -salesorder");
 		mongoTemplate.save(index);
+		salesorder.setId(sequencedal.generateSequence("sorder")); 
 		mongoTemplate.save(salesorder);
 		salesorder.setStatus("success"); 
 		return salesorder;
@@ -397,6 +400,7 @@ public class SalesImpl implements SalesDAL {
 	//--- Insert Transaction Table ---
 	public Transaction saveTransaction(Transaction trans) {
 		logger.info("DAO saveTransaction");
+		trans.setId(sequencedal.generateSequence("transaction")); 
 		mongoTemplate.save(trans);
 		trans.setStatus("success"); 
 		return trans;
@@ -448,6 +452,7 @@ public class SalesImpl implements SalesDAL {
 				mongoTemplate.updateFirst(query, update, Template.class);
 			} else {
 	            // save
+				template.setId(sequencedal.generateSequence("template")); 
 				mongoTemplate.save(template);
 			} 
 		}catch(Exception e) {

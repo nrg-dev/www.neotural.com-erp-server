@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class AbsentList {
 
 	@Id
-	private String id;
+	private long id;
 	 String employeecode;
 	 String checkinreason;
 	 String checkintime;
@@ -33,12 +33,14 @@ public class AbsentList {
 		 this.year=year;
 	 }
 	 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(String id) {
+
+	public void setId(long id) {
 		this.id = id;
 	}
+
 	public String getEmployeecode() {
 		return employeecode;
 	}

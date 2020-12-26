@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 
 public class Enquiry {
 	@Id
-	private String id;
+	private long id;
 	String name; 
 	String phonenumber;	
 	String email_ID;
@@ -14,11 +14,10 @@ public class Enquiry {
     String status;
     String addeddate;
     
-	
-	public String getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getName() {

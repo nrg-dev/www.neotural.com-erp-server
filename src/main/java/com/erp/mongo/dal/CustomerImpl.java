@@ -30,6 +30,9 @@ public class CustomerImpl implements CustomerDAL {
 
 	@Autowired
 	ErpBo investmentBo1;
+	
+	@Autowired
+	private SequenceDAL sequencedal;
 
 	// save
 
@@ -40,6 +43,7 @@ public class CustomerImpl implements CustomerDAL {
 		index.setKey(customer.getCustcode());
 		index.setValue(customer.getCustomerName()+"-"+customer.getPhoneNumber()+"-"+customer.getEmail()+" -customer");
 		mongoTemplate.save(index);
+		customer.setId(sequencedal.generateSequence("customer")); 
 		mongoTemplate.save(customer);
 		customer.setStatus("success");
 		return customer;

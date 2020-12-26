@@ -12,11 +12,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.RecentUpdates;
-import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.StockDamage;
@@ -48,6 +46,7 @@ public class StockImpl implements StockDAL {
 
 	// save
 	public StockDamage saveStockDamage(StockDamage damage) {
+		damage.setId(sequencedal.generateSequence("stockdamage")); 
 		mongoTemplate.save(damage);
 		damage.setStatus("success");
 		return damage;
@@ -77,6 +76,7 @@ public class StockImpl implements StockDAL {
 	
 	//save
 	public StockReturn saveStockReturn(StockReturn stReturn) {
+		stReturn.setId(sequencedal.generateSequence("stockReturn")); 
 		mongoTemplate.save(stReturn);
 		stReturn.setStatus("success");
 		return stReturn;
@@ -103,6 +103,7 @@ public class StockImpl implements StockDAL {
 	@Override
 	public StockInDetails saveStockIn(StockInDetails stockIndetails) {
 		logger.info("Before save stockIn details");
+		stockIndetails.setId(sequencedal.generateSequence("stockIn")); 
 		mongoTemplate.save(stockIndetails);
 		logger.info("After save stockIn details");
 		return stockIndetails;
@@ -111,6 +112,7 @@ public class StockImpl implements StockDAL {
 	// Save Stock
 	public Stock saveStock(Stock stock,int i) {
 		logger.info("Before Save Stock");
+		stock.setId(sequencedal.generateSequence("stock")); 
 		mongoTemplate.save(stock);
 		stock.setStatus("success");
 		logger.info("After Save Stock");
@@ -288,6 +290,7 @@ public class StockImpl implements StockDAL {
 	
 	@Override
 	public Stock saveStockOut(Stock stock) {
+		stock.setId(sequencedal.generateSequence("stockOut")); 
 		mongoTemplate.save(stock);
 		stock.setStatus("success");
 		return stock;

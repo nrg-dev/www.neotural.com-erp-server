@@ -83,6 +83,7 @@ public class PurchaseImpl implements PurchaseDAL {
 		index.setKey(poinvoice.getInvoicenumber());
 		index.setValue(poinvoice.getInvoicenumber()+"-"+poinvoice.getStatus()+" -purcahseinvoice");
 		mongoTemplate.save(index);
+		poinvoice.setId(sequencedal.generateSequence("poinvoice")); 
 		mongoTemplate.save(poinvoice);
 		logger.info("After save Invoice");
 		
@@ -336,6 +337,7 @@ public class PurchaseImpl implements PurchaseDAL {
 	@Override
 	public POReturnDetails insertReturn(POReturnDetails purchasereturn) {
 		logger.info("Before save PO Return details");
+		purchasereturn.setId(sequencedal.generateSequence("poreturn")); 
 		mongoTemplate.save(purchasereturn);
 		logger.info("After save PO Return details");
 		return purchasereturn;
@@ -549,6 +551,7 @@ public class PurchaseImpl implements PurchaseDAL {
 	//--- Insert Transaction Table ---
 	public Transaction saveTransaction(Transaction trans) {
 		logger.info("DAO saveTransaction");
+		trans.setId(sequencedal.generateSequence("transaction")); 
 		mongoTemplate.save(trans);
 		trans.setStatus("success"); 
 		return trans;
@@ -611,6 +614,7 @@ public class PurchaseImpl implements PurchaseDAL {
 				mongoTemplate.updateFirst(query, update, Template.class);
 			} else {
 	            // save
+				template.setId(sequencedal.generateSequence("template")); 
 				mongoTemplate.save(template);
 			} 
 		}catch(Exception e) {
