@@ -313,7 +313,7 @@ public class PurchaseImpl implements PurchaseDAL {
 			update.set("pophasestatus", pophasestatus4);
 			mongoTemplate.findAndModify(query, update,
 					new FindAndModifyOptions().returnNew(true), POInvoice.class);
-			logger.debug("After POInvoice Returned Status Update -->");
+			logger.debug("After POInvoice Partial Status Update -->");
 		}
 		return purchase; 
 	}
